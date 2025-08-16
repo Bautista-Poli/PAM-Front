@@ -8,7 +8,7 @@ import { MatchItem } from '@/helpers/interfaces/matches';
 import { fetchMatches } from '@/helpers/service/matches'; // <-- antes: fetchMatchesForDate
 import { shiftDate, sortMatches, todayISO } from '@/helpers/utils/match';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, RefreshControl, SectionList, StyleSheet } from 'react-native';
+import { Platform, RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 
 type Day = 'hoy' | 'ayer' | 'man' | 'pasman';
 
@@ -28,7 +28,7 @@ export default function HomeScreen() {
     if (day === 'hoy') return todayISO();
     if (day === 'ayer') return shiftDate(todayISO(), -1);
     if (day === 'man') return shiftDate(todayISO(), +1);
-    if (day === 'pasman') return shiftDate(todayISO(), +2);
+    if (day === 'pasman') return shiftDate(todayISO(), +1);
     return todayISO();
   }, [day]);
 
@@ -67,8 +67,9 @@ export default function HomeScreen() {
 
   const ListHeader = (
     <>
-      <HeaderBanner />
-
+      <View style={{backgroundColor: 'red', marginTop: -20, marginLeft:-20, marginRight:-20}}>
+      <HeaderBanner/>
+      </View>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Resultados de Fútbol</ThemedText>
         <ThemedText type="default">
@@ -77,7 +78,7 @@ export default function HomeScreen() {
       </ThemedView>
 
       <DateChips
-        selectedDay={day} // 👈 nuevo prop
+        selectedDay={day}
         onAyer={() => setDay('ayer')}
         onHoy={() => setDay('hoy')}
         onManiana={() => setDay('man')}

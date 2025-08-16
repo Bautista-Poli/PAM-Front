@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 // Cambiá el require a tu nueva imagen para “sacar/cambiar la foto”
 export default function HeaderBanner() {
   return (
-    <View style={{ height: 120, marginBottom: 28, marginTop: 28 }}>
+    <View style={{ height: 120, marginBottom: 28, marginTop: 28, marginLeft:10}}>
       <Image source={require('@/assets/images/promiedos.jpg')} style={styles.img} />
     </View>
   );
@@ -18,5 +18,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+    color: 'red',
   },
 });

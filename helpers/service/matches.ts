@@ -9,10 +9,10 @@ export async function fetchMatches(
     process.env.EXPO_PUBLIC_API_BASE?.replace(/\/+$/, '') ||
     (Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000');
 
-  // Traducir "pasman" a day=date&date=YYYY-MM-DD (+2)
+  // Traducir "pasman" a day=date&date=YYYY-MM-DD (+1)
   const url =
     day === 'pasman'
-      ? `${BASE}/api/matches?day=date&date=${encodeURIComponent(shiftDate(todayISO(), +2))}`
+      ? `${BASE}/api/matches?day=date&date=${encodeURIComponent(shiftDate(todayISO(), +1))}`
       : `${BASE}/api/matches?day=${day}`;
 
   const res = await fetch(url);
