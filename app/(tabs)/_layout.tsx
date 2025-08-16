@@ -7,6 +7,7 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -34,6 +35,23 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="ClubScreen"
+        options={{
+          title: 'club Table',
+          tabBarIcon: ({ color }) => <AntDesign name="table" size={24} color={color} />,
+        }}
+      />
+      
+      {/*
+      <Tabs.Screen
+        name="LeagueTableScreen"
+        options={{
+          title: 'Login',
+          tabBarIcon: ({ color }) => <AntDesign name="lock" size={24} color={color} />,
+        }}
+      />
+      */}
+      <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
@@ -41,5 +59,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    
   );
 }

@@ -41,7 +41,6 @@ function Logo({
 function TeamScore({name,logoUrl,score,align}: {name: string;logoUrl?: string | null;score: number | null;align: 'left' | 'right';}) {
   const alignStyle: ViewStyle = { alignItems: align === 'right' ? 'flex-end' : 'flex-start' };
   const rowDir: ViewStyle   = { flexDirection: align === 'right' ? 'row-reverse' : 'row' };
-  console.log("El logo es ->" + logoUrl)
   return (
     <View style={[styles.teamCol, alignStyle]}>
       <View style={[styles.teamHeaderRow, rowDir]}>

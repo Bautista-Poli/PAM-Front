@@ -12,7 +12,7 @@ export async function fetchMatches(
   // Traducir "pasman" a day=date&date=YYYY-MM-DD (+1)
   const url =
     day === 'pasman'
-      ? `${BASE}/api/matches?day=date&date=${encodeURIComponent(shiftDate(todayISO(), +1))}`
+      ? `${BASE}/api/matches?day=date&date=${encodeURIComponent(shiftDate(todayISO(), +2))}`
       : `${BASE}/api/matches?day=${day}`;
 
   const res = await fetch(url);

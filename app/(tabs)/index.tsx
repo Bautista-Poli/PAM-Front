@@ -7,12 +7,14 @@ import { ThemedView } from '@/components/ThemedView';
 import { MatchItem } from '@/helpers/interfaces/matches';
 import { fetchMatches } from '@/helpers/service/matches'; // <-- antes: fetchMatchesForDate
 import { shiftDate, sortMatches, todayISO } from '@/helpers/utils/match';
+import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, RefreshControl, SectionList, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 
 type Day = 'hoy' | 'ayer' | 'man' | 'pasman';
 
 export default function HomeScreen() {
+  const router = useRouter();
   // Controla qué pedir al backend
   const [day, setDay] = useState<Day>('hoy');
 
@@ -28,7 +30,7 @@ export default function HomeScreen() {
     if (day === 'hoy') return todayISO();
     if (day === 'ayer') return shiftDate(todayISO(), -1);
     if (day === 'man') return shiftDate(todayISO(), +1);
-    if (day === 'pasman') return shiftDate(todayISO(), +1);
+    if (day === 'pasman') return shiftDate(todayISO(), +2);
     return todayISO();
   }, [day]);
 
@@ -104,18 +106,33 @@ export default function HomeScreen() {
   return (
     <SectionList
       sections={sections}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <MatchRow item={item} />}
+      keyExtractor={(item) => String(item.id)}   // por las dudas castear a string
+      renderItem={({ item, section }) => (
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: '/LeagueTableScreen',
+              params: { league: section.title }, // 👈 ahora sí, está definido
+            })
+          }
+        >
+          <MatchRow item={item} />
+        </Pressable>
+      )}
       renderSectionHeader={({ section }) => (
         <ThemedView style={styles.leagueSection}>
-          <ThemedText type="subtitle" style={styles.leagueTitle}>{section.title}</ThemedText>
+          <ThemedText type="subtitle" style={styles.leagueTitle}>
+            {section.title}
+          </ThemedText>
         </ThemedView>
       )}
       ListHeaderComponent={ListHeader}
       ListEmptyComponent={
-        !loading
-          ? <ThemedView style={styles.center}><ThemedText>No hay partidos para esta fecha.</ThemedText></ThemedView>
-          : null
+        !loading ? (
+          <ThemedView style={styles.center}>
+            <ThemedText>No hay partidos para esta fecha.</ThemedText>
+          </ThemedView>
+        ) : null
       }
       ListFooterComponent={
         <ThemedView style={styles.footerHint}>
@@ -136,7 +153,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: { flexDirection: 'row', alignItems: 'baseline', gap: 12, marginBottom: 8 },
-  leagueSection: { marginTop: 10, marginBottom: 6 },
+  leagueSection: { marginTop: 20, marginBottom: 6 },
   leagueTitle: { marginBottom: 6 },
   center: { alignItems: 'center', justifyContent: 'center', padding: 24, gap: 8 },
   errorBox: { padding: 16, borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, borderColor: '#ff3b30', gap: 10, marginBottom: 12 },
