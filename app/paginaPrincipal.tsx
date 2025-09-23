@@ -1,85 +1,65 @@
-import { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Pressable,
-  Platform,
-  StatusBar,
-} from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, SectionList } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
-export default function paginaPrincipal() {
-  return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.center}>
-        <Contador />
+import PartidoCard, { PartidoData } from "@/components/partido";
+import { obtenerJugadores } from "@/components/info";
+import PlayerItem from "@/components/equipoCard";
+
+
+
+export default function PaginaPrincipal() {
+  const { partido } = useLocalSearchParams();
+  const partidoData: PartidoData | null = partido ? JSON.parse(partido as string) : null;
+
+  if (!partidoData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.empty}>No se recibieron datos del partido.</Text>
       </View>
-    </SafeAreaView>
+    );
+  }
+
+  const sections = [
+    {
+      title: `Jugadores — ${partidoData.equipoLocal}`,
+      teamName: partidoData.equipoLocal,
+      data: obtenerJugadores(partidoData.equipoLocal),
+    },
+    {
+      title: `Jugadores — ${partidoData.equipoVisitante}`,
+      teamName: partidoData.equipoVisitante,
+      data: obtenerJugadores(partidoData.equipoVisitante),
+    },
+  ];
+
+  return (
+    <SectionList
+      sections={sections}
+      keyExtractor={(item, index) => `${item}-${index}`}
+      style={styles.list}
+      ListHeaderComponent={<PartidoCard data={partidoData} />}
+      renderSectionHeader={({ section }) => (
+        <Text style={styles.sectionTitle}>{section.title}</Text>
+      )}
+      renderItem={({ item }) => (
+        <PlayerItem name={item} />
+      )}
+      contentContainerStyle={styles.content}
+    />
   );
 }
-
-function Contador() {
-  const [contador, setContador] = useState(0);
-
-  const increment = () => setContador((p) => p + 1);
-  const decrement = () => setContador((p) => p - 1);
-
-  return (
-    <>
-      <Text style={styles.title}>Contador: {contador}</Text>
-
-      <View style={styles.row}>
-        <Pressable onPress={increment} style={[styles.btnBase, styles.btnGreen]}>
-          <Text style={styles.btnText}>Incrementar</Text>
-        </Pressable>
-
-        <Pressable onPress={decrement} style={[styles.btnBase, styles.btnRed]}>
-          <Text style={styles.btnText}>Disminuir</Text>
-        </Pressable>
-      </View>
-    </>
-  );
-}
-
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: "#f4f4f4",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
-  },
-  row: {
-    flexDirection: "row",
-    gap: 15, // solo funciona en RN 0.71+, si no usar margin
-  },
-  btnBase: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    elevation: 3,
-  },
-  btnGreen: {
-    backgroundColor: "#4CAF50",
-  },
-  btnRed: {
-    backgroundColor: "#E53935",
-  },
-  btnText: {
-    color: "#fff",
+  container: { padding: 16, backgroundColor: "#0b1220", flexGrow: 1 },
+  list: { backgroundColor: "#0b1220" },
+  content: { padding: 16, paddingBottom: 40 },
+  empty: { color: "#e5e7eb", textAlign: "center", marginTop: 32 },
+  sectionTitle: {
+    color: "#cbd5e1",
+    fontWeight: "700",
+    marginTop: 16,
+    marginBottom: 8,
     fontSize: 16,
-    fontWeight: "600",
-    textAlign: "center",
   },
 });
