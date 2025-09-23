@@ -12,11 +12,11 @@ const partidosHoy: PartidoData[] = [
     golesLocal: 2,
     golesVisitante: 1,
     competicion: 'Liga Profesional',
-    dia: 'Hoy 19:00',
+    dia: 'Hoy 12:00',
   },
   {
     equipoLocal: 'Lanús',
-    equipoVisitante: 'Belgrano',
+    equipoVisitante: 'Belez',
     logoLocal: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Escudo_de_Lan%C3%BAs_2025.png',
     logoVisitante:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg/896px-Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg.png',
@@ -27,7 +27,7 @@ const partidosHoy: PartidoData[] = [
   },
   {
     equipoLocal: 'Lanús',
-    equipoVisitante: 'Belgrano',
+    equipoVisitante: 'Velez',
     logoLocal: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Escudo_de_Lan%C3%BAs_2025.png',
     logoVisitante:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg/896px-Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg.png',
@@ -38,7 +38,7 @@ const partidosHoy: PartidoData[] = [
   },
   {
     equipoLocal: 'Lanús',
-    equipoVisitante: 'Belgrano',
+    equipoVisitante: 'Velez',
     logoLocal: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Escudo_de_Lan%C3%BAs_2025.png',
     logoVisitante:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg/896px-Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg.png',
@@ -48,15 +48,13 @@ const partidosHoy: PartidoData[] = [
     dia: 'Hoy 19:00',
   },
   {
-    equipoLocal: 'Lanús',
-    equipoVisitante: 'Belgrano',
-    logoLocal: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Escudo_de_Lan%C3%BAs_2025.png',
+    equipoLocal: 'Racing',
+    equipoVisitante: 'Velez',
+    logoLocal: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/632px-Escudo_de_Racing_Club_%282014%29.svg.png',
     logoVisitante:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg/896px-Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg.png',
-    golesLocal: 0,
-    golesVisitante: 5,
     competicion: 'Liga Profesional',
-    dia: 'Hoy 19:00',
+    dia: 'Hoy 23:00',
   },
 ];
 
@@ -83,10 +81,8 @@ const partidosMañana: PartidoData[] = [
       'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/879px-Liverpool_FC.svg.png',
     logoVisitante:
     'https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/376.png',
-    golesLocal: 0,
-    golesVisitante: 1,
     competicion: 'Liga Profesional',
-    dia: 'Ayer 21:00',
+    dia: 'Mañana 15:00',
   },
 ];
 

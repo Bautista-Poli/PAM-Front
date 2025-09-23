@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, Button, StyleSheet, Image, ImageSourcePropType, Pressable } from 'react-native';
+import Marcador from './marcador';
 
 /** ------------------ Componente Partido ------------------ **/
 export type PartidoData = {
@@ -8,8 +9,8 @@ export type PartidoData = {
   equipoVisitante: string;
   logoLocal: ImageSourcePropType | string;
   logoVisitante: ImageSourcePropType | string;
-  golesLocal: number;
-  golesVisitante: number;
+  golesLocal?: number;
+  golesVisitante?: number;
   competicion: string;
   dia: string; // ej: "Hoy 21:30"
 };
@@ -46,18 +47,11 @@ export default function PartidoCard({ data }: PartidoProps) {
               <Text style={styles.teamName} numberOfLines={1}>{data.equipoLocal}</Text>
             </View>
 
-            {/* Marcador */}
             <View style={styles.scoreBlock}>
-              <Text style={styles.scoreText}>
-                {data.golesLocal} <Text style={styles.dash}>—</Text> {data.golesVisitante}
-              </Text>
-              <Text style={styles.status}>
-                {data.golesLocal === data.golesVisitante
-                  ? 'Empate'
-                  : data.golesLocal > data.golesVisitante
-                  ? 'Gana local'
-                  : 'Gana visita'}
-              </Text>
+              <Marcador
+                golesLocal={data.golesLocal}
+                golesVisitante={data.golesVisitante}
+              />
             </View>
 
             {/* Visitante */}

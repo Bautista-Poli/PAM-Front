@@ -1,15 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, SectionList } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-
+import { View, Text, StyleSheet, SectionList, Pressable } from "react-native";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import PartidoCard, { PartidoData } from "@/components/partido";
 import { obtenerJugadores } from "@/components/info";
 import PlayerItem from "@/components/equipoCard";
 
-
-
 export default function PaginaPrincipal() {
   const { partido } = useLocalSearchParams();
+  const router = useRouter();
   const partidoData: PartidoData | null = partido ? JSON.parse(partido as string) : null;
 
   if (!partidoData) {
@@ -21,38 +19,45 @@ export default function PaginaPrincipal() {
   }
 
   const sections = [
-    {
-      title: `Jugadores — ${partidoData.equipoLocal}`,
-      teamName: partidoData.equipoLocal,
-      data: obtenerJugadores(partidoData.equipoLocal),
-    },
-    {
-      title: `Jugadores — ${partidoData.equipoVisitante}`,
-      teamName: partidoData.equipoVisitante,
-      data: obtenerJugadores(partidoData.equipoVisitante),
-    },
+    { title: `Jugadores — ${partidoData.equipoLocal}`, teamName: partidoData.equipoLocal, data: obtenerJugadores(partidoData.equipoLocal) },
+    { title: `Jugadores — ${partidoData.equipoVisitante}`, teamName: partidoData.equipoVisitante, data: obtenerJugadores(partidoData.equipoVisitante) },
   ];
 
   return (
-    <SectionList
-      sections={sections}
-      keyExtractor={(item, index) => `${item}-${index}`}
-      style={styles.list}
-      ListHeaderComponent={<PartidoCard data={partidoData} />}
-      renderSectionHeader={({ section }) => (
-        <Text style={styles.sectionTitle}>{section.title}</Text>
-      )}
-      renderItem={({ item }) => (
-        <PlayerItem name={item} />
-      )}
-      contentContainerStyle={styles.content}
-    />
+    <View style={styles.view}>
+      <Stack.Screen
+        options={{
+          title: "Partido",
+          headerShown: true,
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()} hitSlop={8}>
+              <Text style={{ color: "#3b82f6", fontWeight: "700" }}>Volver</Text>
+            </Pressable>
+          ),
+        }}
+      />
+
+      <SectionList
+        sections={sections}
+        keyExtractor={(item, index) => `${item}-${index}`}
+        style={styles.list}
+        contentContainerStyle={styles.content}
+        contentInsetAdjustmentBehavior="automatic"   // <— útil en iOS
+        ListHeaderComponent={<PartidoCard data={partidoData} />}
+        renderSectionHeader={({ section }) => (
+          <Text style={styles.sectionTitle}>{section.title}</Text>
+        )}
+        renderItem={({ item }) => <PlayerItem name={item} />}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: "#0b1220", flexGrow: 1 },
-  list: { backgroundColor: "#0b1220" },
+  view: { flex: 1, backgroundColor: "#0b1220" },
+  container: { flex: 1, padding: 16, backgroundColor: "#0b1220", justifyContent: "center" },
+
+  list: { backgroundColor: "transparent" },
   content: { padding: 16, paddingBottom: 40 },
   empty: { color: "#e5e7eb", textAlign: "center", marginTop: 32 },
   sectionTitle: {

@@ -44,8 +44,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f172a',
-    padding: 16,
-    paddingTop: 92,
+    paddingTop: 20,
     gap: 16,
   },
   message: {
