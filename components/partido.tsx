@@ -12,7 +12,7 @@ export type PartidoData = {
   golesLocal?: number;
   golesVisitante?: number;
   competicion: string;
-  dia: string; // ej: "Hoy 21:30"
+  dia: string;
 };
 
 type PartidoProps = {
@@ -68,7 +68,7 @@ export default function PartidoCard({ data }: PartidoProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#111827',
+    backgroundColor: '#0a84e21f',
     borderRadius: 16,
     padding: 16,
     marginTop: 20,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   comp: { color: '#93c5fd', fontSize: 14, fontWeight: '700' },
-  date: { color: '#cbd5e1', fontSize: 12 },
+  date: { color: '#cbd5e1', fontSize: 13, fontWeight: '600' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   teamBlock: { flex: 1, alignItems: 'center', gap: 8 },
   logo: { width: 56, height: 56 },

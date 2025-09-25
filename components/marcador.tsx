@@ -16,7 +16,7 @@ export default function Marcador({
   if (!hayResultado) {
     return (
       <View style={[styles.container]}>
-        <Text style={[styles.status]}>Aún no se jugo</Text>
+        <Text style={[styles.sinResultado]}>-</Text>
       </View>
     );
   }
@@ -43,4 +43,5 @@ const styles = StyleSheet.create({
   scoreText: { fontSize: 28, fontWeight: "800", color: "#f8fafc", letterSpacing: 1 },
   dash: { opacity: 0.7 },
   status: { fontSize: 12, color: "#9ca3af" },
+  sinResultado: {fontSize: 30, color: "#9ca3af"}
 });

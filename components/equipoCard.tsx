@@ -7,11 +7,12 @@ export default function PlayerItem({ name }: { name: string }) {
 
   return (
     <View style={styles.row}>
-      <Text style={styles.name} numberOfLines={1}>• {name}</Text>
-      <View style={styles.rowStar}>
-      <Pressable onPress={() => setRating(0)} style={styles.btn} hitSlop={8}>
-        <Text style={[styles.txt, rating === 0 ? styles.on : styles.off]}>0</Text>
+
+      <Pressable onPress={() => setRating(0)} hitSlop={8} style={{ flex: 1 }}>
+        <Text style={styles.name} numberOfLines={1}>• {name}</Text>
       </Pressable>
+
+      <View style={styles.rowStar}>
 
       <Pressable onPress={() => setRating(1)} style={styles.btn} hitSlop={8}>
         <Text style={[styles.txt, rating >= 1 ? styles.on : styles.off]}>★</Text>

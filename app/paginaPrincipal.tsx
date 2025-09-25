@@ -31,7 +31,7 @@ export default function PaginaPrincipal() {
           headerShown: true,
           headerLeft: () => (
             <Pressable onPress={() => router.back()} hitSlop={8}>
-              <Text style={{ color: "#3b82f6", fontWeight: "700" }}>Volver</Text>
+              <Text style={styles.btnVolver}>← Volver</Text>
             </Pressable>
           ),
         }}
@@ -56,7 +56,7 @@ export default function PaginaPrincipal() {
 const styles = StyleSheet.create({
   view: { flex: 1, backgroundColor: "#0b1220" },
   container: { flex: 1, padding: 16, backgroundColor: "#0b1220", justifyContent: "center" },
-
+  btnVolver: { color: "#93c5fd", fontWeight: "600", fontSize: 15 },
   list: { backgroundColor: "transparent" },
   content: { padding: 16, paddingBottom: 40 },
   empty: { color: "#e5e7eb", textAlign: "center", marginTop: 32 },
