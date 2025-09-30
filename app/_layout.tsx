@@ -1,5 +1,5 @@
 // app/_layout.tsx
-import AppLayout from "./(app)/_layout"
+import AppLayout from "./(app)/(mainPage)/_layout"
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
