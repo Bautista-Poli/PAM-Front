@@ -1,5 +1,5 @@
 import { Link } from "expo-router"
-import { View , Text , StyleSheet, TextInput} from "react-native"
+import { View , Text , StyleSheet, TextInput, Image} from "react-native"
 
 
 export default function Login(){
@@ -10,9 +10,11 @@ export default function Login(){
             <TextInput style={styles.textInputBoxStyle} placeholder="Nombre de usuario"></TextInput>
             <TextInput style={styles.textInputBoxStyle} placeholder="Contraseña" secureTextEntry={true}></TextInput>
 
+            
             <Link href={"/(app)"}>
                 <Text style={styles.textStyle}>Recuperar contraseña</Text>
             </Link>
+            <Image source={require("../../assets/images/iconico-del-campeonato-de-futbol.png")} style={styles.logoStyle}/>
 
             <Link style={styles.continueButtonStyle} href={"/(app)"}>
                 <Text style={styles.textStyle}>Continuar</Text>
@@ -49,8 +51,12 @@ const styles = StyleSheet.create({
         padding:20,
         borderRadius:6,
         width: 370,
-        marginTop:520
+        marginTop:20
 
+    },logoStyle:{
+        resizeMode: "center",
+        alignSelf: "center",
+        height: 500,
     }
 
 

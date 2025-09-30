@@ -1,14 +1,14 @@
 import { Link } from "expo-router"
-import { View , Text , StyleSheet, TextInput} from "react-native"
+import { View , Text , StyleSheet, Image} from "react-native"
 
 
 export default function Index(){
 
     return(
         <View>
-            <Text style={[styles.textStyle,styles.titleStyle]}>Promietres</Text>
+            <Text style={[styles.textStyle,styles.titleStyle]}>GolData</Text>
 
-
+            <Image source={require("../assets/images/iconico-del-campeonato-de-futbol.png")} style={styles.logoStyle}/>
             <Link style={styles.ButtonStyle} href={"/(auth)/login"}>
                 <Text style={styles.textStyle}>Iniciar sesión</Text>
             </Link>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     titleStyle:{
         fontSize: 35,
         marginTop:45,
-        marginBottom:530
+        marginBottom:60
     },
     ButtonStyle:{
         backgroundColor: "#1e6091",
@@ -41,6 +41,10 @@ const styles = StyleSheet.create({
         width: 370,
         marginTop:30
 
+    },logoStyle:{
+        resizeMode: "center",
+        alignSelf: "center",
+        height:500
     }
 
 

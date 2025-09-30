@@ -1,5 +1,5 @@
 // app/(app)/_layout.tsx
-import { Stack } from "expo-router";
+import { Stack,Tabs} from "expo-router";
 
 export default function AppLayout() {
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import Partido from '@/components/partido';
 import { getPartidos } from '@/components/info';
+import {Ionicons} from "@expo/vector-icons";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
 
@@ -37,7 +38,7 @@ export default function Index() {
         <DayChip label="Mañana" value="mañana" />
       </View>
 
-      <View style={{ alignItems: "center", marginVertical: 12 }}>
+      <View style={styles.ligaTitleText}>
         <Link href="/ligas" asChild>
           <Pressable
             style={({ pressed }) => [
@@ -48,6 +49,9 @@ export default function Index() {
             <Text style={styles.ligaBtnText}>Tabla Liga Profesional</Text>
           </Pressable>
         </Link>
+        <Pressable style={styles.menuDeLigas} >
+          <Ionicons name="caret-down-outline" color={"white"} size={23}/>
+        </Pressable>
       </View>
 
       <FlatList
@@ -98,5 +102,18 @@ const styles = StyleSheet.create({
   ligaBtnPressed: {
     opacity: 0.75,
   },
-  ligaBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  ligaBtnText: { 
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16 },
+
+  ligaTitleText:{
+    alignSelf: "center",
+    marginVertical: 12,
+    flexDirection:"row"
+  },
+  menuDeLigas:{
+    marginLeft:13
+  }
+
 });
