@@ -1,14 +1,24 @@
 import { Link } from "expo-router";
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import Partido from '@/components/partido';
 import { getPartidos } from '@/components/info';
-import {Ionicons} from "@expo/vector-icons";
+import LigaSelector from "@/components/ligaSelector";
+
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
+const ligasDisponibles = [
+  'Liga Profesional',
+  'Premier League',
+  'La Liga',
+];
 
 export default function Index() {
   const [day, setDay] = useState<Dia>('hoy');
+  const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional');
+
+
+  
 
   const DayChip = ({ label, value }: { label: string; value: Dia }) => {
     const selected = day === value;
@@ -46,20 +56,26 @@ export default function Index() {
               pressed && styles.ligaBtnPressed,
             ]}
           >
-            <Text style={styles.ligaBtnText}>Tabla Liga Profesional</Text>
+            <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
           </Pressable>
         </Link>
-        <Pressable style={styles.menuDeLigas} >
-          <Ionicons name="caret-down-outline" color={"white"} size={23}/>
-        </Pressable>
+        <LigaSelector
+            selectedLiga={ligaSeleccionada}
+            ligas={ligasDisponibles}
+            onSelect={setLigaSeleccionada}
+          />
       </View>
 
       <FlatList
-        data={getPartidos(day)}
+        data={getPartidos(day).filter(p => p.competicion === ligaSeleccionada)}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.card}
         renderItem={({ item }) => <Partido data={item} />}
-        ListEmptyComponent={<Text style={styles.empty}>Sin partidos para este día</Text>}
+        ListEmptyComponent={
+          <Text style={styles.empty}>
+            Sin partidos para {day} en {ligaSeleccionada}
+          </Text>
+        }
       />
     </View>
   );
@@ -105,7 +121,7 @@ const styles = StyleSheet.create({
   ligaBtnText: { 
     color: '#fff',
     fontWeight: '700',
-    fontSize: 16 },
+    fontSize: 22 },
 
   ligaTitleText:{
     alignSelf: "center",

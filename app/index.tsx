@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     },
     titleStyle:{
         fontSize: 35,
-        marginTop:45,
+        marginTop:85,
         marginBottom:60
     },
     ButtonStyle:{
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },logoStyle:{
         resizeMode: "center",
         alignSelf: "center",
-        height:500
+        height:400
     }
 
 

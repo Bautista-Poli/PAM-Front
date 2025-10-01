@@ -29,21 +29,22 @@ const styles = StyleSheet.create({
 
     textStyle:{
         color:"white",
-        textAlign:"center"
+        textAlign:"center",
     },
     titleStyle:{
         fontSize: 30,
-        marginTop:45,
+        marginTop:75,
         marginBottom:20
     },
     textInputBoxStyle:{
         backgroundColor:"#e7e7e7",
         alignSelf:"center",
+        fontSize: 17,
         padding:20,
         height:55,
-        width:400,
+        width:350,
         marginVertical:10,
-        borderRadius:6
+        borderRadius:6,
     },
     continueButtonStyle:{
         backgroundColor: "#1e6091",
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     },logoStyle:{
         resizeMode: "center",
         alignSelf: "center",
-        height: 500,
+        height: 350,
     }
 
 

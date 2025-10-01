@@ -48,6 +48,14 @@ const partidosHoy: PartidoData[] = [
     competicion: 'Liga Profesional',
     dia: '21:00',
   },
+  {
+    equipoLocal: 'Barcelona',
+    equipoVisitante: 'Atl Madrid',
+    logoLocal: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/1183px-FC_Barcelona_%28crest%29.svg.png',
+    logoVisitante: 'https://static.wikia.nocookie.net/futbol/images/a/a2/Atletico_Madrid_logo.svg.png/revision/latest?cb=20250317111446',
+    competicion: 'La Liga',
+    dia: '21:00',
+  },
 ];
 
 const partidosAyer: PartidoData[] = [
