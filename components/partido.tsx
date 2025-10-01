@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { View, Text, Button, StyleSheet, Image, ImageSourcePropType, Pressable } from 'react-native';
 import Marcador from './marcador';
 
-/** ------------------ Componente Partido ------------------ **/
 export type PartidoData = {
   equipoLocal: string;
   equipoVisitante: string;
@@ -27,7 +26,7 @@ export default function PartidoCard({ data }: PartidoProps) {
     <Link
       href={{
         pathname: "/paginaPrincipal",
-        params: { partido: JSON.stringify(data) }, // se pasa como string
+        params: { partido: JSON.stringify(data) },
       }}
       asChild
     >

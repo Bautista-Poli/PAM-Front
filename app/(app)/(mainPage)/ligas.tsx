@@ -1,4 +1,3 @@
-// app/ligas.tsx
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Estadisticas from "@/components/estadisticas";
@@ -44,6 +43,7 @@ const tabla: EquipoTabla[] = [
   { nombre: "Barracas Central", puntos: 23, pj: 27, gf: 15, gc: 33, dg: -18 },
 ];
 
+
 export default function Ligas() {
   const router = useRouter();
 
@@ -69,6 +69,8 @@ export default function Ligas() {
           ),
         }}
       />
+
+      <Text style={styles.tituloTabla}>Tabla Liga Profesional 🇦🇷</Text>
 
       <FlatList
         data={tabla}
@@ -124,4 +126,6 @@ const styles = StyleSheet.create({
     footer: { marginTop: 20, padding: 16, backgroundColor: "#112336", borderRadius: 8 },
     footerTitle: { color: "#fff", fontWeight: "500", marginBottom: 8, fontSize: 16 },
     footerText: { color: "#cbd5e1", marginBottom: 4 },
+
+    tituloTabla: {color: 'white', textAlign: "center", fontSize: 20, fontWeight: "600"}
 });

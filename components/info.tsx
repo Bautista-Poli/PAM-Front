@@ -1,4 +1,3 @@
-// src/data/info.ts
 import { PartidoData } from '../components/partido';
 
 const partidosHoy: PartidoData[] = [
@@ -47,6 +46,22 @@ const partidosHoy: PartidoData[] = [
     logoVisitante: 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/gimnasia.png',
     competicion: 'Liga Profesional',
     dia: '21:00',
+  },
+  {
+    equipoLocal: 'Barcelona',
+    equipoVisitante: 'Atl. Madrid',
+    logoLocal: 'https://paladarnegro.net/escudoteca/espana/laliga/png/barcelona.png',
+    logoVisitante: 'https://paladarnegro.net/escudoteca/espana/laliga/png/atlmadrid.png',
+    competicion: 'La Liga',
+    dia: '21:00',
+  },
+  {
+    equipoLocal: 'Liverpool',
+    equipoVisitante: 'Man. United',
+    logoLocal: 'https://paladarnegro.net/escudoteca/inglaterra/premier/png/liverpool.png',
+    logoVisitante: 'https://paladarnegro.net/escudoteca/inglaterra/premier/png/manchesterunited.png',
+    competicion: 'Premier League',
+    dia: '19:00',
   },
 ];
 
