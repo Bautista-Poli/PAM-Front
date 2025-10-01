@@ -72,7 +72,7 @@ const partidosAyer: PartidoData[] = [
   dia: 'Finalizado',
 },
 {
-  equipoLocal: 'Estudiantes',
+  equipoLocal: 'Estudiantes ',
   equipoVisitante: 'Talleres',
   logoLocal: 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/estudiantes.png',
   logoVisitante: 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/talleres.png',
