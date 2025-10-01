@@ -1,4 +1,3 @@
-// components/LigaSelector.tsx
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Modal, FlatList } from 'react-native';
@@ -20,7 +19,7 @@ export default function LigaSelector({ onSelect, selectedLiga, ligas }: LigaSele
   return (
     <View>
       <Pressable style={styles.dropdownTrigger} onPress={() => setVisible(true)}>
-        <Ionicons name="caret-down-outline" color={"white"} size={14}/>
+        <Ionicons name="caret-down-outline" color="white" size={14} />
       </Pressable>
 
       <Modal transparent visible={visible} animationType="fade">
@@ -29,11 +28,25 @@ export default function LigaSelector({ onSelect, selectedLiga, ligas }: LigaSele
             <FlatList
               data={ligas}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <Pressable onPress={() => handleSelect(item)} style={styles.option}>
-                  <Text style={styles.optionText}>{item}</Text>
-                </Pressable>
-              )}
+              renderItem={({ item, index }) => {
+                const isSelected = item === selectedLiga;
+                return (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => handleSelect(item)}
+                    style={({ pressed }) => [
+                      styles.option,
+                      isSelected && styles.optionSelected,  // resalta la seleccionada
+                      pressed && styles.optionPressed,       // feedback al presionar
+                    ]}
+                    hitSlop={8}
+                  >
+                    <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
+                      {item}
+                    </Text>
+                  </Pressable>
+                );
+              }}
             />
           </View>
         </Pressable>
@@ -52,27 +65,46 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#A9D6E5',
   },
-  triggerText: {
-    color: 'white',
-    fontWeight: '600',
-  },
+
   overlay: {
     flex: 1,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   dropdown: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     marginHorizontal: 40,
     borderRadius: 10,
     padding: 12,
   },
+
   option: {
-    paddingVertical: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    marginVertical: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  optionSelected: {
+    backgroundColor: '#ffffffff',
+    borderWidth: 0.4,
+    borderColor: '#1e5f91ff',
+  },
+  optionPressed: {
+    opacity: 0.85,
+  },
+
   optionText: {
     fontSize: 16,
-    color: '#1E6091',
+    color: '#185585',
     textAlign: 'center',
+    fontWeight: '500',
+  },
+  optionTextSelected: {
+    fontWeight: '600',
+    color: '#0E3E6C',
   },
 });

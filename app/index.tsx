@@ -26,12 +26,12 @@ const styles = StyleSheet.create({
     textStyle:{
         color:"white",
         textAlign:"center",
-        fontSize:15
+        fontSize: 15,
     },
     titleStyle:{
-        fontSize: 35,
-        marginTop:85,
-        marginBottom:60
+        fontSize: 40,
+        marginTop: 85,
+        marginBottom: 60
     },
     ButtonStyle:{
         backgroundColor: "#1e6091",

@@ -17,9 +17,6 @@ export default function Index() {
   const [day, setDay] = useState<Dia>('hoy');
   const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional');
 
-
-  
-
   const DayChip = ({ label, value }: { label: string; value: Dia }) => {
     const selected = day === value;
     return (
@@ -49,14 +46,19 @@ export default function Index() {
       </View>
 
       <View style={styles.ligaTitleText}>
-        <Link href="/ligas" asChild>
+        <Link href={`/ligas?liga=${ligaSeleccionada}`} asChild>
           <Pressable
             style={({ pressed }) => [
               styles.ligaBtn,
               pressed && styles.ligaBtnPressed,
             ]}
           >
-            <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
+            <Text style={styles.ligaBtnText}>
+              {ligaSeleccionada === 'Liga Profesional' ? '🇦🇷 ': ligaSeleccionada === 'Premier League' ? '🏴󠁧󠁢󠁥󠁮󠁧󠁿 '
+                : ligaSeleccionada === 'La Liga' ? '🇪🇸 ' : ''}
+              {ligaSeleccionada}
+            </Text>
+
           </Pressable>
         </Link>
         <LigaSelector

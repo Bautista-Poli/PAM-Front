@@ -1,5 +1,5 @@
 import { Link } from "expo-router"
-import { View , Text , StyleSheet, TextInput, Image} from "react-native"
+import { View , Text , StyleSheet, TextInput, Image, Pressable} from "react-native"
 
 
 export default function Login(){
@@ -11,7 +11,7 @@ export default function Login(){
             <TextInput style={styles.textInputBoxStyle} placeholder="Contraseña" secureTextEntry={true}></TextInput>
 
             
-            <Link href={"/(app)"}>
+            <Link href={"/(app)"} style={styles.recuperarContra}>
                 <Text style={styles.textStyle}>Recuperar contraseña</Text>
             </Link>
             <Image source={require("../../assets/images/iconico-del-campeonato-de-futbol.png")} style={styles.logoStyle}/>
@@ -40,24 +40,28 @@ const styles = StyleSheet.create({
         backgroundColor:"#e7e7e7",
         alignSelf:"center",
         fontSize: 17,
-        padding:20,
-        height:55,
-        width:350,
+        padding: 20,
+        height: 60,
+        width: '85%',
         marginVertical:10,
         borderRadius:6,
     },
     continueButtonStyle:{
         backgroundColor: "#1e6091",
-        alignSelf:"center",
-        padding:20,
-        borderRadius:6,
-        width: 370,
-        marginTop:20
+        alignSelf: "center",
+        padding: 20,
+        borderRadius: 6,
+        width: '85%',
+        marginTop: 20
 
-    },logoStyle:{
+    },
+    logoStyle:{
         resizeMode: "center",
         alignSelf: "center",
         height: 350,
+    },
+    recuperarContra:{
+        marginTop: 15
     }
 
 

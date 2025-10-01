@@ -1,4 +1,3 @@
-// src/data/info.ts
 import { PartidoData } from '../components/partido';
 
 const partidosHoy: PartidoData[] = [
@@ -50,11 +49,19 @@ const partidosHoy: PartidoData[] = [
   },
   {
     equipoLocal: 'Barcelona',
-    equipoVisitante: 'Atl Madrid',
-    logoLocal: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/1183px-FC_Barcelona_%28crest%29.svg.png',
-    logoVisitante: 'https://static.wikia.nocookie.net/futbol/images/a/a2/Atletico_Madrid_logo.svg.png/revision/latest?cb=20250317111446',
+    equipoVisitante: 'Atl. Madrid',
+    logoLocal: 'https://paladarnegro.net/escudoteca/espana/laliga/png/barcelona.png',
+    logoVisitante: 'https://paladarnegro.net/escudoteca/espana/laliga/png/atlmadrid.png',
     competicion: 'La Liga',
     dia: '21:00',
+  },
+  {
+    equipoLocal: 'Liverpool',
+    equipoVisitante: 'Man. United',
+    logoLocal: 'https://paladarnegro.net/escudoteca/inglaterra/premier/png/liverpool.png',
+    logoVisitante: 'https://paladarnegro.net/escudoteca/inglaterra/premier/png/manchesterunited.png',
+    competicion: 'Premier League',
+    dia: '19:00',
   },
 ];
 

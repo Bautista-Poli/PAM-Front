@@ -10,12 +10,9 @@ export default function Estadisticas({ promGoles, maxGF, minGC }: Props) {
   return (
     <View style={styles.footer}>
       <Text style={styles.footerTitle}>Resumen</Text>
-      <Text style={styles.footerText}>⚽ Promedio de goles por partido: {promGoles}
-      </Text>
-      <Text style={styles.footerText}>🔥 Equipo más goleador: {maxGF.nombre} ({maxGF.gf} GF)
-      </Text>
-      <Text style={styles.footerText}>🛡️ Equipo menos goleado: {minGC.nombre} ({minGC.gc} GC)
-      </Text>
+      <Text style={styles.footerText}>⚽ Promedio de goles por partido: {promGoles}</Text>
+      <Text style={styles.footerText}>🔥 Equipo más goleador: {maxGF.nombre} ({maxGF.gf} GF)</Text>
+      <Text style={styles.footerText}>🛡️ Equipo menos goleado: {minGC.nombre} ({minGC.gc} GC)</Text>
     </View>
   );
 }
