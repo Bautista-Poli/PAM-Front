@@ -34,4 +34,13 @@ export interface MatchRow {
   last_hash?: string | null;
   first_seen?: string | null;
   updated_at?: string | null;
+
+  home_crest: string | null;
+  away_crest: string | null;
+}
+
+export interface Player {
+  id: number;
+  full_name: string;
+  team_id: number;
 }

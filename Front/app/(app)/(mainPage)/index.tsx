@@ -1,10 +1,10 @@
 import { Link } from "expo-router";
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
-import Partido from '@/components/partido';
-import { getPartidos } from '@/components/info';
-import LigaSelector from "@/components/ligaSelector";
+import { getPartidos } from '@/components/apiConnections/info';
+import LigaSelector from "@/components/componentesDeApp/ligaSelector";
 import { MatchRow } from "@/components/apiConnections/types";
+import Partido from "@/components/componentesDeApp/partido";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
 
@@ -12,6 +12,7 @@ const ligasDisponibles = [
   'Liga Profesional Argentina',
   'Premier League',
   'LaLiga',
+  'Copa Libertadores'
 ];
 
 export default function Index() {
