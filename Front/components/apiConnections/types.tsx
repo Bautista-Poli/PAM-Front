@@ -44,3 +44,14 @@ export interface Player {
   full_name: string;
   team_id: number;
 }
+
+export type UserData = {
+  id: number;
+  usuario: string;
+  mail: string;
+  club_id: number;
+  club: {
+    nombre: string;
+    crest_url: string;
+  }
+}

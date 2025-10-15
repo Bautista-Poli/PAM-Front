@@ -1,35 +1,74 @@
-import { Link } from "expo-router"
-import { View , Text , StyleSheet, TextInput, Image} from "react-native"
+import { postLogin } from "@/components/apiConnections/apileagues";
+import { Link, useRouter } from "expo-router"
+import { useState } from "react";
+import { View , Text , StyleSheet, TextInput, Image, Alert} from "react-native"
 
+export default function Login() {
+  const [mail, setMail] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const router = useRouter();
 
-export default function Login(){
-    return(
-        <View>
-            <Text style={[styles.titleStyle,styles.textStyle]}>Iniciar sesión</Text>
+  const handleLogin = async () => {
+    const user = await postLogin(mail, contrasena);
+    if (user) {
+      router.push({
+        pathname: '/(app)',
+        params: { usuario: JSON.stringify(user) } // le pasás el nombre al index
+      });
+    } else {
+      Alert.alert('Error', 'Mail o contraseña incorrectos');
+    }
+  };
 
-            <TextInput style={styles.textInputBoxStyle} placeholder="Nombre de usuario"></TextInput>
-            <TextInput style={styles.textInputBoxStyle} placeholder="Contraseña" secureTextEntry={true}></TextInput>
+  return (
+    <View>
+      <Text style={[styles.titleStyle, styles.textStyle]}>Iniciar sesión</Text>
+      <Text style={styles.enterStyle}>Mail</Text>
+      <TextInput
+        style={styles.textInputBoxStyle}
+        placeholder="Correo electrónico"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        value={mail}
+        onChangeText={setMail}
+      />
 
-            
-            <Link href={"/(app)"}>
-                <Text style={styles.textStyle}>Recuperar contraseña</Text>
-            </Link>
-            <Image source={require("../../assets/images/iconico-del-campeonato-de-futbol.png")} style={styles.logoStyle}/>
+      <Text style={styles.enterStyle}>Contraseña</Text>
+      <TextInput
+        style={styles.textInputBoxStyle}
+        placeholder="Contraseña"
+        secureTextEntry={true}
+        value={contrasena}
+        onChangeText={setContrasena}
+      />
 
-            <Link style={styles.continueButtonStyle} href={"/(app)"}>
-                <Text style={styles.textStyle}>Continuar</Text>
-            </Link>
-            
+      <Link href="/(app)">
+        <View> 
+          <Text style={styles.enterStyle}>Recuperar contraseña</Text>
         </View>
+      </Link>
 
-    )
+      <Image source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} style={styles.logoStyle}/>
+
+      <Text onPress={handleLogin} style={styles.continueButtonStyle}>
+        <Text style={styles.textStyle}>Continuar</Text>
+      </Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
 
     textStyle:{
-        color:"white",
-        textAlign:"center",
+      color:"white",
+      textAlign:"center",
+      fontSize: 20,
+    },
+    enterStyle:{
+      color:"white",
+      marginLeft: 30,
+      marginTop: 20,
+      fontSize: 17,
     },
     titleStyle:{
         fontSize: 30,
@@ -57,9 +96,8 @@ const styles = StyleSheet.create({
     },logoStyle:{
         resizeMode: "center",
         alignSelf: "center",
-        height: 350,
-    }
-
+        height: 300,
+    },
 
 })
 

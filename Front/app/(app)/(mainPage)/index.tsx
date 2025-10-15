@@ -1,10 +1,11 @@
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { getPartidos } from '@/components/apiConnections/info';
 import LigaSelector from "@/components/componentesDeApp/ligaSelector";
-import { MatchRow } from "@/components/apiConnections/types";
+import { MatchRow, UserData } from "@/components/apiConnections/types";
 import Partido from "@/components/componentesDeApp/partido";
+import MenuUsuario from "@/components/componentesDeApp/menuUsuario";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
 
@@ -21,6 +22,9 @@ export default function Index() {
   const [partidos, setPartidos] = useState<MatchRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { usuario } = useLocalSearchParams();
+  const userObj = JSON.parse(usuario as string) as UserData; 
+
 
   useEffect(() => {
     const cargar = async () => {
@@ -79,10 +83,13 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {day === 'hoy' ? 'Partidos de hoy' :
-         day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
-      </Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>
+          {day === 'hoy' ? 'Partidos de hoy' :
+          day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
+        </Text>
+        <MenuUsuario usuario={userObj} />
+      </View>
 
       <View style={styles.buttonRow}>
         <DayChip label="Ayer" value="ayer" />
@@ -127,7 +134,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#112336ff', paddingTop: 20, gap: 12 },
   card: { gap: 8, paddingBottom: 24, marginHorizontal: 7 },
   buttonRow: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 4 },
-  title: { color: '#e9ebeeff', textAlign: 'center', fontSize: 18, fontWeight: '600', marginBottom: 12, marginTop: 37 },
+  title: { color: '#e9ebeeff', fontSize: 18, fontWeight: '600', marginLeft:50 },
   empty: { color: '#94a3b8', textAlign: 'center', marginTop: 24 },
 
   dayChip: {
@@ -185,5 +192,11 @@ statusText: {
   color: '#555',
 },
 
-
+headerRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 8,
+  marginTop: 60,
+  zIndex: 100,
+},
 });
