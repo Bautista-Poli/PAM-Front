@@ -1,5 +1,18 @@
 # Welcome to your Expo app 👋
 
+Luego de hacer andar el front con:
+npx expo start -c
+Y hacer andar el backend al mismo tiempo con
+npm run dev
+La base de datos esta subida a neon (requiere invitacion para modificarla)
+Se puede igual ver con 
+npx prisma studio
+
+Para entrar se debe meter
+usuario : prueba
+contraseña : 1234
+
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
