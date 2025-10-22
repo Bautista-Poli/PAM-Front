@@ -5,5 +5,7 @@
 expo-env.d.ts
 # @end expo-cli
 
-# Ignorar la carpeta del backend
-backend/
+# Ignorar carpetas grandes y de compilación
+node_modules/
+backend/ 
+# Asegúrate de que las demás líneas importantes (como .expo/ o .env) también estén ahí
