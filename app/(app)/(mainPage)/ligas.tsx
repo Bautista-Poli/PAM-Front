@@ -1,7 +1,7 @@
 // app/ligas.tsx
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter } from "expo-router";
-import Estadisticas from "@/components/estadisticas";
+import Estadisticas from "@/components/componentesDeApp/estadisticas";
 
 
 type EquipoTabla = {

@@ -1,24 +1,65 @@
-import { Link } from "expo-router";
-import { useState } from 'react';
+import { Link, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
-import Partido from '@/components/partido';
-import { getPartidos } from '@/components/info';
-import LigaSelector from "@/components/ligaSelector";
-
+import { getPartidos } from '@/components/apiConnections/info';
+import LigaSelector from "@/components/componentesDeApp/ligaSelector";
+import { MatchRow, UserData } from "@/components/apiConnections/types";
+import Partido from "@/components/componentesDeApp/partido";
+import MenuUsuario from "@/components/componentesDeApp/menuUsuario";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
+
 const ligasDisponibles = [
-  'Liga Profesional',
+  'Liga Profesional Argentina',
   'Premier League',
-  'La Liga',
+  'LaLiga',
 ];
 
 export default function Index() {
   const [day, setDay] = useState<Dia>('hoy');
-  const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional');
+  const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional Argentina');
+  const [partidos, setPartidos] = useState<MatchRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { usuario } = useLocalSearchParams();
+  const userObj = JSON.parse(usuario as string) as UserData; 
 
 
-  
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        setLoading(true);
+        const todos = await getPartidos(day); // 👈 acá traés la data
+        setPartidos(todos);
+      } catch (e: any) {
+        setError(e.message ?? "Error al cargar partidos");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargar();
+  }, [day]);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.statusText}>Cargando partidos...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.statusText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+
+  // filtramos los partidos por liga seleccionada
+  const partidosFiltrados = partidos.filter(p => p.league === ligaSeleccionada);
 
   const DayChip = ({ label, value }: { label: string; value: Dia }) => {
     const selected = day === value;
@@ -31,16 +72,23 @@ export default function Index() {
           pressed && styles.dayChipPressed,
         ]}
       >
-        <Text style={[styles.dayChipText, selected && styles.dayChipTextSelected]}>{label}</Text>
+        <Text style={[styles.dayChipText, selected && styles.dayChipTextSelected]}>
+          {label}
+        </Text>
       </Pressable>
     );
   };
 
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {day === 'hoy' ? 'Partidos de hoy' : day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
-      </Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>
+          {day === 'hoy' ? 'Partidos de hoy' :
+          day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
+        </Text>
+        <MenuUsuario usuario={userObj} />
+      </View>
 
       <View style={styles.buttonRow}>
         <DayChip label="Ayer" value="ayer" />
@@ -60,15 +108,15 @@ export default function Index() {
           </Pressable>
         </Link>
         <LigaSelector
-            selectedLiga={ligaSeleccionada}
-            ligas={ligasDisponibles}
-            onSelect={setLigaSeleccionada}
-          />
+          selectedLiga={ligaSeleccionada}
+          ligas={ligasDisponibles}
+          onSelect={setLigaSeleccionada}
+        />
       </View>
 
       <FlatList
-        data={getPartidos(day).filter(p => p.competicion === ligaSeleccionada)}
-        keyExtractor={(_, index) => index.toString()}
+        data={partidosFiltrados}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.card}
         renderItem={({ item }) => <Partido data={item} />}
         ListEmptyComponent={
@@ -85,7 +133,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#112336ff', paddingTop: 20, gap: 12 },
   card: { gap: 8, paddingBottom: 24, marginHorizontal: 7 },
   buttonRow: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 4 },
-  title: { color: '#e9ebeeff', textAlign: 'center', fontSize: 18, fontWeight: '600', marginBottom: 12, marginTop: 37 },
+  title: { color: '#e9ebeeff', fontSize: 18, fontWeight: '600', marginLeft:50 },
   empty: { color: '#94a3b8', textAlign: 'center', marginTop: 24 },
 
   dayChip: {
@@ -130,6 +178,24 @@ const styles = StyleSheet.create({
   },
   menuDeLigas:{
     marginLeft:13
-  }
+  },
+  center: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 16,
+},
 
+statusText: {
+  fontSize: 16,
+  color: '#555',
+},
+
+headerRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 8,
+  marginTop: 60,
+  zIndex: 100,
+},
 });
