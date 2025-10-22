@@ -13,7 +13,6 @@ const ligasDisponibles = [
   'Liga Profesional Argentina',
   'Premier League',
   'LaLiga',
-  'Copa Libertadores'
 ];
 
 export default function Index() {

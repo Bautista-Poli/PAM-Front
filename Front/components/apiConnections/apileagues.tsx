@@ -17,11 +17,6 @@ export async function getMatches(url: string): Promise<MatchRow[]> {
   return await res.json();
 }
 
-export async function getEscudo(club:string): Promise<MatchRow[]> {
-  const res = await fetch(`${API_BASE}/escudos?club=${club}`);
-  if (!res.ok) throw new Error('Error al obtener los escudos');
-  return await res.json();
-}
 
 export async function getPlayers(club: string): Promise<Player[]> {
   const res = await fetch(`${API_BASE}/players?club=${club}`);

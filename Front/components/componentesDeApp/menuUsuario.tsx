@@ -20,7 +20,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
 
   return (
     <View style={styles.wrap}>
-      {/* Botón avatar */}
+      
       <Pressable onPress={() => setVisible(!visible)} style={styles.avatarBtn}>
         {crest ? (
           <Image source={{ uri: crest }} style={styles.avatarImg} />
@@ -31,7 +31,6 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
         )}
       </Pressable>
 
-      {/* Menú simple */}
       {visible && (
         <View style={styles.menuBox}>
           <View style={styles.menuHeader}>

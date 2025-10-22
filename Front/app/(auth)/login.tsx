@@ -41,13 +41,6 @@ export default function Login() {
         value={contrasena}
         onChangeText={setContrasena}
       />
-
-      <Link href="/(app)">
-        <View> 
-          <Text style={styles.enterStyle}>Recuperar contraseña</Text>
-        </View>
-      </Link>
-
       <Image source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} style={styles.logoStyle}/>
 
       <Text onPress={handleLogin} style={styles.continueButtonStyle}>
