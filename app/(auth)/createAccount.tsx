@@ -1,108 +1,202 @@
-import { Link } from "expo-router"
+import { Link } from "expo-router";
 import { useState } from "react";
-import { View , Text , StyleSheet, TextInput, Pressable} from "react-native"
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView } from "react-native";
 
 export default function CreateAccount() {
   const [secureEntry, setSecureEntry] = useState(true);
   const [repeatSecureEntry, setRepeatSecureEntry] = useState(true);
 
   return (
-    <View>
-      <Text style={[styles.titleStyle, styles.textStyle]}>Crear cuenta</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.titleStyle}>Crear cuenta</Text>
+        <Text style={styles.subtitleStyle}>
+          Completa tus datos para comenzar
+        </Text>
 
-      <Text style={styles.labelStyle}>Nombre:</Text>
-      <TextInput style={styles.textInputBoxStyle} placeholder="Nombre de usuario" />
+        <View style={styles.formContainer}>
+      
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Nombre</Text>
+            <TextInput
+              style={styles.textInputBoxStyle}
+              placeholder="Nombre de usuario"
+              placeholderTextColor="#9999997e"
+            />
+          </View>
 
-      <Text style={styles.labelStyle}>Contraseña:</Text>
-      <View>
-        <TextInput
-          style={styles.textInputBoxStyle}
-          placeholder="Contraseña"
-          secureTextEntry={secureEntry}
-        />
-        <Pressable onPress={() => setSecureEntry(!secureEntry)}>
-          <Text style={styles.toggleStyle}>
-            {secureEntry ? "Mostrar" : "Ocultar"}
-          </Text>
-        </Pressable>
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Correo electrónico</Text>
+            <TextInput
+              style={styles.textInputBoxStyle}
+              placeholder="ejemplo@email.com"
+              placeholderTextColor="#9999997e"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Contraseña</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Contraseña"
+                placeholderTextColor="#9999997e"
+                secureTextEntry={secureEntry}
+              />
+              <Pressable
+                onPress={() => setSecureEntry(!secureEntry)}
+                style={styles.toggleButton}
+              >
+                <Text style={styles.toggleStyle}>
+                  {secureEntry ? "Mostrar" : "Ocultar"}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Repetir Contraseña</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Repetir Contraseña"
+                placeholderTextColor="#9999997e"
+                secureTextEntry={repeatSecureEntry}
+              />
+              <Pressable
+                onPress={() => setRepeatSecureEntry(!repeatSecureEntry)}
+                style={styles.toggleButton}
+              >
+                <Text style={styles.toggleStyle}>
+                  {repeatSecureEntry ? "Mostrar" : "Ocultar"}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
+          
+        </View>
+
+        <Link style={styles.continueButtonStyle} href={"/(app)"} asChild>
+          <Pressable>
+            <Text style={styles.buttonTextStyle}>Continuar</Text>
+          </Pressable>
+        </Link>
+
+        <Text style={styles.footerText}>
+          ¿Ya tenés cuenta?{" "}
+          <Link href="/login">
+            <Text style={styles.linkText}>Inicia sesión</Text>
+          </Link>
+        </Text>
       </View>
-
-      <Text style={styles.labelStyle}>Repetir Contraseña:</Text>
-      <View>
-        <TextInput
-          style={styles.textInputBoxStyle}
-          placeholder="Repetir Contraseña"
-          secureTextEntry={repeatSecureEntry}
-        />
-        <Pressable onPress={() => setRepeatSecureEntry(!repeatSecureEntry)}>
-          <Text style={styles.toggleStyle}>
-            {repeatSecureEntry ? "Mostrar" : "Ocultar"}
-          </Text>
-        </Pressable>
-      </View>
-
-      <Text style={styles.labelStyle}>Mail:</Text>
-      <TextInput style={styles.textInputBoxStyle} placeholder="ejemplo@email.com" />
-
-      <Link style={styles.continueButtonStyle} href={"/(app)"}>
-        <Text style={styles.buttonTextStyle}>Continuar</Text>
-      </Link>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  textStyle: {
+  container: {
+    flexGrow: 1,
+    backgroundColor: "#0b1220",
+    paddingVertical: 20,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    justifyContent: "flex-start",
+    paddingTop: 70
+  },
+  titleStyle: {
     color: "white",
+    fontSize: 32,
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: 18,
-    fontWeight: "600",
-    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  subtitleStyle: {
+    color: "#9ca3af",
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: 40,
+  },
+  formContainer: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  inputGroup: {
+    marginBottom: 20,
   },
   labelStyle: {
     color: "white",
-    fontSize: 14,
-    marginLeft: 30,
-    marginTop: 10,
-    marginBottom: 4,
-  },
-  toggleStyle: {
-    color: "#1e6091",
-    textAlign: "right",
-    marginRight: 30,
-    marginTop: -35,
-    marginBottom: 15,
-    fontSize: 14,
-  },
-  titleStyle: {
-    fontSize: 30,
-    marginTop: 45,
-    marginBottom: 20,
-    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "500",
+    marginBottom: 8,
   },
   textInputBoxStyle: {
-    backgroundColor: "#e7e7e7",
-    alignSelf: "center",
-    padding: 20,
-    height: 55,
-    width: 350,
-    marginVertical: 5,
-    borderRadius: 6,
+    backgroundColor: "#1f2937",
+    color: "white",
+    padding: 16,
+    height: 52,
+    borderRadius: 10,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#374151",
+  },
+  passwordContainer: {
+    position: "relative",
+    justifyContent: "center",
+  },
+  passwordInput: {
+    backgroundColor: "#1f2937",
+    color: "white",
+    padding: 16,
+    paddingRight: 80,
+    height: 52,
+    borderRadius: 10,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#374151",
+  },
+  toggleButton: {
+    position: "absolute",
+    right: 0,
+    height: "100%",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  toggleStyle: {
+    color: "#3b82f6",
+    fontSize: 14,
+    fontWeight: "600",
   },
   continueButtonStyle: {
     backgroundColor: "#1e6091",
-    alignSelf: "center",
-    padding: 20,
-    borderRadius: 6,
-    width: 370,
-    marginTop: 30,
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginTop: 10,
+    shadowColor: "#1e6091",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   buttonTextStyle: {
     color: "white",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 17,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  footerText: {
+    color: "#9ca3af",
+    textAlign: "center",
+    marginTop: 24,
+    fontSize: 14,
+  },
+  linkText: {
+    color: "#3b82f6",
     fontWeight: "600",
   },
 });
-
-

@@ -1,11 +1,12 @@
 import { postLogin } from "@/components/apiConnections/apileagues";
-import { Link, useRouter } from "expo-router"
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { View , Text , StyleSheet, TextInput, Image, Alert} from "react-native"
+import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable, ScrollView } from "react-native";
 
 export default function Login() {
   const [mail, setMail] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [secureEntry, setSecureEntry] = useState(true);
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -13,7 +14,7 @@ export default function Login() {
     if (user) {
       router.push({
         pathname: '/(app)',
-        params: { usuario: JSON.stringify(user) } // le pasás el nombre al index
+        params: { usuario: JSON.stringify(user) }
       });
     } else {
       Alert.alert('Error', 'Mail o contraseña incorrectos');
@@ -21,76 +22,177 @@ export default function Login() {
   };
 
   return (
-    <View>
-      <Text style={[styles.titleStyle, styles.textStyle]}>Iniciar sesión</Text>
-      <Text style={styles.enterStyle}>Mail</Text>
-      <TextInput
-        style={styles.textInputBoxStyle}
-        placeholder="Correo electrónico"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={mail}
-        onChangeText={setMail}
-      />
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.titleStyle}>Iniciar sesión</Text>
+        <Text style={styles.subtitleStyle}>
+          Ingresa tus datos para continuar
+        </Text>
 
-      <Text style={styles.enterStyle}>Contraseña</Text>
-      <TextInput
-        style={styles.textInputBoxStyle}
-        placeholder="Contraseña"
-        secureTextEntry={true}
-        value={contrasena}
-        onChangeText={setContrasena}
-      />
-      <Image source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} style={styles.logoStyle}/>
+        <Image 
+          source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} 
+          style={styles.logoStyle}
+        />
 
-      <Text onPress={handleLogin} style={styles.continueButtonStyle}>
-        <Text style={styles.textStyle}>Continuar</Text>
-      </Text>
-    </View>
+        <View style={styles.formContainer}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Correo electrónico</Text>
+            <TextInput
+              style={styles.textInputBoxStyle}
+              placeholder="ejemplo@email.com"
+              placeholderTextColor="#9999997e"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              value={mail}
+              onChangeText={setMail}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.labelStyle}>Contraseña</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Contraseña"
+                placeholderTextColor="#9999997e"
+                secureTextEntry={secureEntry}
+                value={contrasena}
+                onChangeText={setContrasena}
+              />
+              <Pressable
+                onPress={() => setSecureEntry(!secureEntry)}
+                style={styles.toggleButton}
+              >
+                <Text style={styles.toggleStyle}>
+                  {secureEntry ? "Mostrar" : "Ocultar"}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+
+        <Pressable style={styles.continueButtonStyle} onPress={handleLogin}>
+          <Text style={styles.buttonTextStyle}>Continuar</Text>
+        </Pressable>
+
+        <Text style={styles.footerText}>
+          ¿No tienes cuenta?{" "}
+          <Link href="/create-account">
+            <Text style={styles.linkText}>Regístrate</Text>
+          </Link>
+        </Text>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-
-    textStyle:{
-      color:"white",
-      textAlign:"center",
-      fontSize: 20,
-    },
-    enterStyle:{
-      color:"white",
-      marginLeft: 30,
-      marginTop: 20,
-      fontSize: 17,
-    },
-    titleStyle:{
-        fontSize: 30,
-        marginTop:75,
-        marginBottom:20
-    },
-    textInputBoxStyle:{
-        backgroundColor:"#e7e7e7",
-        alignSelf:"center",
-        fontSize: 17,
-        padding:20,
-        height:55,
-        width:350,
-        marginVertical:10,
-        borderRadius:6,
-    },
-    continueButtonStyle:{
-        backgroundColor: "#1e6091",
-        alignSelf:"center",
-        padding:20,
-        borderRadius:6,
-        width: 370,
-        marginTop:20
-
-    },logoStyle:{
-        resizeMode: "center",
-        alignSelf: "center",
-        height: 300,
-    },
-
-})
-
+  container: {
+    flexGrow: 1,
+    backgroundColor: "#0b1220",
+    paddingVertical: 20,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 60,
+  },
+  titleStyle: {
+    color: "white",
+    fontSize: 32,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitleStyle: {
+    color: "#9ca3af",
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  logoStyle: {
+    resizeMode: "contain",
+    alignSelf: "center",
+    width: 200,
+    height: 200,
+    marginBottom: 30,
+  },
+  formContainer: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  labelStyle: {
+    color: "white",
+    fontSize: 15,
+    fontWeight: "500",
+    marginBottom: 8,
+  },
+  textInputBoxStyle: {
+    backgroundColor: "#1f2937",
+    color: "white",
+    padding: 16,
+    height: 52,
+    borderRadius: 10,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#374151",
+  },
+  passwordContainer: {
+    position: "relative",
+    justifyContent: "center",
+  },
+  passwordInput: {
+    backgroundColor: "#1f2937",
+    color: "white",
+    padding: 16,
+    paddingRight: 80,
+    height: 52,
+    borderRadius: 10,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#374151",
+  },
+  toggleButton: {
+    position: "absolute",
+    right: 0,
+    height: "100%",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  toggleStyle: {
+    color: "#3b82f6",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  continueButtonStyle: {
+    backgroundColor: "#1e6091",
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginTop: 10,
+    shadowColor: "#1e6091",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  buttonTextStyle: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  footerText: {
+    color: "#9ca3af",
+    textAlign: "center",
+    marginTop: 24,
+    fontSize: 14,
+  },
+  linkText: {
+    color: "#3b82f6",
+    fontWeight: "600",
+  },
+});

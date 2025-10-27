@@ -60,12 +60,12 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
 }
 
 const styles = StyleSheet.create({
-  wrap: { position: 'relative', zIndex: 100 },     // ↑ asegura stacking alto
+  wrap: { position: 'relative', zIndex: 100 },
   avatarBtn: {
     width: 36, height: 36, borderRadius: 18, overflow: 'hidden',
     backgroundColor: '#1f2937', justifyContent: 'center',
     marginLeft: 100,
-    zIndex: 100,                   // ↑ por encima del menú
+    zIndex: 100,
   },
   avatarImg: { width: '100%', height: '100%', resizeMode: 'cover' },
   avatarFallback: {

@@ -22,7 +22,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { usuario } = useLocalSearchParams();
-  const userObj = JSON.parse(usuario as string) as UserData; 
+  const userObj = JSON.parse(usuario as string) as UserData;
 
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   ligaBtnPressed: {
     opacity: 0.75,
   },
-  ligaBtnText: { 
+  ligaBtnText: {
     color: '#fff',
     fontWeight: '700',
     fontSize: 22 },

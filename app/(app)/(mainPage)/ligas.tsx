@@ -75,14 +75,21 @@ export default function Ligas() {
         keyExtractor={(item) => item.nombre}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item, index }) => (
-          <View style={[styles.row, index % 2 === 0 ? styles.rowEven : styles.rowOdd]}>
-            <Text style={styles.pos}>{index + 1}</Text>
-            <Text style={styles.nombre}>{item.nombre}</Text>
-            <Text style={styles.stat}>{item.pj}</Text>
-            <Text style={styles.stat}>{item.gf}:{item.gc}</Text>
-            <Text style={styles.stat}>{item.dg}</Text>
-            <Text style={styles.puntos}>{item.puntos}</Text>
-          </View>
+          <Pressable
+            onPress={() => router.push({
+              pathname: '/equipo',
+              params: { nombre: item.nombre }
+            })}
+          >
+            <View style={[styles.row, index % 2 === 0 ? styles.rowEven : styles.rowOdd]}>
+              <Text style={styles.pos}>{index + 1}</Text>
+              <Text style={styles.nombre}>{item.nombre}</Text>
+              <Text style={styles.stat}>{item.pj}</Text>
+              <Text style={styles.stat}>{item.gf}:{item.gc}</Text>
+              <Text style={styles.stat}>{item.dg}</Text>
+              <Text style={styles.puntos}>{item.puntos}</Text>
+            </View>
+          </Pressable>
         )}
         ListHeaderComponent={
           <View style={[styles.row, styles.header]}>
@@ -96,6 +103,14 @@ export default function Ligas() {
         }
         ListFooterComponent={<Estadisticas promGoles={promGoles} maxGF={maxGF} minGC={minGC}/>}
       />
+
+      <Pressable
+        style={styles.btnEquipos}
+        onPress={() => router.push('/equipos')}
+      >
+        <Text style={styles.btnEquiposText}>Ver todos los equipos</Text>
+      </Pressable>
+
     </View>
 
     
@@ -124,4 +139,23 @@ const styles = StyleSheet.create({
     footer: { marginTop: 20, padding: 16, backgroundColor: "#112336", borderRadius: 8 },
     footerTitle: { color: "#fff", fontWeight: "500", marginBottom: 8, fontSize: 16 },
     footerText: { color: "#cbd5e1", marginBottom: 4 },
+    btnEquipos: {
+      backgroundColor: "#1e6091",
+      marginTop: 8,
+      marginHorizontal: 22,
+      marginBottom: 8,
+      paddingVertical: 12,
+      borderRadius: 8,
+      alignItems: "center",
+      shadowColor: "#1e6091",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 8,
+      elevation: 5,
+  },
+  btnEquiposText: {
+    color: "#f7f7f7ff",
+    fontSize: 15,
+    fontWeight: "400",
+  },
 });
