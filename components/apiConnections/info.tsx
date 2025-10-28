@@ -1,6 +1,5 @@
-// src/data/info.ts
 import { getMatches, getPlayers } from './apileagues';
-import { MatchRow, Player } from './types';
+import { MatchRow, Player, Club } from './types';
 
 function getFechaPorDia(day: string): string {
   const hoy = new Date();
@@ -27,4 +26,22 @@ export async function getPartidos(day: string): Promise<MatchRow[]> {
 
 export async function obtenerJugadores(equipo: string): Promise<Player[]>{
   return await getPlayers(equipo)
+};
+
+export const getEquipos = async (): Promise<Club[]> => {
+  const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
+  if (!IP_ADDR) {
+    throw new Error("La dirección IP del servidor no está configurada.");
+  }
+  
+  const API_URL = `http://${IP_ADDR}:3000/clubs`;
+  
+  console.log(`Pidiendo equipos desde: ${API_URL}`);
+
+  const response = await fetch(API_URL);
+  if (!response.ok) {
+    throw new Error('No se pudieron cargar los equipos desde el servidor.');
+  }
+
+  return response.json();
 };

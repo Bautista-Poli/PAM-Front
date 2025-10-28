@@ -1,8 +1,6 @@
-// app/ligas.tsx
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
-
 
 type EquipoTabla = {
   nombre: string;
@@ -52,7 +50,6 @@ export default function Ligas() {
   const totalPJ = tabla.reduce((sum, t) => sum + t.pj, 0);
 
   const promGoles = ((totalGF + totalGC) / totalPJ).toFixed(2);
-
   const maxGF = tabla.reduce((max, t) => (t.gf > max.gf ? t : max), tabla[0]);
   const minGC = tabla.reduce((min, t) => (t.gc < min.gc ? t : min), tabla[0]);
 
@@ -112,8 +109,6 @@ export default function Ligas() {
       </Pressable>
 
     </View>
-
-    
   );
 }
 

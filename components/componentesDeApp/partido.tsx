@@ -4,8 +4,6 @@ import { View, Text, Button, StyleSheet, Image, ImageSourcePropType, Pressable }
 import { MatchRow } from '../apiConnections/types';
 import Marcador from './marcador';
 
-
-
 type PartidoProps = {
   data: MatchRow;
 };
@@ -18,8 +16,20 @@ function formatHourTime(isoDate: string): string {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'UTC', // Si tus fechas están en UTC y las querés mostrar así
+    timeZone: 'UTC',
   });
+}
+
+function getMatchStatus(isoDate: string): string {
+  const matchDate = new Date(isoDate);
+  const now = new Date();
+  const twoHoursAfter = new Date(matchDate.getTime() + 2 * 60 * 60 * 1000);
+  
+  if (now > twoHoursAfter) {
+    return "Final";
+  }
+  
+  return formatHourTime(isoDate);
 }
 
 export default function PartidoCard({ data }: PartidoProps) {
@@ -36,7 +46,7 @@ export default function PartidoCard({ data }: PartidoProps) {
           {(data.league || data.match_date) && (
             <View style={styles.cardHeader}>
               {data.league ? <Text style={styles.comp}>{data.league}</Text> : null}
-              {data.match_date ? <Text style={styles.date}>{formatHourTime(data.match_date)}</Text> : null}
+              {data.match_date ? <Text style={styles.date}>{getMatchStatus(data.match_date)}</Text> : null}
             </View>
           )}
 

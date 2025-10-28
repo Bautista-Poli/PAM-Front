@@ -55,3 +55,9 @@ export type UserData = {
     crest_url: string;
   }
 }
+
+export interface Club {
+  id: number;
+  nombre: string;
+  crest_url: string;
+}
