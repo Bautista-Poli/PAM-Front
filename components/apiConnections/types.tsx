@@ -61,3 +61,16 @@ export interface Club {
   nombre: string;
   crest_url: string;
 }
+
+export interface EquipoInfo {
+  nombre: string;
+  escudo: string;
+  titulosNacionales: number;
+  titulosInternacionales: number;
+  nombreEstadio: string;
+  capacidadEstadio: number;
+  ciudad: string;
+  colores: string;
+  añoFundacion: number;
+  entrenador: string;
+}

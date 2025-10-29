@@ -1,85 +1,67 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, Image, ActivityIndicator } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { obtenerJugadores } from "@/components/apiConnections/info";
-import { Player } from "@/components/apiConnections/types";
-
-type EquipoInfo = {
-  nombre: string;
-  ciudad: string;
-  estadio: string;
-  capacidad: string;
-  fundacion: string;
-  titulos: number;
-  apodo: string;
-  colores: string;
-  entrenador: string;
-  escudo: string;
-};
-
-// Base de datos de equipos
-const equiposInfo: { [key: string]: EquipoInfo } = {
-  "Vélez Sarsfield": {
-    nombre: "Vélez Sarsfield",
-    ciudad: "Buenos Aires",
-    estadio: "José Amalfitani",
-    capacidad: "49.540",
-    fundacion: "1910",
-    titulos: 19,
-    apodo: "El Fortín",
-    colores: "Blanco y Azul",
-    entrenador: "Guillermo Barros Schelotto",
-    escudo: "https://paladarnegro.net/escudoteca/argentina/primeradivision/png/velez.png"
-  },
-  
-}
-
+import { obtenerJugadores, obtenerEquipoInfo } from "@/components/apiConnections/info";
+import { Player, EquipoInfo } from "@/components/apiConnections/types";
 
 export default function EquipoDetalle() {
   const { nombre } = useLocalSearchParams();
   const router = useRouter();
+
   const [jugadores, setJugadores] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  const equipoInfo = equiposInfo[nombre as string];
+  const [equipoInfo, setEquipoInfo] = useState<EquipoInfo | null>(null);
 
   useEffect(() => {
     let isMounted = true;
-    (async () => {
+    const cargarDatos = async () => {
       try {
         setLoading(true);
         setError(null);
-
-        const players = await obtenerJugadores(nombre as string);
+        
+        const [info, players] = await Promise.all([
+          obtenerEquipoInfo(nombre as string),
+          obtenerJugadores(nombre as string)
+        ]);
 
         if (!isMounted) return;
+
+        setEquipoInfo(info);
         setJugadores(players);
 
       } catch (e: any) {
-        if (isMounted) setError(e?.message ?? 'Error al cargar jugadores');
+        if (isMounted) setError(e?.message ?? 'Error al cargar los datos');
       } finally {
         if (isMounted) setLoading(false);
       }
-    })();
+    };
+    
+    if (nombre) {
+      cargarDatos();
+    }
+    
     return () => { isMounted = false; };
   }, [nombre]);
 
-  if (!equipoInfo) {
+  
+  if (loading) {
     return (
-      <View style={styles.container}>
-        <Stack.Screen
-          options={{
-            title: "Equipo",
-            headerShown: true,
-            headerLeft: () => (
-              <Pressable onPress={() => router.back()} hitSlop={8}>
-                <Text style={styles.btnVolver}>← Volver</Text>
-              </Pressable>
-            ),
-          }}
-        />
-        <Text style={styles.errorText}>Información no disponible</Text>
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color="#93c5fd" />
+        <Text style={styles.loadingText}>Cargando información del equipo...</Text>
+      </View>
+    );
+  }
+
+  if (error || !equipoInfo) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <Stack.Screen options={{ title: "Error" }} />
+        <Text style={styles.errorText}>{error || "Información del equipo no disponible."}</Text>
+         <Pressable onPress={() => router.back()} hitSlop={8}>
+            <Text style={[styles.btnVolver, {marginTop: 20}]}>← Volver</Text>
+        </Pressable>
       </View>
     );
   }
@@ -98,28 +80,27 @@ export default function EquipoDetalle() {
         }}
       />
 
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Image 
-            source={{ uri: equipoInfo.escudo }} 
+          <Image
+            source={{ uri: equipoInfo.escudo }}
             style={styles.escudo}
             resizeMode="contain"
           />
           <Text style={styles.teamName}>{equipoInfo.nombre}</Text>
-          <Text style={styles.apodo}>{equipoInfo.apodo}</Text>
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{equipoInfo.titulos}</Text>
-            <Text style={styles.statLabel}>Títulos</Text>
+            <Text style={styles.statNumber}>{equipoInfo.titulosNacionales}</Text>
+            <Text style={styles.statLabel}>Títulos Nacionales</Text>
           </View>
           <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{equipoInfo.fundacion}</Text>
-            <Text style={styles.statLabel}>Fundación</Text>
+            <Text style={styles.statNumber}>{equipoInfo.titulosInternacionales}</Text>
+            <Text style={styles.statLabel}>Títulos Internac.</Text>
           </View>
         </View>
 
@@ -128,15 +109,22 @@ export default function EquipoDetalle() {
           
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>📅  Fundación</Text>
+              <Text style={styles.infoValue}>{equipoInfo.añoFundacion}</Text>
+            </View>
+
+            <View style={styles.divider} />
+
+            <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>🏟️  Estadio</Text>
-              <Text style={styles.infoValue}>{equipoInfo.estadio}</Text>
+              <Text style={styles.infoValue}>{equipoInfo.nombreEstadio}</Text>
             </View>
 
             <View style={styles.divider} />
 
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>👥  Capacidad</Text>
-              <Text style={styles.infoValue}>{equipoInfo.capacidad}</Text>
+              <Text style={styles.infoValue}>{equipoInfo.capacidadEstadio}</Text>
             </View>
 
             <View style={styles.divider} />
@@ -161,6 +149,8 @@ export default function EquipoDetalle() {
             </View>
           </View>
         </View>
+
+
 
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Plantel</Text>
@@ -200,9 +190,14 @@ export default function EquipoDetalle() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+    container: {
     flex: 1,
     backgroundColor: "#0D1B2A",
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   btnVolver: {
     color: "#93c5fd",
@@ -220,9 +215,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   escudo: {
-    width: 120,
-    height: 120,
-    marginBottom: 16,
+    width: 150,
+    height: 150,
   },
   teamName: {
     color: "#fff",
@@ -231,7 +225,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
   },
-  apodo: {
+  apodo: {  //me lo olvide de poner en la BD (rip)
     color: "#94a3b8",
     fontSize: 16,
     fontStyle: "italic",
@@ -327,29 +321,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#1E3A5F",
     marginLeft: 24,
   },
-  loadingContainer: {
-    backgroundColor: "#112336",
-    borderRadius: 12,
-    padding: 32,
-    borderWidth: 1,
-    borderColor: "#1E3A5F",
-    alignItems: "center",
-  },
   loadingText: {
     color: "#94a3b8",
     marginTop: 12,
     fontSize: 14,
   },
-  errorContainer: {
-    backgroundColor: "#112336",
-    borderRadius: 12,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: "#1E3A5F",
-  },
-  errorMessage: {
+  errorText: {
     color: "#f87171",
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
   },
   emptyContainer: {
@@ -365,10 +344,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontStyle: "italic",
   },
-  errorText: {
-    color: "#e5e7eb",
-    fontSize: 16,
+  loadingContainer: {
+    backgroundColor: "#112336",
+    borderRadius: 12,
+    padding: 32,
+    borderWidth: 1,
+    borderColor: "#1E3A5F",
+    alignItems: "center",
+  },
+  errorContainer: {
+    backgroundColor: "#112336",
+    borderRadius: 12,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: "#1E3A5F",
+  },
+  errorMessage: {
+    color: "#f87171",
+    fontSize: 14,
     textAlign: "center",
-    marginTop: 32,
   },
 });
