@@ -1,7 +1,7 @@
 import { postLogin } from "@/components/apiConnections/apileagues";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 
 export default function Login() {
   const [mail, setMail] = useState('');
@@ -22,75 +22,88 @@ export default function Login() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.titleStyle}>Iniciar sesión</Text>
-        <Text style={styles.subtitleStyle}>
-          Ingresa tus datos para continuar
-        </Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <Text style={styles.titleStyle}>Iniciar sesión</Text>
+          <Text style={styles.subtitleStyle}>
+            Ingresa tus datos para continuar
+          </Text>
 
-        <Image 
-          source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} 
-          style={styles.logoStyle}
-        />
+          <Image
+            source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} 
+            style={styles.logoStyle}
+          />
 
-        <View style={styles.formContainer}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.labelStyle}>Correo electrónico</Text>
-            <TextInput
-              style={styles.textInputBoxStyle}
-              placeholder="ejemplo@email.com"
-              placeholderTextColor="#9999997e"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              value={mail}
-              onChangeText={setMail}
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.labelStyle}>Contraseña</Text>
-            <View style={styles.passwordContainer}>
+          <View style={styles.formContainer}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.labelStyle}>Correo electrónico</Text>
               <TextInput
-                style={styles.passwordInput}
-                placeholder="Contraseña"
+                style={styles.textInputBoxStyle}
+                placeholder="ejemplo@email.com"
                 placeholderTextColor="#9999997e"
-                secureTextEntry={secureEntry}
-                value={contrasena}
-                onChangeText={setContrasena}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                value={mail}
+                onChangeText={setMail}
               />
-              <Pressable
-                onPress={() => setSecureEntry(!secureEntry)}
-                style={styles.toggleButton}
-              >
-                <Text style={styles.toggleStyle}>
-                  {secureEntry ? "Mostrar" : "Ocultar"}
-                </Text>
-              </Pressable>
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.labelStyle}>Contraseña</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Contraseña"
+                  placeholderTextColor="#9999997e"
+                  secureTextEntry={secureEntry}
+                  value={contrasena}
+                  onChangeText={setContrasena}
+                />
+                <Pressable
+                  onPress={() => setSecureEntry(!secureEntry)}
+                  style={styles.toggleButton}
+                >
+                  <Text style={styles.toggleStyle}>
+                    {secureEntry ? "Mostrar" : "Ocultar"}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
+
+          <Pressable style={styles.continueButtonStyle} onPress={handleLogin}>
+            <Text style={styles.buttonTextStyle}>Continuar</Text>
+          </Pressable>
+
+          <Text style={styles.footerText}>
+            ¿No tienes cuenta?{" "}
+            <Link href="/create-account">
+              <Text style={styles.linkText}>Regístrate</Text>
+            </Link>
+          </Text>
         </View>
-
-        <Pressable style={styles.continueButtonStyle} onPress={handleLogin}>
-          <Text style={styles.buttonTextStyle}>Continuar</Text>
-        </Pressable>
-
-        <Text style={styles.footerText}>
-          ¿No tienes cuenta?{" "}
-          <Link href="/create-account">
-            <Text style={styles.linkText}>Regístrate</Text>
-          </Link>
-        </Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: "#0b1220",
-    paddingVertical: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingVertical: 10,
   },
   content: {
     flex: 1,

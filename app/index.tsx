@@ -13,7 +13,7 @@ export default function Index(){
                 <Text style={styles.textStyle}>Iniciar sesión</Text>
             </Link>
             <Link style={[styles.ButtonStyle,{backgroundColor:"#102f4a"}]} href={"/(auth)/createAccount"}>
-                <Text style={styles.textStyle}>Crear Cuenta</Text>
+                <Text style={styles.textStyle}>Crear cuenta</Text>
             </Link>
             
         </View>
@@ -29,9 +29,10 @@ const styles = StyleSheet.create({
         fontSize:15
     },
     titleStyle:{
-        fontSize: 35,
-        marginTop:85,
-        marginBottom:60
+        fontSize: 40,
+        marginTop: 85,
+        marginBottom: 60,
+        fontWeight: "400"
     },
     ButtonStyle:{
         backgroundColor: "#1e6091",
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
         padding:20,
         borderRadius:6,
         width: 370,
-        marginTop:30
+        marginTop:20
 
     },logoStyle:{
         resizeMode: "center",
