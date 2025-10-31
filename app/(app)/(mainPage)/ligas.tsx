@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
 
+const LEAGUE_KEY_ACTUAL = "liga_profesional_argentina";  //cambiar esto cuando tengamos las tablas de las 3 ligas
+
 type EquipoTabla = {
   nombre: string;
   puntos: number;
@@ -53,6 +55,17 @@ export default function Ligas() {
   const maxGF = tabla.reduce((max, t) => (t.gf > max.gf ? t : max), tabla[0]);
   const minGC = tabla.reduce((min, t) => (t.gc < min.gc ? t : min), tabla[0]);
 
+  const handleTabPress = (tab: 'tabla' | 'equipos') => {
+      if (tab === 'equipos') {
+          // --- MODIFICAR ESTA LÍNEA ---
+          // Ahora pasamos la leagueKey como parámetro a la ruta
+          router.push({
+            pathname: '/equipos',
+            params: { leagueKey: LEAGUE_KEY_ACTUAL }
+          });
+      }
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -103,7 +116,10 @@ export default function Ligas() {
 
       <Pressable
         style={styles.btnEquipos}
-        onPress={() => router.push('/equipos')}
+        onPress={() => router.push({
+          pathname: '/equipos',
+          params: { leagueKey: LEAGUE_KEY_ACTUAL }
+        })}
       >
         <Text style={styles.btnEquiposText}>Ver todos los equipos</Text>
       </Pressable>

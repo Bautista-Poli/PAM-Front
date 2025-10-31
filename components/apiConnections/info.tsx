@@ -28,10 +28,13 @@ export async function obtenerJugadores(equipo: string): Promise<Player[]>{
   return await getPlayers(equipo)
 };
 
-export const getEquipos = async (): Promise<Club[]> => {
+export const getEquipos = async (leagueKey?: string): Promise<Club[]> => {
   const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
   
-  const API_URL = `http://${IP_ADDR}:3000/clubs`;
+  let API_URL = `http://${IP_ADDR}:3000/clubs`;
+  if (leagueKey) {
+    API_URL += `?league_key=${encodeURIComponent(leagueKey)}`;
+  }
 
   const response = await fetch(API_URL);
   if (!response.ok) {

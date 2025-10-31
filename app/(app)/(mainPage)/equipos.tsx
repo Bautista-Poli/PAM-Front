@@ -1,12 +1,14 @@
 // app/equipos.tsx
 import { View, Text, StyleSheet, Pressable, Image, FlatList, ActivityIndicator } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from 'react';
 import { getEquipos } from "@/components/apiConnections/info";
 import { Club } from "@/components/apiConnections/types";
 
 export default function Equipos() {
   const router = useRouter();
+
+  const { leagueKey } = useLocalSearchParams<{ leagueKey?: string }>();
 
   const [equipos, setEquipos] = useState<Club[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ export default function Equipos() {
     const cargarEquipos = async () => {
       try {
         setLoading(true);
-        const data = await getEquipos();
+        const data = await getEquipos(leagueKey);
         setEquipos(data);
       } catch (e: any) {
         setError(e.message ?? "Error al cargar equipos");
@@ -26,7 +28,7 @@ export default function Equipos() {
     };
 
     cargarEquipos();
-  }, []);
+  }, [leagueKey]);
 
   const renderEquipo = ({ item }: { item: Club }) => (
     <Pressable
