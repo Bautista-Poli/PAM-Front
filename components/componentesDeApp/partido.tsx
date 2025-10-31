@@ -1,6 +1,5 @@
 import { Link } from 'expo-router';
-import { useState } from 'react';
-import { View, Text, Button, StyleSheet, Image, ImageSourcePropType, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { MatchRow } from '../apiConnections/types';
 import Marcador from './marcador';
 
@@ -10,18 +9,23 @@ type PartidoProps = {
 
 const fallbackLogo = 'https://ligafutbolcity.com/img/logo/equipos/equipo_default.png';
 
+function getLocalDateFromApi(isoDate: string): Date {
+  const localIsoDate = isoDate.endsWith('Z') ? isoDate.slice(0, -1) : isoDate;
+  return new Date(localIsoDate);
+}
+
 function formatHourTime(isoDate: string): string {
-  const date = new Date(isoDate);
+  const date = getLocalDateFromApi(isoDate);
+
   return date.toLocaleTimeString('es-AR', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'UTC',
   });
 }
 
 function getMatchStatus(isoDate: string): string {
-  const matchDate = new Date(isoDate);
+  const matchDate = getLocalDateFromApi(isoDate);
   const now = new Date();
   const twoHoursAfter = new Date(matchDate.getTime() + 2 * 60 * 60 * 1000);
   
@@ -33,6 +37,10 @@ function getMatchStatus(isoDate: string): string {
 }
 
 export default function PartidoCard({ data }: PartidoProps) {
+  const matchDate = getLocalDateFromApi(data.match_date);
+  const now = new Date();
+  const partidoNoComenzado = now < matchDate;
+
   return (
     <Link
       href={{
@@ -64,10 +72,14 @@ export default function PartidoCard({ data }: PartidoProps) {
             </View>
 
             <View style={styles.scoreBlock}>
-              <Marcador
-                golesLocal={data.score_home ?? undefined}
-                golesVisitante={data.score_away ?? undefined}
-              />
+              {partidoNoComenzado ? (
+                <Text style={styles.scoreText}>-</Text>
+              ) : (
+                <Marcador
+                  golesLocal={data.score_home ?? 0}
+                  golesVisitante={data.score_away ?? 0}
+                />
+              )}
             </View>
 
             {/* Visitante */}
