@@ -44,7 +44,7 @@ export default function LigaSelector({ onSelect, selectedLiga, ligas }: LigaSele
 
 const styles = StyleSheet.create({
   dropdownTrigger: {
-    paddingVertical: 6,
+    paddingVertical: 8,
     paddingHorizontal: 8,
     backgroundColor: '#1E6091',
     borderRadius: 8,

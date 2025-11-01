@@ -1,4 +1,4 @@
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { getPartidos } from '@/components/apiConnections/info';
@@ -16,6 +16,7 @@ const ligasDisponibles = [
 ];
 
 export default function Index() {
+  const router = useRouter();
   const [day, setDay] = useState<Dia>('hoy');
   const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional Argentina');
   const [partidos, setPartidos] = useState<MatchRow[]>([]);
@@ -97,16 +98,18 @@ export default function Index() {
       </View>
 
       <View style={styles.ligaTitleText}>
-        <Link href="/ligas" asChild>
-          <Pressable
-            style={({ pressed }) => [
-              styles.ligaBtn,
-              pressed && styles.ligaBtnPressed,
-            ]}
-          >
-            <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
-          </Pressable>
-        </Link>
+        <Pressable
+          style={({ pressed }) => [
+            styles.ligaBtn,
+            pressed && styles.ligaBtnPressed,
+          ]}
+          onPress={() => router.push({
+            pathname: '/ligas',
+            params: { ligaNombre: ligaSeleccionada }
+          })}
+        >
+          <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
+        </Pressable>
         <LigaSelector
           selectedLiga={ligaSeleccionada}
           ligas={ligasDisponibles}
@@ -156,12 +159,8 @@ const styles = StyleSheet.create({
   dayChipTextSelected: { color: '#FFFFFF' },
 
   ligaBtn: {
-    backgroundColor: '#1E6091',
-    paddingVertical: 12,
+    paddingVertical: 6,
     paddingHorizontal: 18,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#A9D6E5',
   },
   ligaBtnPressed: {
     opacity: 0.75,
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
   ligaBtnText: {
     color: '#fff',
     fontWeight: '700',
-    fontSize: 22 },
+    fontSize: 20 },
 
   ligaTitleText:{
     alignSelf: "center",

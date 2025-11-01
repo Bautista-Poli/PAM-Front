@@ -1,51 +1,21 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
-
-const LEAGUE_KEY_ACTUAL = "liga_profesional_argentina";  //cambiar esto cuando tengamos las tablas de las 3 ligas
-
-type EquipoTabla = {
-  nombre: string;
-  puntos: number;
-  pj: number;
-  gf: number;
-  gc: number;
-  dg: number;
-};
-
-const tabla: EquipoTabla[] = [
-  { nombre: "Vélez Sarsfield", puntos: 51, pj: 27, gf: 38, gc: 16, dg: 22 },
-  { nombre: "Talleres", puntos: 48, pj: 27, gf: 34, gc: 27, dg: 7 },
-  { nombre: "Racing Club", puntos: 46, pj: 27, gf: 42, gc: 30, dg: 12 },
-  { nombre: "Huracán", puntos: 46, pj: 27, gf: 28, gc: 18, dg: 10 },
-  { nombre: "River Plate", puntos: 43, pj: 27, gf: 38, gc: 21, dg: 17 },
-  { nombre: "Boca Juniors", puntos: 42, pj: 27, gf: 30, gc: 23, dg: 7 },
-  { nombre: "Independiente", puntos: 40, pj: 27, gf: 25, gc: 17, dg: 8 },
-  { nombre: "Atlético Tucumán", puntos: 40, pj: 27, gf: 28, gc: 27, dg: 1 },
-  { nombre: "Unión", puntos: 40, pj: 27, gf: 27, gc: 26, dg: 1 },
-  { nombre: "Platense", puntos: 39, pj: 27, gf: 20, gc: 18, dg: 2 },
-  { nombre: "Independiente Rivadavia", puntos: 38, pj: 27, gf: 23, gc: 25, dg: -2 },
-  { nombre: "Estudiantes (LP)", puntos: 36, pj: 27, gf: 36, gc: 34, dg: 2 },
-  { nombre: "Instituto", puntos: 36, pj: 27, gf: 32, gc: 31, dg: 1 },
-  { nombre: "Lanús", puntos: 36, pj: 27, gf: 28, gc: 31, dg: -3 },
-  { nombre: "Godoy Cruz", puntos: 35, pj: 27, gf: 31, gc: 28, dg: 3 },
-  { nombre: "Belgrano", puntos: 35, pj: 27, gf: 33, gc: 32, dg: 1 },
-  { nombre: "Deportivo Riestra", puntos: 35, pj: 27, gf: 26, gc: 27, dg: -1 },
-  { nombre: "Tigre", puntos: 34, pj: 27, gf: 27, gc: 30, dg: -3 },
-  { nombre: "Gimnasia y Esgrima (LP)", puntos: 32, pj: 27, gf: 21, gc: 23, dg: -2 },
-  { nombre: "Rosario Central", puntos: 32, pj: 27, gf: 27, gc: 30, dg: -3 },
-  { nombre: "Defensa y Justicia", puntos: 32, pj: 27, gf: 27, gc: 33, dg: -6 },
-  { nombre: "Central Córdoba (SdE)", puntos: 31, pj: 27, gf: 29, gc: 36, dg: -7 },
-  { nombre: "Argentinos Juniors", puntos: 30, pj: 27, gf: 22, gc: 28, dg: -6 },
-  { nombre: "San Lorenzo", puntos: 29, pj: 27, gf: 20, gc: 26, dg: -6 },
-  { nombre: "Newell's Old Boys", puntos: 28, pj: 27, gf: 22, gc: 35, dg: -13 },
-  { nombre: "Sarmiento (J)", puntos: 26, pj: 27, gf: 18, gc: 28, dg: -10 },
-  { nombre: "Banfield", puntos: 24, pj: 27, gf: 22, gc: 36, dg: -14 },
-  { nombre: "Barracas Central", puntos: 23, pj: 27, gf: 15, gc: 33, dg: -18 },
-];
+import { LIGAS_DATA, getLigaByKey, getLigaByName, EquipoTabla } from "@/constants/ligasData";
 
 export default function Ligas() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  
+  let ligaActual = LIGAS_DATA[0];  //por defecto Liga Argentina
+  
+  if (params.leagueKey) {
+    ligaActual = getLigaByKey(params.leagueKey as string) || LIGAS_DATA[0];
+  } else if (params.ligaNombre) {
+    ligaActual = getLigaByName(params.ligaNombre as string) || LIGAS_DATA[0];
+  }
+
+  const tabla = ligaActual.tabla;
 
   const totalGF = tabla.reduce((sum, t) => sum + t.gf, 0);
   const totalGC = tabla.reduce((sum, t) => sum + t.gc, 0);
@@ -55,22 +25,11 @@ export default function Ligas() {
   const maxGF = tabla.reduce((max, t) => (t.gf > max.gf ? t : max), tabla[0]);
   const minGC = tabla.reduce((min, t) => (t.gc < min.gc ? t : min), tabla[0]);
 
-  const handleTabPress = (tab: 'tabla' | 'equipos') => {
-      if (tab === 'equipos') {
-          // --- MODIFICAR ESTA LÍNEA ---
-          // Ahora pasamos la leagueKey como parámetro a la ruta
-          router.push({
-            pathname: '/equipos',
-            params: { leagueKey: LEAGUE_KEY_ACTUAL }
-          });
-      }
-  };
-
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "Tabla Liga Profesional",
+          title: `Tabla ${ligaActual.nombre}`,
           headerShown: true,
           headerLeft: () => (
             <Pressable onPress={() => router.back()} hitSlop={8}>
@@ -118,7 +77,7 @@ export default function Ligas() {
         style={styles.btnEquipos}
         onPress={() => router.push({
           pathname: '/equipos',
-          params: { leagueKey: LEAGUE_KEY_ACTUAL }
+          params: { leagueKey: ligaActual.key }
         })}
       >
         <Text style={styles.btnEquiposText}>Ver todos los equipos</Text>
