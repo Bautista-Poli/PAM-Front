@@ -73,7 +73,7 @@ const tablaLaLiga: EquipoTabla[] = [
   { nombre: "Atlético Madrid", puntos: 26, pj: 13, gf: 19, gc: 7, dg: 12 },
   { nombre: "Villarreal", puntos: 24, pj: 12, gf: 23, gc: 19, dg: 4 },
   { nombre: "Osasuna", puntos: 21, pj: 13, gf: 17, gc: 20, dg: -3 },
-  { nombre: "Athletic Bilbao", puntos: 20, pj: 13, gf: 19, gc: 13, dg: 6 },
+  { nombre: "Athletic Club", puntos: 20, pj: 13, gf: 19, gc: 13, dg: 6 },
   { nombre: "Real Betis", puntos: 20, pj: 13, gf: 13, gc: 12, dg: 1 },
   { nombre: "Real Sociedad", puntos: 18, pj: 13, gf: 9, gc: 7, dg: 2 },
   { nombre: "Mallorca", puntos: 18, pj: 13, gf: 10, gc: 10, dg: 0 },

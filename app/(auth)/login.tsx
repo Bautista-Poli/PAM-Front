@@ -86,7 +86,7 @@ export default function Login() {
 
           <Text style={styles.footerText}>
             ¿No tienes cuenta?{" "}
-            <Link href="/create-account">
+            <Link href="/createAccount">
               <Text style={styles.linkText}>Regístrate</Text>
             </Link>
           </Text>
