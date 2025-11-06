@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Alert, Modal } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { obtenerJugadores } from '@/components/apiConnections/info';
 import { checkUserVoted } from '@/components/apiConnections/apileagues';
@@ -22,6 +22,8 @@ export default function RatingPartido() {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [checkingVote, setCheckingVote] = useState(true);
+
+  const [showVotedAlert, setShowVotedAlert] = useState(false);
 
   const equipoLocal = partidoData?.home_team ?? 'Local';
   const equipoVisitante = partidoData?.away_team ?? 'Visitante';
@@ -64,11 +66,7 @@ export default function RatingPartido() {
         const result = await checkUserVoted(userId, matchId);
 
         if (result.hasVoted) {
-          Alert.alert(
-            'Ya evaluaste este partido',
-            'No puedes evaluar el mismo partido dos veces.',
-            [{ text: 'OK', onPress: () => router.back() }]
-          );
+          setShowVotedAlert(true);
         }
       } catch (e: any) {
         console.error('Error al verificar voto:', e);
@@ -187,6 +185,35 @@ export default function RatingPartido() {
         partidoData={partidoData}
         userId={userId}
       />
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showVotedAlert}
+        onRequestClose={() => {
+          setShowVotedAlert(false);
+          router.back();
+        }}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Ya evaluaste este partido</Text>
+            <Text style={styles.modalMessage}>
+              No podés evaluar el mismo partido dos veces.
+            </Text>
+            <Pressable
+              style={styles.modalButton}
+              onPress={() => {
+                setShowVotedAlert(false);
+                router.back();
+              }}
+            >
+              <Text style={styles.modalButtonText}>Volver</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -206,5 +233,51 @@ const styles = StyleSheet.create({
   loadingText: {
     color: '#94a3b8',
     fontSize: 16,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  modalContainer: {
+    width: '85%',
+    maxWidth: 350,
+    backgroundColor: '#581919ff',
+    borderRadius: 10,
+    padding: 24,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e11d48',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    color: '#ffffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  modalMessage: {
+    color: '#e5e7eb',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  modalButton: {
+    backgroundColor: '#e11d48',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 6,
+  },
+  modalButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

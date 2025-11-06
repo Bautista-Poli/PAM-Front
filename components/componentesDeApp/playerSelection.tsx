@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionList, Text, StyleSheet, Alert } from 'react-native';
+import { SectionList, Text, StyleSheet, Alert, Modal, View, Pressable } from 'react-native';
 import PlayerItem from './playerCard';
 import { MatchRow, Player } from '../apiConnections/types';
 import EvaluarFooter from './botonDeEvaluar';
@@ -25,8 +25,17 @@ export default function PlayersSectionList({sections, loading, partidoData, user
     const [submitting, setSubmitting] = useState(false);
     const router = useRouter();
 
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+
     function onChangeRating(id: number, value: number) {
         setRatings((prev: any) => ({ ...prev, [id]: value }));
+    };
+
+    function handleCloseSuccessModal() {
+        setShowSuccessModal(false);
+        setRatings({});
+        router.back();
     };
 
     async function handleEvaluar() {
@@ -48,14 +57,8 @@ export default function PlayersSectionList({sections, loading, partidoData, user
             const result = await postRatings(userId, matchId, ratingsArray);
 
             if (result) {
-                Alert.alert('Éxito', `Se guardaron ${result.ratingsCreated} evaluaciones correctamente`,
-                    [{text: 'OK', onPress: () => {
-                                setRatings({});
-                                router.back();
-                            },
-                        },
-                    ]
-                );
+                setSuccessMessage(`Se guardaron ${result.ratingsCreated} evaluaciones correctamente`);
+                setShowSuccessModal(true);
             }
         }
         catch (error: any) {
@@ -68,46 +71,70 @@ export default function PlayersSectionList({sections, loading, partidoData, user
     
 
     return (
-        <SectionList<Player, SectionJugadores>
-            sections={sections}
-            keyExtractor={(item) => String(item.id)}
-            style={styles.list}
-            contentContainerStyle={styles.content}
-            contentInsetAdjustmentBehavior="automatic"
-            ListHeaderComponent={<PartidoCard data={partidoData} />}
-            ListFooterComponent={
-                <EvaluarFooter
-                    onPress={ handleEvaluar }
-                    disabled = { submitting }
-                />
-            }
-            renderSectionHeader={({ section }) => (
-                <Text style={styles.sectionTitle}>{section.title}</Text>
-            )}
-            renderSectionFooter={({ section }) =>
-                !loading && section.data.length === 0 ? (
-                    <Text style={styles.emptySectionMsg}>
-                        No hay jugadores cargados en la base de datos para {section.teamName}.
-                    </Text>
-                ) : null
-            }
-            renderItem={({ item }) => (
-                <PlayerItem
-                    name={item.full_name}
-                    rating={ratings[item.id] ?? 0}
-                    onChangeRating={(newRating: number) => onChangeRating(item.id, newRating)}
+        <View style={styles.listWrapper}>
+            <SectionList<Player, SectionJugadores>
+                sections={sections}
+                keyExtractor={(item) => String(item.id)}
+                style={styles.list}
+                contentContainerStyle={styles.content}
+                contentInsetAdjustmentBehavior="automatic"
+                ListHeaderComponent={<PartidoCard data={partidoData} />}
+                ListFooterComponent={
+                    <EvaluarFooter
+                        onPress={ handleEvaluar }
+                        disabled = { submitting }
+                    />
+                }
+                renderSectionHeader={({ section }) => (
+                    <Text style={styles.sectionTitle}>{section.title}</Text>
+                )}
+                renderSectionFooter={({ section }) =>
+                    !loading && section.data.length === 0 ? (
+                        <Text style={styles.emptySectionMsg}>
+                            No hay jugadores cargados en la base de datos para {section.teamName}.
+                        </Text>
+                    ) : null
+                }
+                renderItem={({ item }) => (
+                    <PlayerItem
+                        name={item.full_name}
+                        rating={ratings[item.id] ?? 0}
+                        onChangeRating={(newRating: number) => onChangeRating(item.id, newRating)}
 
-                />
-            )}
-        />
+                    />
+                )}
+            />
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showSuccessModal}
+                onRequestClose={handleCloseSuccessModal}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={[styles.modalContainer, styles.successModalContainer]}>
+                        <Text style={[styles.modalTitle, styles.successModalTitle]}>Gracias por tus valoraciones</Text>
+                        <Text style={styles.modalMessage}>{successMessage}</Text>
+                        <Pressable
+                            style={[styles.modalButton, styles.successModalButton]}
+                            onPress={handleCloseSuccessModal}
+                        >
+                            <Text style={styles.modalButtonText}>OK</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+        </View>
     );
 }
 
 
 export const styles = StyleSheet.create({
-    list: {
+    listWrapper: {
         flex: 1,
         backgroundColor: '#0b1220',
+    },
+    list: {
+        flex: 1,
     },
     content: {
         paddingHorizontal: 16,
@@ -130,6 +157,58 @@ export const styles = StyleSheet.create({
         lineHeight: 18,
         marginHorizontal: 16,
         marginBottom: 12,
+    },
+
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
+    modalContainer: {
+        width: '85%',
+        maxWidth: 350,
+        borderRadius: 10,
+        padding: 24,
+        alignItems: 'center',
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 12,
+    },
+    modalMessage: {
+        color: '#e5e7eb',
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 24,
+    },
+    modalButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 6,
+    },
+    modalButtonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    successModalContainer: {
+        backgroundColor: '#0b4928ff',
+        borderColor: '#10b981',
+    },
+    successModalTitle: {
+        color: '#ffffffff',
+    },
+    successModalButton: {
+        backgroundColor: '#10b981',
     },
 });
 

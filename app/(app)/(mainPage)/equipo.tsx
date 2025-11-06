@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { obtenerEquipoInfo } from "@/components/apiConnections/info";
 import { getPlayerRatingsByClub } from "@/components/apiConnections/apileagues";
 import { PlayerWithRating, EquipoInfo } from "@/components/apiConnections/types";
+import EquipoInfoGeneral from "@/components/componentesDeApp/equipoInfoGeneral";
 
 export default function EquipoDetalle() {
   const { nombre } = useLocalSearchParams();
@@ -94,62 +95,7 @@ export default function EquipoDetalle() {
           <Text style={styles.teamName}>{equipoInfo.nombre}</Text>
         </View>
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{equipoInfo.titulosNacionales}</Text>
-            <Text style={styles.statLabel}>Títulos Nacionales</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>{equipoInfo.titulosInternacionales}</Text>
-            <Text style={styles.statLabel}>Títulos Internac.</Text>
-          </View>
-        </View>
-
-        <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Información General</Text>
-          
-          <View style={styles.infoCard}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>📅  Fundación</Text>
-              <Text style={styles.infoValue}>{equipoInfo.añoFundacion}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>🏟️  Estadio</Text>
-              <Text style={styles.infoValue}>{equipoInfo.nombreEstadio}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>👥  Capacidad</Text>
-              <Text style={styles.infoValue}>{equipoInfo.capacidadEstadio}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>📍  Ciudad</Text>
-              <Text style={styles.infoValue}>{equipoInfo.ciudad}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>🎨  Colores</Text>
-              <Text style={styles.infoValue}>{equipoInfo.colores}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>👔  Entrenador</Text>
-              <Text style={styles.infoValue}>{equipoInfo.entrenador}</Text>
-            </View>
-          </View>
-        </View>
+        <EquipoInfoGeneral info={equipoInfo} />
 
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Plantel</Text>
@@ -175,7 +121,7 @@ export default function EquipoDetalle() {
                             {'☆'.repeat(5 - Math.round(jugador.averageRating))}
                           </Text>
                           <Text style={styles.ratingNumber}>
-                            {jugador.averageRating.toFixed(1)} ({jugador.totalVotes})
+                            {jugador.averageRating.toFixed(2)} ({jugador.totalVotes})
                           </Text>
                         </>
                       ) : (
@@ -195,7 +141,7 @@ export default function EquipoDetalle() {
 }
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
     backgroundColor: "#0D1B2A",
   },
@@ -230,35 +176,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
   },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 32,
-    gap: 16,
-  },
-  statBox: {
-    flex: 1,
-    backgroundColor: "#1E3A5F",
-    padding: 20,
-    borderRadius: 12,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#2A4A6F",
-  },
-  statNumber: {
-    color: "#A9D6E5",
-    fontSize: 32,
-    fontWeight: "700",
-    marginBottom: 4,
-  },
-  apodo: {  //me lo olvide de poner en la BD (rip)
+  apodo: {  //me olvide de ponerlo en la BD (qepd)
     color: "#94a3b8",
     fontSize: 16,
     fontStyle: "italic",
-  },
-  statLabel: {
-    color: "#cbd5e1",
-    fontSize: 14,
   },
   infoSection: {
     marginBottom: 24,
@@ -268,35 +189,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginBottom: 12,
-  },
-  infoCard: {
-    backgroundColor: "#112336",
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "#1E3A5F",
-  },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  infoLabel: {
-    color: "#94a3b8",
-    fontSize: 15,
-    flex: 1,
-  },
-  infoValue: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "600",
-    flex: 1,
-    textAlign: "right",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "#1E3A5F",
   },
   playersCard: {
     backgroundColor: "#112336",
@@ -332,7 +224,7 @@ const styles = StyleSheet.create({
   },
   ratingStars: {
     color: "#facc15",
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 2,
   },
   ratingNumber: {
