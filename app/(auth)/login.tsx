@@ -2,22 +2,41 @@ import { postLogin } from "@/components/apiConnections/apileagues";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const [mail, setMail] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [secureEntry, setSecureEntry] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async () => {
-    const user = await postLogin(mail, contrasena);
-    if (user) {
-      router.push({
-        pathname: '/(app)',
-        params: { usuario: JSON.stringify(user) }
-      });
-    } else {
-      Alert.alert('Error', 'Mail o contraseña incorrectos');
+    if (!mail || !contrasena) {
+      Alert.alert('Error', 'Por favor completa todos los campos');
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const user = await postLogin(mail, contrasena);
+      
+      if (user) {
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+        
+        router.push({
+          pathname: '/(app)',
+          params: { usuario: JSON.stringify(user) }
+        });
+      } else {
+        Alert.alert('Error', 'Mail o contraseña incorrectos');
+      }
+    } catch (error) {
+      console.error('Error en login:', error);
+      Alert.alert('Error', 'Ocurrió un error al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,6 +73,7 @@ export default function Login() {
                 keyboardType="email-address"
                 value={mail}
                 onChangeText={setMail}
+                editable={!loading}
               />
             </View>
 
@@ -67,10 +87,12 @@ export default function Login() {
                   secureTextEntry={secureEntry}
                   value={contrasena}
                   onChangeText={setContrasena}
+                  editable={!loading}
                 />
                 <Pressable
                   onPress={() => setSecureEntry(!secureEntry)}
                   style={styles.toggleButton}
+                  disabled={loading}
                 >
                   <Text style={styles.toggleStyle}>
                     {secureEntry ? "Mostrar" : "Ocultar"}
@@ -80,8 +102,14 @@ export default function Login() {
             </View>
           </View>
 
-          <Pressable style={styles.continueButtonStyle} onPress={handleLogin}>
-            <Text style={styles.buttonTextStyle}>Continuar</Text>
+          <Pressable
+            style={[styles.continueButtonStyle, loading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <Text style={styles.buttonTextStyle}>
+              {loading ? 'Ingresando...' : 'Continuar'}
+            </Text>
           </Pressable>
 
           <Text style={styles.footerText}>
@@ -190,6 +218,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
+  },
+  buttonDisabled: {
+    backgroundColor: "#64748b",
+    shadowOpacity: 0.1,
   },
   buttonTextStyle: {
     color: "white",

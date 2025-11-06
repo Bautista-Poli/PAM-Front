@@ -45,6 +45,11 @@ export interface Player {
   team_id: number;
 }
 
+export interface PlayerWithRating extends Player {
+  averageRating: number;
+  totalVotes: number;
+}
+
 export type UserData = {
   id: number;
   usuario: string;

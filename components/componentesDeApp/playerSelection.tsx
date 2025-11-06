@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { SectionList, Text } from 'react-native';
+import { SectionList, Text, StyleSheet, Alert } from 'react-native';
 import PlayerItem from './playerCard';
-
-import { StyleSheet } from 'react-native';
 import { MatchRow, Player } from '../apiConnections/types';
 import EvaluarFooter from './botonDeEvaluar';
 import PartidoCard from './partido';
-
+import { postRatings } from '../apiConnections/apileagues';
+import { useRouter } from 'expo-router';
 
 type SectionJugadores = {
     title: string;
@@ -18,14 +17,54 @@ type Props = {
     sections: SectionJugadores[];
     loading: boolean;
     partidoData: MatchRow;
+    userId: number;
 };
 
-export default function PlayersSectionList({ sections,loading,partidoData}: Props) {
+export default function PlayersSectionList({sections, loading, partidoData, userId}: Props) {
     const [ratings, setRatings] = useState<Record<number, number>>({});
+    const [submitting, setSubmitting] = useState(false);
+    const router = useRouter();
 
     function onChangeRating(id: number, value: number) {
         setRatings((prev: any) => ({ ...prev, [id]: value }));
     };
+
+    async function handleEvaluar() {
+        const ratingsArray = Object.entries(ratings)
+            .filter(([_, rating]) => rating > 0)
+            .map(([playerId, rating]) => ({
+                playerId: parseInt(playerId),
+                rating: rating,
+            }));
+        if (ratingsArray.length === 0) {
+            Alert.alert('Error', 'Debes calificar al menos un jugador');
+            return;
+        }
+
+        setSubmitting(true);
+
+        try {
+            const matchId = parseInt(partidoData.id);
+            const result = await postRatings(userId, matchId, ratingsArray);
+
+            if (result) {
+                Alert.alert('Éxito', `Se guardaron ${result.ratingsCreated} evaluaciones correctamente`,
+                    [{text: 'OK', onPress: () => {
+                                setRatings({});
+                                router.back();
+                            },
+                        },
+                    ]
+                );
+            }
+        }
+        catch (error: any) {
+            Alert.alert('Error', error.message || 'No se pudieron guardar las evaluaciones');
+        }
+        finally {
+            setSubmitting(false);
+        }
+    }
     
 
     return (
@@ -36,12 +75,12 @@ export default function PlayersSectionList({ sections,loading,partidoData}: Prop
             contentContainerStyle={styles.content}
             contentInsetAdjustmentBehavior="automatic"
             ListHeaderComponent={<PartidoCard data={partidoData} />}
-            ListFooterComponent={<EvaluarFooter
-                onPress={() => {
-                    setRatings({});
-                    console.log("Evaluaciones (solo log, sin POST):", ratings);
-                }}
-            />}
+            ListFooterComponent={
+                <EvaluarFooter
+                    onPress={ handleEvaluar }
+                    disabled = { submitting }
+                />
+            }
             renderSectionHeader={({ section }) => (
                 <Text style={styles.sectionTitle}>{section.title}</Text>
             )}

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import { UserData } from '../apiConnections/types';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MenuUsuario( { usuario }: { usuario: UserData }) {
   const [visible, setVisible] = useState(false);
@@ -10,9 +11,16 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
   const name = usuario.usuario;
   const router = useRouter();
 
-  const handleLogout = () => {
-    setVisible(false);
-    router.replace('/(auth)/');
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+      setVisible(false);
+      router.replace('/login');
+    }
+    catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      Alert.alert('Error', 'No se pudo cerrar sesión correctamente');
+    }
   };
 
   const handleGoToTeam = () => {
@@ -67,7 +75,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
                 <Pressable onPress={handleGoToTeam} style={styles.menuItem}>
                   <Text style={styles.menuItemTxt}>Ver mi equipo</Text>
                 </Pressable>
-                <Pressable onPress={() => handleLogout()} style={styles.menuItem}>
+                <Pressable onPress={handleLogout} style={styles.menuItem}>
                   <Text style={styles.menuItemTxt}>Cerrar sesión</Text>
                 </Pressable>
               </View>
@@ -93,14 +101,11 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   avatarTxt: { color: 'white', fontWeight: '700' },
-
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     alignItems: 'flex-end',
   },
-
-
   menuBox: {
     marginTop: 80,
     marginRight: 20,
@@ -114,7 +119,6 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
   },
-
   menuHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   menuCrest: { width: 45, height: 45, resizeMode: 'contain' },
   menuUser: { color: 'white', fontSize: 18, fontWeight: '700' },

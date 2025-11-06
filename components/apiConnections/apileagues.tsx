@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { LeagueTableRow, MatchRow, Player, UserData } from './types';
 
 const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
@@ -44,3 +43,62 @@ export async function postLogin(mail: string, contrasena: string): Promise<UserD
   }
 }
 
+export type RatingInput = {
+  playerId: number;
+  rating: number;
+};
+
+export async function postRatings(userId: number, matchId: number, ratings: RatingInput[]): Promise<{ success: boolean; ratingsCreated: number } | null> {
+  try {
+    const response = await fetch(`${API_BASE}/ratings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, matchId, ratings }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error al guardar las evaluaciones');
+    }
+
+    return await response.json();
+  }
+  catch (err) {
+    console.error('Error al guardar ratings:', err);
+    throw err;
+  }
+}
+
+export async function checkUserVoted(userId: number, matchId: number): Promise<{ hasVoted: boolean }> {
+  try {
+    const response = await fetch(`${API_BASE}/ratings/check?userId=${userId}&matchId=${matchId}`);
+
+    if (!response.ok) {
+      throw new Error('Error al verificar voto');
+    }
+
+    return await response.json();
+  }
+  catch (err) {
+    console.error('Error al verificar voto:', err);
+    throw err;
+  }
+}
+
+export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
+  try {
+    const response = await fetch(`${API_BASE}/ratings/club/${encodeURIComponent(clubName)}`);
+
+    if (!response.ok) {
+      throw new Error('Error al obtener ratings del club');
+    }
+
+    return await response.json();
+  }
+  catch (err) {
+    console.error('Error al obtener ratings:', err);
+    throw err;
+  }
+}
