@@ -1,4 +1,4 @@
-import { LeagueTableRow, MatchRow, Player, UserData } from './types';
+import { LeagueTableRow, MatchRow, Player, UserData, Club } from './types';
 
 const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
 
@@ -16,11 +16,21 @@ export async function getMatches(url: string): Promise<MatchRow[]> {
   return await res.json();
 }
 
-
 export async function getPlayers(club: string): Promise<Player[]> {
   const res = await fetch(`${API_BASE}/players?club=${club}`);
   if (!res.ok) throw new Error('Error al obtener los jugadores de ' + club);
   return await res.json();
+}
+
+export async function getClubsArgentinos(): Promise<Club[]> {
+  try {
+    const response = await fetch(`${API_BASE}/user/clubs`);
+    if (!response.ok) throw new Error('Error al obtener los clubes');
+    return await response.json();
+  } catch (err) {
+    console.error('Error al obtener clubes argentinos:', err);
+    throw err;
+  }
 }
 
 export async function postLogin(mail: string, contrasena: string): Promise<UserData | null> {
@@ -40,6 +50,40 @@ export async function postLogin(mail: string, contrasena: string): Promise<UserD
   } catch (err) {
     console.error('Error en el login:', err);
     return null;
+  }
+}
+
+export async function postCreateUser(
+  nombre: string,
+  mail: string,
+  contrasena: string,
+  clubId: number
+): Promise<{ success: boolean; user?: UserData; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE}/user/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nombre, mail, contrasena, clubId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Error al crear la cuenta'
+      };
+    }
+
+    return { success: true, user: data };
+  } catch (err) {
+    console.error('Error al crear usuario:', err);
+    return {
+      success: false,
+      error: 'Error de conexión al crear la cuenta'
+    };
   }
 }
 

@@ -211,4 +211,3 @@ export const styles = StyleSheet.create({
         backgroundColor: '#10b981',
     },
 });
-

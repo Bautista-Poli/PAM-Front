@@ -1,10 +1,82 @@
-import { Link } from "expo-router";
-import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, KeyboardAvoidingView, Platform, Modal, FlatList, Image, Alert } from "react-native";
+import { getClubsArgentinos, postCreateUser } from "@/components/apiConnections/apileagues";
+import { Club } from "@/components/apiConnections/types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CreateAccount() {
   const [secureEntry, setSecureEntry] = useState(true);
   const [repeatSecureEntry, setRepeatSecureEntry] = useState(true);
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
+  const [showClubModal, setShowClubModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [repetirContrasena, setRepetirContrasena] = useState("");
+
+  useEffect(() => {
+    fetchClubs();
+  }, []);
+
+  const fetchClubs = async () => {
+    try {
+      const data = await getClubsArgentinos();
+      setClubs(data);
+    } catch (error) {
+      console.error('Error al cargar clubes:', error);
+      Alert.alert('No se pudieron cargar los clubes. Intentá nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateAccount = async () => {
+    if (!nombre || !email || !contrasena || !repetirContrasena) {
+      Alert.alert('Por favor completá todos los campos');
+      return;
+    }
+    if (contrasena !== repetirContrasena) {
+      Alert.alert('Las contraseñas no coinciden');
+      return;
+    }
+    if (!selectedClub) {
+      Alert.alert('Por favor seleccioná tu club');
+      return;
+    }
+    setSubmitting(true);
+
+    try {
+      const result = await postCreateUser(
+        nombre,
+        email,
+        contrasena,
+        selectedClub.id
+      );
+
+      if (result.success && result.user) {
+        await AsyncStorage.setItem('user', JSON.stringify(result.user));
+        
+        router.push({
+          pathname: '/(app)',
+          params: { usuario: JSON.stringify(result.user) }
+        });
+      } else {
+        Alert.alert('Error', result.error || 'No se pudo crear la cuenta');
+      }
+    }
+    catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'Error de conexión al crear la cuenta');
+    } finally {
+      setSubmitting(false)
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -24,24 +96,27 @@ export default function CreateAccount() {
           </Text>
 
           <View style={styles.formContainer}>
-        
             <View style={styles.inputGroup}>
               <Text style={styles.labelStyle}>Nombre</Text>
               <TextInput
                 style={styles.textInputBoxStyle}
                 placeholder="Nombre de usuario"
                 placeholderTextColor="#9999997e"
+                value={nombre}
+                onChangeText={setNombre}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.labelStyle}>Correo electrónico</Text>
+              <Text style={styles.labelStyle}>Correo Electrónico</Text>
               <TextInput
                 style={styles.textInputBoxStyle}
                 placeholder="ejemplo@email.com"
                 placeholderTextColor="#9999997e"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -53,6 +128,8 @@ export default function CreateAccount() {
                   placeholder="Contraseña"
                   placeholderTextColor="#9999997e"
                   secureTextEntry={secureEntry}
+                  value={contrasena}
+                  onChangeText={setContrasena}
                 />
                 <Pressable
                   onPress={() => setSecureEntry(!secureEntry)}
@@ -73,6 +150,8 @@ export default function CreateAccount() {
                   placeholder="Repetir Contraseña"
                   placeholderTextColor="#9999997e"
                   secureTextEntry={repeatSecureEntry}
+                  value={repetirContrasena}
+                  onChangeText={setRepetirContrasena}
                 />
                 <Pressable
                   onPress={() => setRepeatSecureEntry(!repeatSecureEntry)}
@@ -85,14 +164,44 @@ export default function CreateAccount() {
               </View>
             </View>
 
-            
+            {/* Selector de Club */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.labelStyle}>Tu Club</Text>
+              <Pressable
+                style={styles.clubSelectorButton}
+                onPress={() => setShowClubModal(true)}
+              >
+                {selectedClub ? (
+                  <View style={styles.selectedClubContainer}>
+                    <Image
+                      source={{ uri: selectedClub.crest_url }}
+                      style={styles.clubCrest}
+                    />
+                    <Text style={styles.selectedClubText}>
+                      {selectedClub.nombre}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text style={styles.placeholderText}>
+                    Seleccioná tu club
+                  </Text>
+                )}
+              </Pressable>
+            </View>
           </View>
 
-          <Link style={styles.continueButtonStyle} href={"/(app)"} asChild>
-            <Pressable>
-              <Text style={styles.buttonTextStyle}>Continuar</Text>
-            </Pressable>
-          </Link>
+          <Pressable
+            style={[
+              styles.continueButtonStyle,
+              (loading || submitting) && styles.buttonDisabled
+            ]}
+            onPress={handleCreateAccount}
+            disabled={loading || submitting}
+          >
+            <Text style={styles.buttonTextStyle}>
+              {submitting ? 'Creando cuenta...' : 'Continuar'}
+            </Text>
+          </Pressable>
 
           <Text style={styles.footerText}>
             ¿Ya tenés cuenta?{" "}
@@ -102,6 +211,52 @@ export default function CreateAccount() {
           </Text>
         </View>
       </ScrollView>
+
+      <Modal
+        visible={showClubModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowClubModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Seleccioná tu club</Text>
+              <Pressable onPress={() => setShowClubModal(false)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </Pressable>
+            </View>
+
+            {loading ? (
+              <Text style={styles.loadingText}>Cargando clubes...</Text>
+            ) : (
+              <FlatList
+                data={clubs}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <Pressable
+                    style={[
+                      styles.clubItem,
+                      selectedClub?.id === item.id && styles.clubItemSelected
+                    ]}
+                    onPress={() => {
+                      setSelectedClub(item);
+                      setShowClubModal(false);
+                    }}
+                  >
+                    <Image
+                      source={{ uri: item.crest_url }}
+                      style={styles.clubCrestModal}
+                    />
+                    <Text style={styles.clubNameModal}>{item.nombre}</Text>
+                  </Pressable>
+                )}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -184,6 +339,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
+  clubSelectorButton: {
+    backgroundColor: "#1f2937",
+    padding: 16,
+    height: 52,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#374151",
+    justifyContent: "center",
+  },
+  selectedClubContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  clubCrest: {
+    width: 24,
+    height: 24,
+    marginRight: 12,
+  },
+  selectedClubText: {
+    color: "white",
+    fontSize: 16,
+  },
+  placeholderText: {
+    color: "#9999997e",
+    fontSize: 16,
+  },
   continueButtonStyle: {
     backgroundColor: "#1e6091",
     paddingVertical: 16,
@@ -211,5 +392,66 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#3b82f6",
     fontWeight: "600",
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#1f2937",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: "80%",
+    paddingBottom: 20,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#374151",
+  },
+  modalTitle: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  closeButton: {
+    color: "#9ca3af",
+    fontSize: 24,
+    fontWeight: "600",
+  },
+  loadingText: {
+    color: "#9ca3af",
+    textAlign: "center",
+    padding: 20,
+  },
+  clubItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#374151",
+  },
+  clubItemSelected: {
+    backgroundColor: "#374151",
+  },
+  clubCrestModal: {
+    width: 32,
+    height: 32,
+    marginRight: 16,
+  },
+  clubNameModal: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+
+  buttonDisabled: {
+    backgroundColor: "#64748b",
+    shadowOpacity: 0.1,
   },
 });

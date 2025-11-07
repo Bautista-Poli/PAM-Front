@@ -113,7 +113,7 @@ export default function Login() {
           </Pressable>
 
           <Text style={styles.footerText}>
-            ¿No tienes cuenta?{" "}
+            ¿No tenés cuenta?{" "}
             <Link href="/createAccount">
               <Text style={styles.linkText}>Regístrate</Text>
             </Link>

@@ -63,7 +63,7 @@ const tablaPremierLeague: EquipoTabla[] = [
   { nombre: "Everton", puntos: 10, pj: 11, gf: 10, gc: 17, dg: -7 },
   { nombre: "Ipswich", puntos: 8, pj: 11, gf: 12, gc: 22, dg: -10 },
   { nombre: "Crystal Palace", puntos: 7, pj: 11, gf: 8, gc: 15, dg: -7 },
-  { nombre: "Wolves", puntos: 6, pj: 11, gf: 16, gc: 27, dg: -11 },
+  { nombre: "Wolverhamptom", puntos: 6, pj: 11, gf: 16, gc: 27, dg: -11 },
   { nombre: "Southampton", puntos: 4, pj: 11, gf: 7, gc: 21, dg: -14 },
 ];
 
