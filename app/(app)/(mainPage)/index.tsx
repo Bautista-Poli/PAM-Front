@@ -30,7 +30,7 @@ export default function Index() {
     const cargar = async () => {
       try {
         setLoading(true);
-        const todos = await getPartidos(day); // 👈 acá traés la data
+        const todos = await getPartidos(day);
         setPartidos(todos);
       } catch (e: any) {
         setError(e.message ?? "Error al cargar partidos");

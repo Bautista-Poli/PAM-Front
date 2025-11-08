@@ -4,11 +4,19 @@ const IP_ADDR = process.env.EXPO_PUBLIC_IP_ADDR;
 
 const API_BASE = `http://${IP_ADDR}:3000`;
 
+/*
 export async function getLeague(): Promise<LeagueTableRow[]> {
   const res = await fetch(`${API_BASE}/table`);
   if (!res.ok) throw new Error('Error al obtener la tabla');
   return await res.json();
+}*/
+
+export async function getLeagueTableByName(leagueName:string): Promise<LeagueTableRow[]>{
+  const res = await fetch(`${API_BASE}/league-table?leagueName=${leagueName}`);
+  if (!res.ok) throw new Error('Error al obtener la tabla de la liga: '+leagueName);
+  return res.json()
 }
+
 
 export async function getMatches(url: string): Promise<MatchRow[]> {
   const res = await fetch(`${API_BASE}/matches/by-date${url}`);

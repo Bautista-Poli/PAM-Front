@@ -3,20 +3,16 @@ export interface LeagueTableRow {
   league_preset: string;
   table_index: number;
   table_title?: string | null;
-
-  pos?: number | null;
   team: string;
-  crest?: string | null;
-  pts?: number | null;
-  played?: number | null;
-  wins?: number | null;
-  draws?: number | null;
-  losses?: number | null;
-  gf?: number | null;
-  ga?: number | null;
-  diff?: number | null;
+  pts: number | null;
+  played: number | null;
+  wins: number | null;
+  draws: number | null;
+  losses: number | null;
+  gf: number;
+  ga: number;
+  diff: number | null;
 
-  source_url?: string | null;
   updated_at: string;
 }
 

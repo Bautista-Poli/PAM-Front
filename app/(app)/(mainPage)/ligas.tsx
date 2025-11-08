@@ -2,13 +2,56 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
 import { LIGAS_DATA, getLigaByKey, getLigaByName, EquipoTabla } from "@/constants/ligasData";
+import {getLeagueTableByName} from '../../../components/apiConnections/apileagues'
+import { useEffect, useState } from "react";
+import { LeagueTableRow } from '../../../components/apiConnections/types';
 
 export default function Ligas() {
   const router = useRouter();
   const params = useLocalSearchParams();
   
-  let ligaActual = LIGAS_DATA[0];  //por defecto Liga Argentina
+  const [leagueName,setLeagueName]     = useState<string>('Liga Profesional Argentina');
+  const [tableEntries,setTableEntries] = useState<LeagueTableRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  let ligaActual = LIGAS_DATA[0]; 
+
+  useEffect(() => {
+
+    const cargar = async () => {
+      try {
+        setLoading(true);
+        const entries = await getLeagueTableByName(leagueName);
+        setTableEntries(entries);
+      } catch (e: any) {
+        setError(e.message ?? "Error al cargar la tabla");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargar()
+
+  },[leagueName]);
+
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.statusText}>Cargando partidos...</Text>
+      </View>
+    );
+  }
   
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.statusText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
   if (params.leagueKey) {
     ligaActual = getLigaByKey(params.leagueKey as string) || LIGAS_DATA[0];
   } else if (params.ligaNombre) {
@@ -17,6 +60,7 @@ export default function Ligas() {
 
   const tabla = ligaActual.tabla;
 
+  
   const totalGF = tabla.reduce((sum, t) => sum + t.gf, 0);
   const totalGC = tabla.reduce((sum, t) => sum + t.gc, 0);
   const totalPJ = tabla.reduce((sum, t) => sum + t.pj, 0);
@@ -40,23 +84,23 @@ export default function Ligas() {
       />
 
       <FlatList
-        data={tabla}
-        keyExtractor={(item) => item.nombre}
+        data={tableEntries}
+        keyExtractor={(item) => item.team}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item, index }) => (
           <Pressable
             onPress={() => router.push({
               pathname: '/equipo',
-              params: { nombre: item.nombre }
+              params: { nombre: item.team }
             })}
           >
             <View style={[styles.row, index % 2 === 0 ? styles.rowEven : styles.rowOdd]}>
               <Text style={styles.pos}>{index + 1}</Text>
-              <Text style={styles.nombre}>{item.nombre}</Text>
-              <Text style={styles.stat}>{item.pj}</Text>
-              <Text style={styles.stat}>{item.gf}:{item.gc}</Text>
-              <Text style={styles.stat}>{item.dg}</Text>
-              <Text style={styles.puntos}>{item.puntos}</Text>
+              <Text style={styles.nombre}>{item.team}</Text>
+              <Text style={styles.stat}>{item.played}</Text>
+              <Text style={styles.stat}>{item.gf}:{item.ga}</Text>
+              <Text style={styles.stat}>{item.gf - item.ga}</Text>
+              <Text style={styles.puntos}>{item.pts}</Text>
             </View>
           </Pressable>
         )}
@@ -128,4 +172,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "400",
   },
+  statusText: {
+    fontSize: 16,
+    color: '#555',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  }
 });
