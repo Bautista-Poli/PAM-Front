@@ -4,6 +4,7 @@ import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from 'react';
 import { getEquipos } from "@/components/apiConnections/info";
 import { Club } from "@/components/apiConnections/types";
+import LoaderBall from "@/components/componentesDeApp/animacionCarga";
 
 export default function Equipos() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Equipos() {
 
   if (loading) {
     return (
-      <View style={styles.center}><ActivityIndicator size="large" color="#fff" /></View>
+      <LoaderBall message="Cargando informacion del equipo..."/>
     );
   }
 

@@ -6,6 +6,7 @@ import LigaSelector from "@/components/componentesDeApp/ligaSelector";
 import { MatchRow, UserData } from "@/components/apiConnections/types";
 import Partido from "@/components/componentesDeApp/partido";
 import MenuUsuario from "@/components/componentesDeApp/menuUsuario";
+import LoaderBall from "@/components/componentesDeApp/animacionCarga";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
 
@@ -44,9 +45,7 @@ export default function Index() {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.statusText}>Cargando partidos...</Text>
-      </View>
+      <LoaderBall message="Cargando partidos..." fullScreen   />
     );
   }
 

@@ -5,6 +5,7 @@ import { obtenerEquipoInfo } from "@/components/apiConnections/info";
 import { getPlayerRatingsByClub } from "@/components/apiConnections/apileagues";
 import { PlayerWithRating, EquipoInfo } from "@/components/apiConnections/types";
 import EquipoInfoGeneral from "@/components/componentesDeApp/equipoInfoGeneral";
+import LoaderBall from "@/components/componentesDeApp/animacionCarga";
 
 export default function EquipoDetalle() {
   const { nombre } = useLocalSearchParams();
@@ -49,10 +50,9 @@ export default function EquipoDetalle() {
   
   if (loading) {
     return (
-      <View style={[styles.container, styles.centerContent]}>
-        <ActivityIndicator size="large" color="#93c5fd" />
-        <Text style={styles.loadingText}>Cargando información del equipo...</Text>
-      </View>
+      <LoaderBall
+        message="Cargando información del equipo..." fullScreen
+      />
     );
   }
 

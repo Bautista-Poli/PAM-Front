@@ -5,6 +5,7 @@ import { LIGAS_DATA, getLigaByKey, getLigaByName, EquipoTabla } from "@/constant
 import {getLeagueTableByName} from '../../../components/apiConnections/apileagues'
 import { useEffect, useState } from "react";
 import { LeagueTableRow } from '../../../components/apiConnections/types';
+import LoaderBall from "@/components/componentesDeApp/animacionCarga";
 
 export default function Ligas() {
   const router = useRouter();
@@ -37,11 +38,11 @@ export default function Ligas() {
 
 
   if (loading) {
-    return (
-      <View style={styles.center}>
-        <Text style={styles.statusText}>Cargando partidos...</Text>
-      </View>
-    );
+      return (
+        <LoaderBall
+          message="Cargando información del equipo..." fullScreen
+        />
+      );
   }
   
   if (error) {
