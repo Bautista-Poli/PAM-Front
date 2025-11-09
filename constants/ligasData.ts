@@ -103,7 +103,7 @@ export const LIGAS_DATA: LigaData[] = [
   },
   {
     key: "la_liga",
-    nombre: "LaLiga",
+    nombre: "La Liga",
     tabla: tablaLaLiga,
   },
 ];

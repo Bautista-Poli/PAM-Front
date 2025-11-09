@@ -11,20 +11,19 @@ export default function Ligas() {
   const router = useRouter();
   const params = useLocalSearchParams();
   
-  const [leagueName,setLeagueName]     = useState<string>('Liga Profesional Argentina');
   const [tableEntries,setTableEntries] = useState<LeagueTableRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  let ligaActual = LIGAS_DATA[0]; 
+
 
   useEffect(() => {
 
     const cargar = async () => {
       try {
         setLoading(true);
-        const entries = await getLeagueTableByName(leagueName);
-        setTableEntries(entries);
+        const entries = await getLeagueTableByName(params.ligaNombre as string);
+        setTableEntries(entries.sort((a,b) => b.pts - a.pts));
       } catch (e: any) {
         setError(e.message ?? "Error al cargar la tabla");
       } finally {
@@ -34,7 +33,7 @@ export default function Ligas() {
 
     cargar()
 
-  },[leagueName]);
+  },[params.ligaNombre]);
 
 
   if (loading) {
@@ -53,28 +52,21 @@ export default function Ligas() {
     );
   }
 
-  if (params.leagueKey) {
-    ligaActual = getLigaByKey(params.leagueKey as string) || LIGAS_DATA[0];
-  } else if (params.ligaNombre) {
-    ligaActual = getLigaByName(params.ligaNombre as string) || LIGAS_DATA[0];
-  }
-
-  const tabla = ligaActual.tabla;
 
   
-  const totalGF = tabla.reduce((sum, t) => sum + t.gf, 0);
-  const totalGC = tabla.reduce((sum, t) => sum + t.gc, 0);
-  const totalPJ = tabla.reduce((sum, t) => sum + t.pj, 0);
+  const totalGF = tableEntries.reduce((sum, t) => sum + t.gf, 0);
+  const totalGC = tableEntries.reduce((sum, t) => sum + t.ga, 0);
+  const totalPJ = tableEntries.reduce((sum, t) => sum + t.played, 0);
 
   const promGoles = ((totalGF + totalGC) / totalPJ).toFixed(2);
-  const maxGF = tabla.reduce((max, t) => (t.gf > max.gf ? t : max), tabla[0]);
-  const minGC = tabla.reduce((min, t) => (t.gc < min.gc ? t : min), tabla[0]);
+  const maxGF = tableEntries.reduce((max, t) => (t.gf > max.gf ? t : max), tableEntries[0]);
+  const minGC = tableEntries.reduce((min, t) => (t.ga < min.ga ? t : min), tableEntries[0]);
 
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: `Tabla ${ligaActual.nombre}`,
+          title: `Tabla ${params.ligaNombre}`,
           headerShown: true,
           headerLeft: () => (
             <Pressable onPress={() => router.back()} hitSlop={8}>
@@ -100,7 +92,7 @@ export default function Ligas() {
               <Text style={styles.nombre}>{item.team}</Text>
               <Text style={styles.stat}>{item.played}</Text>
               <Text style={styles.stat}>{item.gf}:{item.ga}</Text>
-              <Text style={styles.stat}>{item.gf - item.ga}</Text>
+              <Text style={(item.gf - item.ga)>0 ? styles.positiveDiff : styles.negativeDiff}>{(item.gf - item.ga)>0 ? '+'+(item.gf - item.ga) : (item.gf - item.ga)}</Text>
               <Text style={styles.puntos}>{item.pts}</Text>
             </View>
           </Pressable>
@@ -115,14 +107,14 @@ export default function Ligas() {
             <Text style={styles.puntos}>Pts</Text>
           </View>
         }
-        ListFooterComponent={<Estadisticas promGoles={promGoles} maxGF={maxGF} minGC={minGC}/>}
+        ListFooterComponent={<Estadisticas promGoles={promGoles} maxGF={{nombre:maxGF.team,gf:maxGF.gf}} minGC={{nombre:minGC.team,gc:minGC.ga}}/>}
       />
 
       <Pressable
         style={styles.btnEquipos}
         onPress={() => router.push({
           pathname: '/equipos',
-          params: { leagueKey: ligaActual.key }
+          params: { leagueKey: params.ligaNombre }
         })}
       >
         <Text style={styles.btnEquiposText}>Ver todos los equipos</Text>
@@ -182,5 +174,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+  },
+  positiveDiff: {
+    width: 40,
+    textAlign: "center",
+    color: "#3ac921ff"
+  },
+  negativeDiff: {
+    width: 40,
+    textAlign: "center",
+    color: "#c31414ff"
   }
 });

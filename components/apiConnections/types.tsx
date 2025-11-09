@@ -4,8 +4,8 @@ export interface LeagueTableRow {
   table_index: number;
   table_title?: string | null;
   team: string;
-  pts: number | null;
-  played: number | null;
+  pts: number;
+  played: number;
   wins: number | null;
   draws: number | null;
   losses: number | null;

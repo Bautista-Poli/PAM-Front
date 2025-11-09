@@ -13,7 +13,7 @@ type Dia = 'ayer' | 'hoy' | 'mañana';
 const ligasDisponibles = [
   'Liga Profesional Argentina',
   'Premier League',
-  'LaLiga',
+  'La Liga',
 ];
 
 export default function Index() {
