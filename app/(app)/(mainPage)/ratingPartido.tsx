@@ -1,10 +1,10 @@
 // app/(app)/rating-partido.tsx
-import React from "react";
 import { View, Text, Modal, Pressable, StyleSheet } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useRatingPartido } from "@/components/componentesDeApp/useRatingPartido";
 import PlayersSectionList from "@/components/componentesDeApp/playerSelection";
-import LoaderBall from "@/components/componentesDeApp/animacionCarga";
+import AlreadyVotedModal from "@/components/animations/votedAnimation";
+import LoaderBall from "@/components/animations/animacionCarga";
 
 
 export default function RatingPartido() {
@@ -38,21 +38,9 @@ export default function RatingPartido() {
 
     case "voted":
       return (
-        <View style={styles.view}>
+        <View>
           <Header onBack={() => router.back()} />
-          <Modal animationType="fade" transparent visible onRequestClose={() => router.back()}>
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Ya evaluaste este partido</Text>
-                <Text style={styles.modalMessage}>
-                  No podés evaluar el mismo partido dos veces.
-                </Text>
-                <Pressable style={styles.modalButton} onPress={() => router.back()}>
-                  <Text style={styles.modalButtonText}>Volver</Text>
-                </Pressable>
-              </View>
-            </View>
-          </Modal>
+          <AlreadyVotedModal isVisible={true} onClose={() => router.back()} />
         </View>
       );
 

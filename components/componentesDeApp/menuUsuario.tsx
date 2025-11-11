@@ -1,3 +1,5 @@
+// MenuUsuario.tsx (Versión Limpia)
+
 import { useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import { UserData } from '../apiConnections/types';
@@ -50,7 +52,6 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
         animationType="fade"
         onRequestClose={() => setVisible(false)}
       >
-
         <TouchableWithoutFeedback onPress={() => setVisible(false)}>
           <View style={styles.modalBackdrop}>
             
@@ -60,7 +61,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
                   {crest ? (
                     <Image source={{ uri: crest }} style={styles.menuCrest} />
                   ) : (
-                    <View style={[styles.avatarFallback, { width: 40, height: 40, borderRadius: 20 }]}>
+                    <View style={[styles.avatarFallback, { width: 45, height: 45, borderRadius: 22.5 }]}>
                       <Text style={styles.avatarTxt}>{name.charAt(0).toUpperCase()}</Text>
                     </View>
                   )}
@@ -70,8 +71,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
                   </View>
                 </View>
 
-                <Text style={styles.separador}>-------------------------------------------------------------</Text>
-
+                
                 <Pressable onPress={handleGoToTeam} style={styles.menuItem}>
                   <Text style={styles.menuItemTxt}>Ver mi equipo</Text>
                 </Pressable>

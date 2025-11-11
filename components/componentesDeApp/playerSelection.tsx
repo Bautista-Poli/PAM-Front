@@ -6,6 +6,7 @@ import EvaluarFooter from './botonDeEvaluar';
 import PartidoCard from './partido';
 import { postRatings } from '../apiConnections/apileagues';
 import { useRouter } from 'expo-router';
+import SuccessCheckAnimation from '../animations/successAnimation';
 
 type SectionJugadores = {
     title: string;
@@ -104,25 +105,12 @@ export default function PlayersSectionList({sections, loading, partidoData, user
                     />
                 )}
             />
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={showSuccessModal}
-                onRequestClose={handleCloseSuccessModal}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={[styles.modalContainer, styles.successModalContainer]}>
-                        <Text style={[styles.modalTitle, styles.successModalTitle]}>Gracias por tus valoraciones</Text>
-                        <Text style={styles.modalMessage}>{successMessage}</Text>
-                        <Pressable
-                            style={[styles.modalButton, styles.successModalButton]}
-                            onPress={handleCloseSuccessModal}
-                        >
-                            <Text style={styles.modalButtonText}>OK</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+            <SuccessCheckAnimation
+                isVisible={showSuccessModal}
+                onClose={handleCloseSuccessModal} // Esta función también hace el router.back()
+                message={successMessage}
+            />
+
         </View>
     );
 }

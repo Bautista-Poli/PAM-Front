@@ -5,7 +5,8 @@ import { obtenerEquipoInfo } from "@/components/apiConnections/info";
 import { getPlayerRatingsByClub } from "@/components/apiConnections/apileagues";
 import { PlayerWithRating, EquipoInfo } from "@/components/apiConnections/types";
 import EquipoInfoGeneral from "@/components/componentesDeApp/equipoInfoGeneral";
-import LoaderBall from "@/components/componentesDeApp/animacionCarga";
+import LoaderBall from "@/components/animations/animacionCarga";
+
 
 export default function EquipoDetalle() {
   const { nombre } = useLocalSearchParams();

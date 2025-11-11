@@ -5,7 +5,7 @@ import { LIGAS_DATA, getLigaByKey, getLigaByName, EquipoTabla } from "@/constant
 import {getLeagueTableByName} from '../../../components/apiConnections/apileagues'
 import { useEffect, useState } from "react";
 import { LeagueTableRow } from '../../../components/apiConnections/types';
-import LoaderBall from "@/components/componentesDeApp/animacionCarga";
+import LoaderBall from "@/components/animations/animacionCarga";
 
 export default function Ligas() {
   const router = useRouter();
