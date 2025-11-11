@@ -189,7 +189,6 @@ export default function CreateAccount() {
               </View>
             </View>
 
-            {/* Selector de Club */}
             <View style={styles.inputGroup}>
               <Text style={styles.labelStyle}>Tu Club</Text>
               <Pressable
