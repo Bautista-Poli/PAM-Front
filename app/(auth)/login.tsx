@@ -26,7 +26,7 @@ export default function Login() {
         await AsyncStorage.setItem('user', JSON.stringify(user));
         
         router.push({
-          pathname: '/(app)',
+          pathname: '/(app)/(mainPage)',
           params: { usuario: JSON.stringify(user) }
         });
       } else {

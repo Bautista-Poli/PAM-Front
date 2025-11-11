@@ -19,6 +19,7 @@ export default function CreateAccount() {
   const [email, setEmail] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [repetirContrasena, setRepetirContrasena] = useState("");
+  const [errorMessage,setErrorMessage] = useState('');
 
   useEffect(() => {
     fetchClubs();
@@ -36,22 +37,45 @@ export default function CreateAccount() {
     }
   };
 
-  const handleCreateAccount = async () => {
+  const isUserInputValid = () => {
     if (!nombre || !email || !contrasena || !repetirContrasena) {
-      Alert.alert('Por favor completá todos los campos');
-      return;
+      setErrorMessage('Por favor completá todos los campos');
+      return false;
     }
+    if(!email.includes('@')){
+      setErrorMessage('La dirección de email no es valida');
+      return false;
+    }
+    if(!(contrasena.match(/\d/m))){
+      setErrorMessage('La contraseña debe contener al menos un número');
+      return false;
+    }
+    if(contrasena.length < 8){
+      setErrorMessage('La contraseñas debe contener al menos 8 caracteres');
+      return false;
+    }
+    
     if (contrasena !== repetirContrasena) {
-      Alert.alert('Las contraseñas no coinciden');
+      setErrorMessage('Las contraseñas no coinciden');
+      return false;
+    }
+
+
+    return true;
+  }
+
+  const handleCreateAccount = async () => {
+    if(!isUserInputValid()){
       return;
     }
     if (!selectedClub) {
-      Alert.alert('Por favor seleccioná tu club');
+      setErrorMessage('Por favor seleccioná tu club')
       return;
     }
     setSubmitting(true);
 
     try {
+
       const result = await postCreateUser(
         nombre,
         email,
@@ -63,7 +87,7 @@ export default function CreateAccount() {
         await AsyncStorage.setItem('user', JSON.stringify(result.user));
         
         router.push({
-          pathname: '/(app)',
+          pathname: '/(app)/(mainPage)',
           params: { usuario: JSON.stringify(result.user) }
         });
       } else {
@@ -97,6 +121,7 @@ export default function CreateAccount() {
 
           <View style={styles.formContainer}>
             <View style={styles.inputGroup}>
+              <Text style={[styles.errorMessageText, (errorMessage == "") ? {display:"none"} : {display:"flex"}]}>{errorMessage}</Text>
               <Text style={styles.labelStyle}>Nombre</Text>
               <TextInput
                 style={styles.textInputBoxStyle}
@@ -454,4 +479,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#64748b",
     shadowOpacity: 0.1,
   },
+  errorMessageText:{
+    color: "#f54040ff",
+    fontSize:16,
+    textAlign:"center",
+  }
 });
