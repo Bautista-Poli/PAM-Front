@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, Image } from "react-native";
 import { Club } from "@/components/apiConnections/types";
 
@@ -72,7 +72,6 @@ export default function CreateAccountForm({
         <View style={styles.formContainer}>
           {errorMessage !== "" && <Text style={styles.errorText}>{errorMessage}</Text>}
 
-          {/* Nombre */}
           <View style={styles.inputGroup}>
             <Text style={styles.labelStyle}>Nombre</Text>
             <TextInput

@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  FlatList,
-  Image,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, Modal,Pressable, StyleSheet,Text,View} from "react-native";
 import { Club } from "@/components/apiConnections/types";
 import { getClubsArgentinos } from "@/components/apiConnections/apileagues";
 

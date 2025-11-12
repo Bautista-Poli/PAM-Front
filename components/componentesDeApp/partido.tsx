@@ -59,7 +59,7 @@ export default function PartidoCard({ data }: PartidoProps) {
           )}
 
           <View style={styles.row}>
-            {/* Local */}
+            
             <View style={styles.teamBlock}>
               <Image
                 source={{ uri: data.home_crest ?? fallbackLogo }}
@@ -82,7 +82,6 @@ export default function PartidoCard({ data }: PartidoProps) {
               )}
             </View>
 
-            {/* Visitante */}
             <View style={styles.teamBlock}>
               <Image
                 source={{ uri: data.away_crest ?? fallbackLogo }}

@@ -1,6 +1,5 @@
 // components/Marcador.tsx
-import React from "react";
-import { View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 
 export type MarcadorProps = {
   golesLocal?: number;

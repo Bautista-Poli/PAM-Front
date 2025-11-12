@@ -1,36 +1,44 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { getPartidos } from '@/components/apiConnections/info';
 import LigaSelector from "@/components/componentesDeApp/ligaSelector";
-import { MatchRow, UserData } from "@/components/apiConnections/types";
+import { MatchRow } from "@/components/apiConnections/types";
 import Partido from "@/components/componentesDeApp/partido";
 import MenuUsuario from "@/components/componentesDeApp/menuUsuario";
 import LoaderBall from "@/components/animations/animacionCarga";
+import { useAuth } from "../../../auth/authContext"; 
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
-
-const ligasDisponibles = [
-  'Liga Profesional Argentina',
-  'Premier League',
-  'La Liga',
-];
+const ligasDisponibles = ['Liga Profesional Argentina', 'Premier League', 'La Liga'];
 
 export default function Index() {
   const router = useRouter();
-  const [day, setDay] = useState<Dia>('hoy');
-  const [ligaSeleccionada, setLigaSeleccionada] = useState('Liga Profesional Argentina');
+  const { user, isBooting } = useAuth();
+
+  const [day, setDay] = useState<Dia>("hoy");
+  const [ligaSeleccionada, setLigaSeleccionada] = useState(ligasDisponibles[0]);
   const [partidos, setPartidos] = useState<MatchRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { usuario } = useLocalSearchParams();
-  const userObj = JSON.parse(usuario as string) as UserData;
+
+  
+  useEffect(() => {
+    if (isBooting) return; 
+
+    if (!user) {
+      router.replace("/(auth)/login");
+    }
+  }, [isBooting, user]);
 
 
   useEffect(() => {
+    
+    if (isBooting || !user) return;
+
     const cargar = async () => {
       try {
-        setLoading(true);
+        setLoading(true); 
         const todos = await getPartidos(day);
         setPartidos(todos);
       } catch (e: any) {
@@ -39,16 +47,14 @@ export default function Index() {
         setLoading(false);
       }
     };
-
     cargar();
-  }, [day]);
+  }, [day, user, isBooting]); 
 
-  if (loading) {
-    return (
-      <LoaderBall message="Cargando partidos..." fullScreen   />
-    );
+  
+  if (isBooting || (!user && !error)) {
+    return <LoaderBall message="Cargando aplicación..." fullScreen />;
   }
-
+  
   if (error) {
     return (
       <View style={styles.center}>
@@ -56,11 +62,9 @@ export default function Index() {
       </View>
     );
   }
-
-
-  // filtramos los partidos por liga seleccionada
-  const partidosFiltrados = partidos.filter(p => p.league === ligaSeleccionada);
-
+  
+  const partidosFiltrados = partidos.filter((p) => p.league === ligaSeleccionada);
+  
   const DayChip = ({ label, value }: { label: string; value: Dia }) => {
     const selected = day === value;
     return (
@@ -79,15 +83,13 @@ export default function Index() {
     );
   };
 
-
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>
-          {day === 'hoy' ? 'Partidos de hoy' :
-          day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
+          {day === 'hoy' ? 'Partidos de hoy' : day === 'ayer' ? 'Partidos de ayer' : 'Partidos de mañana'}
         </Text>
-        <MenuUsuario usuario={userObj} />
+        <MenuUsuario usuario={user!} /> 
       </View>
 
       <View style={styles.buttonRow}>
@@ -98,22 +100,14 @@ export default function Index() {
 
       <View style={styles.ligaTitleText}>
         <Pressable
-          style={({ pressed }) => [
-            styles.ligaBtn,
-            pressed && styles.ligaBtnPressed,
-          ]}
-          onPress={() => router.push({
-            pathname: '/ligas',
-            params: { ligaNombre: ligaSeleccionada }
-          })}
+          style={({ pressed }) => [styles.ligaBtn, pressed && styles.ligaBtnPressed]}
+          onPress={() =>
+            router.push({ pathname: '/ligas', params: { ligaNombre: ligaSeleccionada } })
+          }
         >
           <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
         </Pressable>
-        <LigaSelector
-          selectedLiga={ligaSeleccionada}
-          ligas={ligasDisponibles}
-          onSelect={setLigaSeleccionada}
-        />
+        <LigaSelector selectedLiga={ligaSeleccionada} ligas={ligasDisponibles} onSelect={setLigaSeleccionada} />
       </View>
 
       <FlatList

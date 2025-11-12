@@ -1,10 +1,9 @@
 // hooks/useRatingPartido.ts
 import { useEffect, useMemo, useReducer } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
 import { checkUserVoted } from "../apiConnections/apileagues";
 import { obtenerJugadores } from "../apiConnections/info";
-import { MatchRow, Player } from "../apiConnections/types";
+import { MatchRow, Player, UserData } from "../apiConnections/types";
+import { useAuthUser } from "@/auth/authContext";
 
 export type SectionJugadores = { title: string; teamName: string; data: Player[] };
 
@@ -47,6 +46,15 @@ function reducer(state: State, action: Action): State {
 }
 
 export function useRatingPartido(originalPartidoParam: unknown) {
+  // 1. Obtener el usuario autenticado
+  let user: UserData;
+  try {
+      user = useAuthUser(); 
+  } catch (e) {
+      console.error("Error al obtener usuario en useRatingPartido:", e);
+      return { status: "error", error: "Usuario no autenticado", partidoData: null };
+  }
+
   const partidoData: MatchRow | null = useMemo(() => {
     try {
       return originalPartidoParam ? (JSON.parse(originalPartidoParam as string) as MatchRow) : null;
@@ -62,20 +70,13 @@ export function useRatingPartido(originalPartidoParam: unknown) {
   }, [partidoData]);
 
   useEffect(() => {
+    const userId: number = user.id;
+
     (async () => {
       if (!partidoData) return;
       dispatch({ type: "LOADING" });
 
-      try {
-        const userStr = await AsyncStorage.getItem("user");
-        if (!userStr) {
-          Alert.alert("Error", "Debes iniciar sesión para evaluar jugadores");
-          dispatch({ type: "ERROR", error: "Usuario no logueado" });
-          return;
-        }
-        const user = JSON.parse(userStr);
-        const userId: number = user?.id;
-
+      try {        
         const matchId = parseInt(partidoData.id);
         const result = await checkUserVoted(userId, matchId);
         if (result?.hasVoted) {
@@ -87,7 +88,7 @@ export function useRatingPartido(originalPartidoParam: unknown) {
         const equipoVisitante = partidoData.away_team ?? "Visitante";
 
         const [loc, vis] = await Promise.all([
-          obtenerJugadores(equipoLocal),  // Promise<Player[]>
+          obtenerJugadores(equipoLocal), 
           obtenerJugadores(equipoVisitante),
         ]);
 
@@ -101,7 +102,7 @@ export function useRatingPartido(originalPartidoParam: unknown) {
         dispatch({ type: "ERROR", error: e?.message ?? "Error cargando datos" });
       }
     })();
-  }, [partidoData]);
+  }, [partidoData, user.id]); // Asegúrate de incluir 'user.id' como dependencia
 
   return state;
 }

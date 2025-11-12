@@ -1,66 +1,41 @@
-import { postLogin } from "@/components/apiConnections/apileagues";
+import { useAuth } from "../../auth/authContext";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Image, Alert, Pressable, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
-  const [mail, setMail] = useState('');
-  const [contrasena, setContrasena] = useState('');
+  const [mail, setMail] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const [secureEntry, setSecureEntry] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     if (!mail || !contrasena) {
-      Alert.alert('Error', 'Por favor completa todos los campos');
+      Alert.alert("Error", "Por favor completa todos los campos");
       return;
     }
-
     setLoading(true);
-    
     try {
-      const user = await postLogin(mail, contrasena);
-      
-      if (user) {
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        
-        router.push({
-          pathname: '/(app)/(mainPage)',
-          params: { usuario: JSON.stringify(user) }
-        });
-      } else {
-        Alert.alert('Error', 'Mail o contraseña incorrectos');
-      }
-    } catch (error) {
-      console.error('Error en login:', error);
-      Alert.alert('Error', 'Ocurrió un error al iniciar sesión');
+      await login({ email: mail, password: contrasena });
+      // podés confiar en el guard del layout o navegar directo:
+      router.replace("/(app)/(mainPage)");
+    } catch (e) {
+      Alert.alert("Error", "Mail o contraseña incorrectos");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}>
+      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <Text style={styles.titleStyle}>Iniciar sesión</Text>
-          <Text style={styles.subtitleStyle}>
-            Ingresa tus datos para continuar
-          </Text>
+          <Text style={styles.subtitleStyle}>Ingresa tus datos para continuar</Text>
 
-          <Image
-            source={require('../../assets/images/iconico-del-campeonato-de-futbol.png')} 
-            style={styles.logoStyle}
-          />
+          <Image source={require("../../assets/images/iconico-del-campeonato-de-futbol.png")} style={styles.logoStyle} />
 
           <View style={styles.formContainer}>
             <View style={styles.inputGroup}>
@@ -89,27 +64,15 @@ export default function Login() {
                   onChangeText={setContrasena}
                   editable={!loading}
                 />
-                <Pressable
-                  onPress={() => setSecureEntry(!secureEntry)}
-                  style={styles.toggleButton}
-                  disabled={loading}
-                >
-                  <Text style={styles.toggleStyle}>
-                    {secureEntry ? "Mostrar" : "Ocultar"}
-                  </Text>
+                <Pressable onPress={() => setSecureEntry(!secureEntry)} style={styles.toggleButton} disabled={loading}>
+                  <Text style={styles.toggleStyle}>{secureEntry ? "Mostrar" : "Ocultar"}</Text>
                 </Pressable>
               </View>
             </View>
           </View>
 
-          <Pressable
-            style={[styles.continueButtonStyle, loading && styles.buttonDisabled]}
-            onPress={handleLogin}
-            disabled={loading}
-          >
-            <Text style={styles.buttonTextStyle}>
-              {loading ? 'Ingresando...' : 'Continuar'}
-            </Text>
+          <Pressable style={[styles.continueButtonStyle, loading && styles.buttonDisabled]} onPress={handleLogin} disabled={loading}>
+            <Text style={styles.buttonTextStyle}>{loading ? "Ingresando..." : "Continuar"}</Text>
           </Pressable>
 
           <Text style={styles.footerText}>
@@ -123,6 +86,7 @@ export default function Login() {
     </KeyboardAvoidingView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

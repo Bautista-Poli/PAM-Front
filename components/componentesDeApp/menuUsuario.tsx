@@ -4,18 +4,19 @@ import { useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import { UserData } from '../apiConnections/types';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/auth/authContext';
 
 export default function MenuUsuario( { usuario }: { usuario: UserData }) {
   const [visible, setVisible] = useState(false);
   const crest = usuario.club.crest_url;
   const club = usuario.club.nombre;
   const name = usuario.usuario;
+  const { logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem('user');
+      await logout();
       setVisible(false);
       router.replace('/login');
     }

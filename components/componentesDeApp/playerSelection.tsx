@@ -107,7 +107,7 @@ export default function PlayersSectionList({sections, loading, partidoData, user
             />
             <SuccessCheckAnimation
                 isVisible={showSuccessModal}
-                onClose={handleCloseSuccessModal} // Esta función también hace el router.back()
+                onClose={handleCloseSuccessModal} 
                 message={successMessage}
             />
 

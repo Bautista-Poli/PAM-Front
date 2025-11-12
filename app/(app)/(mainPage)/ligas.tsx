@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
-import { LIGAS_DATA, getLigaByKey, getLigaByName, EquipoTabla } from "@/constants/ligasData";
 import {getLeagueTableByName} from '../../../components/apiConnections/apileagues'
 import { useEffect, useState } from "react";
 import { LeagueTableRow } from '../../../components/apiConnections/types';

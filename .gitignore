@@ -8,4 +8,5 @@ expo-env.d.ts
 # Ignorar carpetas grandes y de compilación
 node_modules/
 backend/ 
-# Asegúrate de que las demás líneas importantes (como .expo/ o .env) también estén ahí
+# Asegúrate de que las demás líneas importantes (como .expo/ o .env) también estén ahí.env
+.env
