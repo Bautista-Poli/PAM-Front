@@ -62,8 +62,6 @@ export default function SuccessCheckAnimation({ onClose, isVisible, message }: S
     transform: [{ scale: scaleAnim }],
   };
 
-  // Corrección para evitar el error de Property Does Not Exist en TS/RN:
-  // Se usa type assertion para acceder a __getValue() de forma segura.
   const fadeValue = (fadeAnim as any).__getValue();
   if (!isVisible && fadeValue === 0) return null;
 

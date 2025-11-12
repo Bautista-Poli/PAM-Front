@@ -9,9 +9,9 @@ const BALL_URL =
 const BALL_SOURCE = require('../../assets/images/ball-blue.png')
 type Props = {
   message?: string;
-  size?: number;        // px
-  speedMs?: number;     // duración de la vuelta
-  fullScreen?: boolean; // ocupa toda la vista o solo inline
+  size?: number;        
+  speedMs?: number;    
+  fullScreen?: boolean; 
 };
 
 export default function LoaderBall({

@@ -1,5 +1,4 @@
-// components/componentesDeApp/AlreadyVotedModal.tsx
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { View, Text, Modal, Pressable, StyleSheet, Animated, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 

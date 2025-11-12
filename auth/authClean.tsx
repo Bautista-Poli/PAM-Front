@@ -8,7 +8,7 @@ export default function AuthClean() {
     (async () => {
       await SecureStore.deleteItemAsync("user");
       await SecureStore.deleteItemAsync("token");
-      console.log("✅ SecureStore limpiado (user + token)");
+      console.log(" SecureStore limpiado ");
     })();
   }, []);
 
