@@ -1,5 +1,4 @@
-// app/equipos.tsx
-import { View, Text, StyleSheet, Pressable, Image, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image, FlatList } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from 'react';
 import { getEquipos } from "@/components/apiConnections/info";

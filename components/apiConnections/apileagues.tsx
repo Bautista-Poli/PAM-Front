@@ -149,3 +149,29 @@ export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
     throw err;
   }
 }
+
+export async function updateUserProfile(
+  userId: number,
+  nombre: string,
+  clubId: number
+): Promise<UserData> {
+  try {
+    const response = await fetch(`${API_BASE}/user/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nombre, clubId }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Error al actualizar perfil');
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    console.error('Error al actualizar perfil:', error);
+    throw error;
+  }
+}

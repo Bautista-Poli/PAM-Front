@@ -1,5 +1,3 @@
-// MenuUsuario.tsx (Versión Limpia)
-
 import { useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
 import { UserData } from '../apiConnections/types';
@@ -24,7 +22,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
       console.error('Error al cerrar sesión:', error);
       Alert.alert('Error', 'No se pudo cerrar sesión correctamente');
     }
-  };
+  }
 
   const handleGoToTeam = () => {
     setVisible(false);
@@ -32,7 +30,12 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
       pathname: '/equipo',
       params: { nombre: club }
     });
-  };
+  }
+
+  const handleGoToEditProfile = () => {
+    setVisible(false);
+    router.push('/perfil');
+  }
 
   return (
     <View style={styles.wrap}>
@@ -76,6 +79,11 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
                 <Pressable onPress={handleGoToTeam} style={styles.menuItem}>
                   <Text style={styles.menuItemTxt}>Ver mi equipo</Text>
                 </Pressable>
+
+                <Pressable onPress={handleGoToEditProfile} style={styles.menuItem}>
+                  <Text style={styles.menuItemTxt}>Editar perfil</Text>
+                </Pressable>
+
                 <Pressable onPress={handleLogout} style={styles.menuItem}>
                   <Text style={styles.menuItemTxt}>Cerrar sesión</Text>
                 </Pressable>
