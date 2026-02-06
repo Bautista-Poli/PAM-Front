@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { UserData } from "@/components/apiConnections/types";
-import { postLogin } from "@/components/apiConnections/apileagues";
+import { UserData } from "@/apiConnections/types";
+import { postLogin } from "@/apiConnections/users";
 
 type AuthState = {
   isBooting: boolean;

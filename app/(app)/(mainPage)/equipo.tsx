@@ -1,9 +1,8 @@
 import { View, Text, StyleSheet, ScrollView, Pressable, Image, ActivityIndicator } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { obtenerEquipoInfo } from "@/components/apiConnections/info";
-import { getPlayerRatingsByClub } from "@/components/apiConnections/apileagues";
-import { PlayerWithRating, EquipoInfo } from "@/components/apiConnections/types";
+import { obtenerEquipoInfo } from "@/apiConnections/info";
+import { PlayerWithRating, EquipoInfo } from "@/apiConnections/types";
 import EquipoInfoGeneral from "@/components/componentesDeApp/equipoInfoGeneral";
 import LoaderBall from "@/components/animations/animacionCarga";
 
@@ -266,3 +265,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+
+function getPlayerRatingsByClub(arg0: string): any {
+  throw new Error("Function not implemented.");
+}

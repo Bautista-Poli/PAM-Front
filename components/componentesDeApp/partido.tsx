@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import { MatchRow } from '../apiConnections/types';
+import { MatchRow } from '../../apiConnections/types';
 import Marcador from './marcador';
 
 type PartidoProps = {

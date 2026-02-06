@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useAuth } from '@/auth/authContext';
-import { Club } from '@/components/apiConnections/types';
-import { updateUserProfile, getClubsArgentinos } from '@/components/apiConnections/apileagues';
+import { Club } from '@/apiConnections/types';
 import LoaderBall from '@/components/animations/animacionCarga';
+import { getClubsArgentinos } from '@/apiConnections/clubs';
+import { updateUserProfile } from '@/apiConnections/users';
 
 export default function EditarPerfil() {
   const router = useRouter();

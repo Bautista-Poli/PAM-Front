@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, Image, Modal,Pressable, StyleSheet,Text,View} from "react-native";
-import { Club } from "@/components/apiConnections/types";
-import { getClubsArgentinos } from "@/components/apiConnections/apileagues";
+import { Club } from "@/apiConnections/types";
+import { getClubsArgentinos } from "../../apiConnections/clubs";
 
 type Props = {
   visible: boolean;

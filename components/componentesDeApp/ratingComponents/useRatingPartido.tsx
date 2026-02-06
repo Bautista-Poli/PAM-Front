@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { obtenerJugadores } from "../../apiConnections/info";
-import { MatchRow, Player } from "../../apiConnections/types";
+import { obtenerJugadores } from "../../../apiConnections/info";
+import { MatchRow, Player } from "../../../apiConnections/types";
 import { useAuthUser } from "@/auth/authContext";
 
 export type SectionJugadores = { title: string; teamName: string; data: Player[] };

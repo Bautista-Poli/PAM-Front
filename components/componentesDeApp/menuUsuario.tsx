@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, Modal, TouchableWithoutFeedback, Alert } from 'react-native';
-import { UserData } from '../apiConnections/types';
+import { UserData } from '../../apiConnections/types';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/auth/authContext';
 

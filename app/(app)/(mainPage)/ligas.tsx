@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
-import {getLeagueTableByName} from '../../../components/apiConnections/apileagues'
 import { useEffect, useState } from "react";
-import { LeagueTableRow } from '../../../components/apiConnections/types';
+import { LeagueTableRow } from '../../../apiConnections/types';
 import LoaderBall from "@/components/animations/animacionCarga";
+import { getLeagueTableByName } from "@/apiConnections/clubs";
 
 export default function Ligas() {
   const router = useRouter();

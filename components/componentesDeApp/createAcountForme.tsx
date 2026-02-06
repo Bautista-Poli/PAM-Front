@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, Image } from "react-native";
-import { Club } from "@/components/apiConnections/types";
+import { Club } from "@/apiConnections/types";
 
 export type FormValues = {
   nombre: string;

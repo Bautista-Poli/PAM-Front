@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
-import { getMatchEvents } from "../../apiConnections/apileagues";
+import { getMatchEvents } from "@/apiConnections/matches";
 
 interface MatchEvent {
   id: number;

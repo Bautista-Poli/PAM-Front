@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
-import { getPartidos } from '@/components/apiConnections/info';
-import { MatchRow } from "@/components/apiConnections/types";
+import { getPartidos } from '@/apiConnections/info';
+import { MatchRow } from "@/apiConnections/types";
 import LoaderBall from "@/components/animations/animacionCarga";
 import { useAuth } from "../../../auth/authContext"; 
 import Partido from "@/components/componentesDeApp/partido";

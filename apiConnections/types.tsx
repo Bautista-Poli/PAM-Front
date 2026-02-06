@@ -35,6 +35,13 @@ export interface MatchRow {
   away_crest: string | null;
 }
 
+
+export type RatingInput = {
+  playerId: number;
+  rating: number;
+};
+
+
 export interface Player {
   id: number;
   full_name: string;

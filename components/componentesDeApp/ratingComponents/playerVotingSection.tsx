@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'; // Asegúrate de importar useEffect
 import { SectionList, Text, Alert, View } from 'react-native';
 import PlayerItem from '../playerCard';
-import { MatchRow, Player } from '../../apiConnections/types';
-import { postRatings, updateRatings, getUserMatchRatings } from '../../apiConnections/apileagues'; // Importamos las 3 funciones
 import { useRouter } from 'expo-router';
 import SuccessCheckAnimation from '../../animations/successAnimation';
 import AlreadyVotedModal from '../../animations/votedAnimation';
 import { styles } from './playerVotingSectionStyle'; 
 import EvaluarFooter from './botonDeEvaluar';
+import { getUserMatchRatings, postRatings, updateRatings } from '@/apiConnections/ratings';
 
 export default function PlayerVotingSectionList({ sections, partidoData, userId }: any) {
     const router = useRouter();

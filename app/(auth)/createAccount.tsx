@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
-import { postCreateUser } from "@/components/apiConnections/apileagues";
-import { Club } from "@/components/apiConnections/types";
+import { Club } from "@/apiConnections/types";
 import CreateAccountForm, { FormValues } from "@/components/componentesDeApp/createAcountForme";
 import ClubPickerModal from "@/components/componentesDeApp/createAcountPickClub";
 import { useAuth } from "@/auth/authContext";
+import { postCreateUser } from "@/apiConnections/users";
 
 export default function CreateAccountScreen() {
   const router = useRouter();
