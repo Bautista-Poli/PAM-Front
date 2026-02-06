@@ -55,7 +55,7 @@ export default function PartidoCard({ data }: PartidoProps) {
   const handleCardPress = () => {
     if (partidoFinalizado) {
       router.push({
-        pathname: "/ratingPartido",
+        pathname: "/detallesPartido",
         params: { partido: JSON.stringify(data) },
       });
     }
@@ -149,8 +149,22 @@ const styles = StyleSheet.create({
   date: { color: '#cbd5e1', fontSize: 13, fontWeight: '600' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   teamBlock: { flex: 1, alignItems: 'center', gap: 8 },
-  logoContainer: { padding: 2 },
-  logo: { width: 56, height: 56 },
+  logoContainer: { 
+    width: 80, 
+    height: 80,
+    borderRadius: 45, 
+    backgroundColor: '#1e293b', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#334155', 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  logo: { width: 66, height: 66 },
   teamName: { color: '#e5e7eb', fontSize: 14, fontWeight: '600', textAlign: 'center' },
   scoreBlock: { minWidth: 120, alignItems: 'center', justifyContent: 'center', gap: 4 },
   scoreText: { fontSize: 28, fontWeight: '800', color: '#f8fafc', letterSpacing: 1 },

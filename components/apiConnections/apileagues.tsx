@@ -113,7 +113,25 @@ export async function postRatings(userId: number, matchId: number, ratings: Rati
     return await response.json();
   }
   catch (err) {
-    console.error('Error al guardar ratings:', err);
+    throw err;
+  }
+}
+
+export async function updateRatings(userId: number, matchId: number, ratings: RatingInput[]) {
+  try {
+    const response = await fetch(`${API_BASE}/ratings`, {
+      method: 'PUT', // Usamos PUT para actualizar
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, matchId, ratings }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error al actualizar');
+    }
+
+    return await response.json();
+  } catch (err) {
     throw err;
   }
 }
@@ -134,6 +152,12 @@ export async function checkUserVoted(userId: number, matchId: number): Promise<{
   }
 }
 
+export async function getUserMatchRatings(userId: number, matchId: number) {
+  const response = await fetch(`${API_BASE}/ratings/user-match?userId=${userId}&matchId=${matchId}`);
+  if (!response.ok) throw new Error('Error al obtener calificaciones previas');
+  return await response.json();
+}
+
 export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
   try {
     const response = await fetch(`${API_BASE}/ratings/club/${encodeURIComponent(clubName)}`);
@@ -149,6 +173,19 @@ export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
     throw err;
   }
 }
+
+// Agrega esto a tu archivo de conexiones de API
+export const getMatchEvents = async (matchId: string) => {
+  try {
+    // Ajusta la URL según tu endpoint de Nest/Express
+    const response = await fetch(`${API_BASE}/matches/${matchId}/events`);
+    if (!response.ok) throw new Error("Error al obtener eventos");
+    return await response.json();
+  } catch (error) {
+    console.error("Error getMatchEvents:", error);
+    return [];
+  }
+};
 
 export async function updateUserProfile(
   userId: number,
