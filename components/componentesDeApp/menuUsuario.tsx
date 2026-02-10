@@ -27,7 +27,7 @@ export default function MenuUsuario( { usuario }: { usuario: UserData }) {
   const handleGoToTeam = () => {
     setVisible(false);
     router.push({
-      pathname: '/equipo',
+      pathname: '/detallesEquipo',
       params: { nombre: club }
     });
   }

@@ -29,3 +29,14 @@ export async function getUserMatchRatings(userId: number, matchId: number) {
   const res = await fetch(`${API_BASE}/ratings/user-match?userId=${userId}&matchId=${matchId}`);
   return handleResponse(res, 'Error al obtener calificaciones previas');
 }
+
+export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
+  try {
+    const response = await fetch(`${API_BASE}/ratings/club/${encodeURIComponent(clubName)}`);
+    return await handleResponse(response, 'Error al obtener ratings del club');
+  }
+  catch (err) {
+    console.error('Error al obtener ratings:', err);
+    throw err;
+  }
+}

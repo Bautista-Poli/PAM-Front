@@ -33,7 +33,7 @@ export default function Equipos() {
   const renderEquipo = ({ item }: { item: Club }) => (
     <Pressable
       style={styles.equipoCard}
-      onPress={() => router.push({ pathname: '/equipo', params: { nombre: item.nombre }})}
+      onPress={() => router.push({ pathname: '/detallesEquipo', params: { nombre: item.nombre }})}
     >
       <View style={styles.escudoContainer}>
         <Image source={{ uri: item.crest_url }} style={styles.escudo} resizeMode="contain" />
