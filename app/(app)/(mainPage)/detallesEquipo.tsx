@@ -1,13 +1,14 @@
-import { View, Text, StyleSheet, ScrollView, Pressable, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Image, Animated } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { EquipoInfo, PlayerWithRating } from "@/apiConnections/types";
+import { useEffect, useState, useRef } from "react";
+import { EquipoInfo, MatchRow, PlayerWithRating } from "@/apiConnections/types";
 import { obtenerEquipoInfo } from "@/apiConnections/info";
 import LoaderBall from "@/components/animations/animacionCarga";
 import EquipoInfoGeneral from "@/components/componentesDeApp/equipoInfoGeneral";
 import { getPlayerRatingsByClub } from "@/apiConnections/ratings";
 import PlantelConRatings from "@/components/componentesDeApp/detallesEquipo/plantelPromedioRatings";
 import HistorialPartidos from "@/components/componentesDeApp/detallesEquipo/historialPartidos";
+import { getMatchesByTeam } from "@/apiConnections/matches";
 
 type TabType = "plantel" | "historial";
 
@@ -18,7 +19,12 @@ export default function EquipoDetalle() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [equipoInfo, setEquipoInfo] = useState<EquipoInfo | null>(null);
+  const [partidosReal, setPartidosReal] = useState<MatchRow[]>([]);
   const [tabActiva, setTabActiva] = useState<TabType>("plantel");
+  
+  // Animaciones
+  const slideAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     let isMounted = true;
@@ -27,13 +33,18 @@ export default function EquipoDetalle() {
         setLoading(true);
         setError(null);
         
-        const [info, players] = await Promise.all([
+        // Ejecutamos las 3 llamadas en paralelo
+        const [info, players, matches] = await Promise.all([
           obtenerEquipoInfo(nombre as string),
-          getPlayerRatingsByClub(nombre as string)
+          getPlayerRatingsByClub(nombre as string),
+          getMatchesByTeam(nombre as string) // Nueva llamada
         ]);
+
         if (!isMounted) return;
+
         setEquipoInfo(info);
         setJugadores(players);
+        setPartidosReal(matches); // Guardamos los partidos reales
       } catch (e: any) {
         if (isMounted) setError(e?.message ?? 'Error al cargar los datos');
       } finally {
@@ -47,6 +58,34 @@ export default function EquipoDetalle() {
     
     return () => { isMounted = false; };
   }, [nombre]);
+
+  const cambiarTab = (nuevaTab: TabType) => {
+    if (nuevaTab === tabActiva) return;
+
+    // Fade out del contenido actual
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => {
+      setTabActiva(nuevaTab);
+      
+      // Slide del indicador
+      Animated.spring(slideAnim, {
+        toValue: nuevaTab === "plantel" ? 0 : 1,
+        useNativeDriver: true,
+        tension: 80,
+        friction: 10,
+      }).start();
+
+      // Fade in del nuevo contenido
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
   
   if (loading) {
     return (
@@ -97,32 +136,52 @@ export default function EquipoDetalle() {
 
         <EquipoInfoGeneral info={equipoInfo} />
 
-        <View style={styles.tabsContainer}>
-          <Pressable
-            style={[styles.tab, tabActiva === "plantel" && styles.tabActiva]}
-            onPress={() => setTabActiva("plantel")}
-          >
-            <Text style={[styles.tabText, tabActiva === "plantel" && styles.tabTextActiva]}>
-              Plantel
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[styles.tab, tabActiva === "historial" && styles.tabActiva]}
-            onPress={() => setTabActiva("historial")}
-          >
-            <Text style={[styles.tabText, tabActiva === "historial" && styles.tabTextActiva]}>
-              Historial
-            </Text>
-          </Pressable>
+        {/* Sistema de Tabs con indicador animado */}
+        <View style={styles.tabsWrapper}>
+          <View style={styles.tabsContainer}>
+            <Pressable
+              style={styles.tab}
+              onPress={() => cambiarTab("plantel")}
+            >
+              <Text style={[styles.tabText, tabActiva === "plantel" && styles.tabTextActiva]}>
+                Plantel
+              </Text>
+            </Pressable>
+            <Pressable
+              style={styles.tab}
+              onPress={() => cambiarTab("historial")}
+            >
+              <Text style={[styles.tabText, tabActiva === "historial" && styles.tabTextActiva]}>
+                Historial
+              </Text>
+            </Pressable>
+          </View>
+          
+          {/* Indicador deslizante */}
+          <Animated.View
+            style={[
+              styles.indicator,
+              {
+                transform: [
+                  {
+                    translateX: slideAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, 180], // Ajusta según el ancho de tus tabs
+                    }),
+                  },
+                ],
+              },
+            ]}
+          />
         </View>
 
-        <View style={styles.infoSection}>
+        <Animated.View style={[styles.infoSection, { opacity: fadeAnim }]}>
           {tabActiva === "plantel" ? (
-            <PlantelConRatings jugadores={jugadores} />
+            <PlantelConRatings jugadores={jugadores} equipoNombre={equipoInfo.nombre} />
           ) : (
-            <HistorialPartidos equipoNombre={equipoInfo.nombre} />
+            <HistorialPartidos equipoNombre={equipoInfo.nombre} partidos={partidosReal} />
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
     </View>
   );
@@ -164,9 +223,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
   },
+  tabsWrapper: {
+    marginBottom: 16,
+    position: 'relative',
+  },
   tabsContainer: {
     flexDirection: "row",
-    marginBottom: 16,
     backgroundColor: "#112336",
     borderRadius: 12,
     padding: 4,
@@ -178,9 +240,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: "center",
     borderRadius: 8,
-  },
-  tabActiva: {
-    backgroundColor: "#2b71c2ff",
+    zIndex: 1,
   },
   tabText: {
     color: "#94a3b8",
@@ -189,6 +249,16 @@ const styles = StyleSheet.create({
   },
   tabTextActiva: {
     color: "#fff",
+  },
+  indicator: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    width: '48%',
+    height: 44,
+    backgroundColor: "#2b71c2ff",
+    borderRadius: 8,
+    zIndex: 0,
   },
   infoSection: {
     marginBottom: 24,

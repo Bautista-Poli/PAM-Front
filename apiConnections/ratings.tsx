@@ -1,5 +1,5 @@
 import { API_BASE, handleResponse } from './config';
-import { RatingInput } from './types';
+import { MatchRating, RatingInput } from './types';
 
 
 export async function postRatings(userId: number, matchId: number, ratings: RatingInput[]) {
@@ -37,6 +37,16 @@ export async function getPlayerRatingsByClub(clubName: string): Promise<any[]> {
   }
   catch (err) {
     console.error('Error al obtener ratings:', err);
+    throw err;
+  }
+}
+
+export async function getPlayerRatingsHistory(playerId: number): Promise<MatchRating[]> {
+  try {
+    const res = await fetch(`${API_BASE}/ratings/player/${playerId}`);
+    return await handleResponse(res, 'Error al obtener el historial del jugador');
+  } catch (err) {
+    console.error(`Error en getPlayerRatingsHistory (ID: ${playerId}):`, err);
     throw err;
   }
 }

@@ -1,12 +1,26 @@
 // components/componentesDeApp/plantelConRatings.tsx
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { PlayerWithRating } from "@/apiConnections/types";
+import { useRouter } from "expo-router";
 
 interface PlantelConRatingsProps {
-  jugadores: PlayerWithRating[];
+  jugadores: PlayerWithRating[],
+  equipoNombre: string
 }
 
-export default function PlantelConRatings({ jugadores }: PlantelConRatingsProps) {
+export default function PlantelConRatings({ jugadores, equipoNombre }: PlantelConRatingsProps) {
+  const router = useRouter();
+  const navegarARating = (jugadorId: number, nombreCompleto: string) => {
+    router.push({
+      pathname: "/ratingJugador", 
+      params: { 
+        id: jugadorId, 
+        nombre: nombreCompleto,
+        equipoNombre : equipoNombre 
+      }
+    });
+  };
+
   if (jugadores.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -22,10 +36,20 @@ export default function PlantelConRatings({ jugadores }: PlantelConRatingsProps)
       {jugadores.map((jugador, index) => (
         <View key={jugador.id}>
           <View style={styles.playerRow}>
-            <View style={styles.playerInfo}>
+            <Pressable 
+              onPress={() => navegarARating(jugador.id, jugador.full_name)}
+              // Combinamos el estilo base y el efecto de opacidad en una sola propiedad
+              style={({ pressed }) => [
+                styles.playerInfo,
+                { 
+                  opacity: pressed ? 0.6 : 1,
+                  backgroundColor: pressed ? "#1E3A5F50" : "transparent" // Un toque extra de feedback
+                }
+              ]}
+            >
               <Text style={styles.playerBullet}>•</Text>
               <Text style={styles.playerName}>{jugador.full_name}</Text>
-            </View>
+            </Pressable>
             <View style={styles.ratingInfo}>
               {jugador.totalVotes > 0 ? (
                 <>

@@ -15,3 +15,13 @@ export const getMatchEvents = async (matchId: string) => {
     return [];
   }
 };
+
+export async function getMatchesByTeam(teamName: string): Promise<MatchRow[]> {
+  const res = await fetch(`${API_BASE}/matches/team/${encodeURIComponent(teamName)}`);
+  return handleResponse(res, 'Error al obtener el historial del equipo');
+}
+
+export async function getTournamentMatches(leagueName: string): Promise<MatchRow[]> {
+  const res = await fetch(`${API_BASE}/matches/by-league/${encodeURIComponent(leagueName)}`);
+  return handleResponse(res, 'Error al obtener los partidos del torneo');
+}

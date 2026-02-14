@@ -2,26 +2,24 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
 import { useEffect, useState } from "react";
-import { LeagueTableRow } from '../../../apiConnections/types';
+import { LeagueTableRow } from '../../apiConnections/types';
 import LoaderBall from "@/components/animations/animacionCarga";
 import { getLeagueTableByName } from "@/apiConnections/clubs";
 
 export default function Ligas() {
   const router = useRouter();
-  const params = useLocalSearchParams();
+  const { torneoNombre } = useLocalSearchParams<{ torneoNombre: string }>();
   
   const [tableEntries,setTableEntries] = useState<LeagueTableRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-
 
   useEffect(() => {
 
     const cargar = async () => {
       try {
         setLoading(true);
-        const entries = await getLeagueTableByName(params.ligaNombre as string);
+        const entries = await getLeagueTableByName(torneoNombre as string);
         setTableEntries(entries.sort((a,b) => b.pts - a.pts));
       } catch (e: any) {
         setError(e.message ?? "Error al cargar la tabla");
@@ -32,7 +30,7 @@ export default function Ligas() {
 
     cargar()
 
-  },[params.ligaNombre]);
+  },[torneoNombre]);
 
 
   if (loading) {
@@ -65,7 +63,7 @@ export default function Ligas() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: `Tabla ${params.ligaNombre}`,
+          title: `Tabla ${torneoNombre}`,
           headerShown: true,
           headerLeft: () => (
             <Pressable onPress={() => router.back()} hitSlop={8}>
@@ -82,7 +80,7 @@ export default function Ligas() {
         renderItem={({ item, index }) => (
           <Pressable
             onPress={() => router.push({
-              pathname: '/equipo',
+              pathname: '/detallesEquipo',
               params: { nombre: item.team }
             })}
           >
@@ -113,7 +111,7 @@ export default function Ligas() {
         style={styles.btnEquipos}
         onPress={() => router.push({
           pathname: '/equipos',
-          params: { leagueKey: params.ligaNombre }
+          params: { leagueKey: torneoNombre }
         })}
       >
         <Text style={styles.btnEquiposText}>Ver todos los equipos</Text>

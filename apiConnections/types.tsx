@@ -17,22 +17,20 @@ export interface LeagueTableRow {
 }
 
 export interface MatchRow {
-  id: string;
-  match_date: string;
-  league?: string | null;
-  home_team?: string | null;
-  away_team?: string | null;
-  score_home?: number | null;
-  score_away?: number | null;
-  status?: string | null;
-  minute?: number | null;
-  source_url?: string | null;
-  last_hash?: string | null;
-  first_seen?: string | null;
-  updated_at?: string | null;
-
-  home_crest: string | null;
-  away_crest: string | null;
+  id:           number;
+  espn_id:      string | null;  
+  league:       string;
+  home_team:    string;
+  away_team:    string;
+  home_club_id: number | null;  
+  away_club_id: number | null;   
+  score_home:   number | null;
+  score_away:   number | null;
+  round:        string;          
+  group_name:   string | null;   
+  leg:          number | null;   
+  match_date:   string | null;   
+  updated_at:   string;
 }
 
 
@@ -81,4 +79,14 @@ export interface EquipoInfo {
   colores: string;
   añoFundacion: number;
   entrenador: string;
+}
+
+export interface MatchRating {
+  date: string;
+  opponent: string;
+  competition: string;
+  rating: number;
+  goals?: number;
+  assists?: number;
+  minutesPlayed?: number;
 }

@@ -11,7 +11,8 @@ import { getMatches } from "@/apiConnections/matches";
 import PartidoCard from "@/components/componentesDeApp/partidoCard";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
-const ligasDisponibles = ['Liga Profesional Argentina', 'Premier League', 'La Liga'];
+const ligasDisponibles = ['Liga Profesional Argentina', 'Premier League', 'La Liga', 'Copa Libertadores', 'Champions League'];
+const torneosDeCopa = ['Copa Libertadores', 'Champions League'];
 
 export default function Index() {
   const router = useRouter();
@@ -89,6 +90,17 @@ export default function Index() {
     );
   };
 
+  const handlePressLiga = () => {
+    // Si es un torneo de copa, ir a la pantalla específica
+    router.push({
+      pathname: '/tablaCompeticion',
+      params: {
+        torneoNombre: ligaSeleccionada,
+        type: torneosDeCopa.includes(ligaSeleccionada) ? 'copa' : 'liga',
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
@@ -107,9 +119,7 @@ export default function Index() {
       <View style={styles.ligaTitleText}>
         <Pressable
           style={({ pressed }) => [styles.ligaBtn, pressed && styles.ligaBtnPressed]}
-          onPress={() =>
-            router.push({ pathname: '/ligas', params: { ligaNombre: ligaSeleccionada } })
-          }
+          onPress={handlePressLiga}
         >
           <Text style={styles.ligaBtnText}>{ligaSeleccionada}</Text>
         </Pressable>
@@ -143,7 +153,7 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#112336ff', paddingTop: 20, gap: 12 },
+  container: { flex: 1, backgroundColor: '#112336ff', paddingTop: 20, gap: 12, paddingBottom: 60 },
   cardList: { gap: 8, paddingBottom: 24, marginHorizontal: 7 },
   buttonRow: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 4 },
   title: { color: '#e9ebeeff', fontSize: 18, fontWeight: '600', marginLeft: 50 },
