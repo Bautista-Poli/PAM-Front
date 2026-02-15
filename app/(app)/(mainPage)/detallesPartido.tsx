@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   partidoHeader: { 
     paddingHorizontal: 10, 
-    marginBottom: 5 
+    marginBottom: 20
   },
   center: { 
     flex: 1, 

@@ -152,7 +152,7 @@ export default function EquipoDetalle() {
               onPress={() => cambiarTab("historial")}
             >
               <Text style={[styles.tabText, tabActiva === "historial" && styles.tabTextActiva]}>
-                Historial
+                Partidos
               </Text>
             </Pressable>
           </View>

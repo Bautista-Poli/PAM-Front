@@ -58,57 +58,55 @@ export default function ForoPartido({ matchId, userId }: ForoProps) {
   if (loading) return <ActivityIndicator color="#3b82f6" style={{ marginTop: 20 }} />;
 
   return (
-    <View style={{ flex: 1 }}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.container}
-        // Este valor es clave: si el teclado tapa el input, subí este número (ej. 120 o 140)
-        keyboardVerticalOffset={Platform.OS === "ios" ? 360 : 0} 
-      >
-        <FlatList
-          ref={flatListRef}
-          data={comentarios}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContent}
-          // Pull to refresh manual por si el usuario es ansioso
-          onRefresh={() => cargarComentarios(false)}
-          refreshing={false}
-          renderItem={({ item }) => (
-            <View style={styles.messageRow}>
-              <Image 
-                source={{ uri: item.user?.club?.crest_url || 'https://via.placeholder.com/40' }} 
-                style={styles.miniLogo} 
-              />
-              <View style={styles.bubble}>
-                <Text style={styles.username}>{item.user?.usuario}</Text>
-                <Text style={styles.text}>{item.text}</Text>
-                <Text style={styles.time}>
-                  {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </Text>
-              </View>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      // Dejamos a Android en "undefined" para que use el "resize" nativo del app.json
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // Ajusta este offset de iOS si tienes un Header de navegación arriba
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <FlatList
+        ref={flatListRef}
+        data={comentarios}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContent}
+        onRefresh={() => cargarComentarios(false)}
+        refreshing={false}
+        renderItem={({ item }) => (
+          <View style={styles.messageRow}>
+            <Image 
+              source={{ uri: item.user?.club?.crest_url || 'https://via.placeholder.com/40' }} 
+              style={styles.miniLogo} 
+            />
+            <View style={styles.bubble}>
+              <Text style={styles.username}>{item.user?.usuario}</Text>
+              <Text style={styles.text}>{item.text}</Text>
+              <Text style={styles.time}>
+                {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
             </View>
-          )}
-        />
+          </View>
+        )}
+      />
 
-        <View style={styles.inputArea}>
-          <TextInput
-            style={styles.input}
-            placeholder="Escribe algo..."
-            placeholderTextColor="#94a3b8"
-            value={mensaje}
-            onChangeText={setMensaje}
-            multiline={false} 
-            returnKeyType="send"
-            onSubmitEditing={handleEnviar}
-          />
-          <Pressable onPress={handleEnviar} disabled={isSending}>
-            <Text style={[styles.sendBtnText, isSending && { opacity: 0.5 }]}>
-              {isSending ? "..." : "Enviar"}
-            </Text>
-          </Pressable>
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+      <View style={styles.inputArea}>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe algo..."
+          placeholderTextColor="#94a3b8"
+          value={mensaje}
+          onChangeText={setMensaje}
+          multiline={false} 
+          returnKeyType="send"
+          onSubmitEditing={handleEnviar}
+        />
+        <Pressable onPress={handleEnviar} disabled={isSending}>
+          <Text style={[styles.sendBtnText, isSending && { opacity: 0.5 }]}>
+            {isSending ? "..." : "Enviar"}
+          </Text>
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

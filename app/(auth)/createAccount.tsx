@@ -27,7 +27,6 @@ export default function CreateAccountScreen() {
     try {
       setSubmitting(true);
 
-      // tu API: { success: boolean; user?: UserData; error?: string }
       const result = await postCreateUser(
         form.nombre,
         form.email,
@@ -35,13 +34,15 @@ export default function CreateAccountScreen() {
         selectedClub.id
       );
 
-      if (result?.success && result.user) {
-        // Persistir sesión (no hay token)
-        await setFromCreate({ user: result.user });
+      // Ahora verificamos si el resultado tiene un "id" para confirmar que se creó
+      if (result && result.id) {
+        // Como 'result' YA ES el usuario entero, lo pasamos directamente
+        await setFromCreate({ user: result });
 
         // Ir al área protegida
         router.replace("/(app)/(mainPage)");
       } else {
+        // Si result tiene un error (dependiendo de cómo funcione tu handleResponse)
         Alert.alert("Error", result?.error || "No se pudo crear la cuenta");
       }
     } catch (err) {

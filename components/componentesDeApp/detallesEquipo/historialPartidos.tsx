@@ -43,7 +43,7 @@ const PartidoCard = ({
       diaSemana: dias[date.getDay()],
       dia: date.getDate().toString().padStart(2, '0'),
       mes: meses[date.getMonth()],
-      hora: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      hora: date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' })
     };
   };
 
