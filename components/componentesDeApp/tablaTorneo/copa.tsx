@@ -36,10 +36,9 @@ export default function TorneoCopa() {
 
   const isLeagueFormat = tournamentData?.groups.length === 1 && tournamentData.groups[0].name === "Fase de Liga";
 
-  const bracketMatches = useMemo(
-    () => tournamentData ? toBracketMatches(tournamentData.knockout_matches) : [],
-    [tournamentData]
-  );
+  const bracketMatches = tournamentData 
+  ? toBracketMatches(tournamentData.knockout_matches) 
+  : [];
 
 
   if (loading) return <LoaderBall message="Cargando información del torneo..." fullScreen />;
