@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import LoaderBall from "@/components/animations/animacionCarga";
 import { getTournamentMatches } from "@/apiConnections/matches";
 import { transformTournamentData } from "@/helpers/utils/tournamentTransform";

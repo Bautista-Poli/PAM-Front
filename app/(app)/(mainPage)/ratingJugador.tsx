@@ -1,76 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import LoaderBall from '@/components/animations/animacionCarga';
 import { getPlayerRatingsHistory } from '@/apiConnections/ratings';
 
-const datosEjemplo: MatchRating[] = [
-    {
-        date: '2024-02-10',
-        opponent: 'Boca Juniors',
-        competition: 'Liga Profesional',
-        rating: 1.7,
-        goals: 1,
-        assists: 0,
-        minutesPlayed: 90
-    },
-    {
-        date: '2024-02-04',
-        opponent: 'River Plate',
-        competition: 'Copa de la Liga',
-        rating: 2.2,
-        goals: 0,
-        assists: 1,
-        minutesPlayed: 75
-    },
-    {
-        date: '2024-01-28',
-        opponent: 'Racing Club',
-        competition: 'Liga Profesional',
-        rating: 3.5,
-        goals: 0,
-        assists: 0,
-        minutesPlayed: 90
-    },
-    {
-        date: '2024-01-28',
-        opponent: 'Racing Club',
-        competition: 'Liga Profesional',
-        rating: 4.5,
-        goals: 0,
-        assists: 0,
-        minutesPlayed: 90
-    },
-    {
-        date: '2024-01-28',
-        opponent: 'Racing Club',
-        competition: 'Liga Profesional',
-        rating: 2.8,
-        goals: 0,
-        assists: 0,
-        minutesPlayed: 90
-    },
-    {
-        date: '2024-01-28',
-        opponent: 'Racing Club',
-        competition: 'Liga Profesional',
-        rating: 3.3,
-        goals: 0,
-        assists: 0,
-        minutesPlayed: 90
-    },
-    {
-        date: '2024-01-28',
-        opponent: 'Racing Club',
-        competition: 'Liga Profesional',
-        rating: 4.75,
-        goals: 0,
-        assists: 0,
-        minutesPlayed: 90
-    }
-];
-
-// Interfaz para los datos del backend
 interface MatchRating {
   date: string;
   opponent: string;
@@ -84,17 +17,8 @@ interface MatchRating {
 export default function RatingJugadorScreen() {
   const { id, nombre, equipoNombre } = useLocalSearchParams();
   const router = useRouter();
-  const [selectedMatch, setSelectedMatch] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [matchHistory, setMatchHistory] = useState<MatchRating[]>([]);
-
-  const radarData = [
-    { label: 'Ataque', value: 75 },
-    { label: 'Defensa', value: 60 },
-    { label: 'Físico', value: 85 },
-    { label: 'Pases', value: 80 },
-    { label: 'Técnica', value: 70 },
-  ];
 
   useEffect(() => {
     const fetchPlayerData = async () => {
@@ -150,8 +74,6 @@ export default function RatingJugadorScreen() {
           </View>
         </View>
 
-        
-
         <View style={styles.calendarSection}>
           <View style={styles.calendarHeader}>
             <Text style={styles.sectionTitle}>Historial de Partidos</Text>
@@ -160,15 +82,7 @@ export default function RatingJugadorScreen() {
 
           <View style={styles.matchList}>
             {matchHistory.map((match, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.matchCard,
-                  selectedMatch === index && styles.matchCardSelected,
-                ]}
-                onPress={() => setSelectedMatch(selectedMatch === index ? null : index)}
-                activeOpacity={0.7}
-              >
+              <View key={index} style={styles.matchCard}>
                 <View style={styles.matchHeader}>
                   <Text style={styles.matchDate}>{new Date(match.date).toLocaleDateString()}</Text>
                   <View style={styles.competitionBadge}>
@@ -190,26 +104,7 @@ export default function RatingJugadorScreen() {
                     <Text style={styles.ratingLabel}>{getRatingLabel(match.rating)}</Text>
                   </View>
                 </View>
-
-                {selectedMatch === index && (
-                  <View style={styles.matchDetails}>
-                    <View style={styles.detailsGrid}>
-                      <View style={styles.statItem}>
-                        <Text style={styles.statLabel}>Goles</Text>
-                        <Text style={styles.statValue}>{match.goals || 0}</Text>
-                      </View>
-                      <View style={styles.statItem}>
-                        <Text style={styles.statLabel}>Asistencias</Text>
-                        <Text style={styles.statValue}>{match.assists || 0}</Text>
-                      </View>
-                      <View style={styles.statItem}>
-                        <Text style={styles.statLabel}>Minutos</Text>
-                        <Text style={styles.statValue}>{match.minutesPlayed || '--'}'</Text>
-                      </View>
-                    </View>
-                  </View>
-                )}
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>
