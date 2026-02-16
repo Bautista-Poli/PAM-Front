@@ -1,4 +1,3 @@
-
 import { getPlayers } from './clubs';
 import { getMatches } from './matches';
 import { MatchRow, Player, Club, EquipoInfo } from './types';

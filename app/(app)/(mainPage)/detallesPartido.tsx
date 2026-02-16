@@ -12,7 +12,6 @@ export default function RatingPartido() {
   const { partido } = useLocalSearchParams();
   const { partidoData, sections, loading, error, userId } = useRatingPartido(partido);
 
-  // 1. Manejo temprano de errores o falta de datos
   if (!partidoData) {
     return (
       <View style={styles.center}>
@@ -21,16 +20,13 @@ export default function RatingPartido() {
     );
   }
 
-  // 2. Lógica de negocio extraída: ¿Se puede votar?
   const matchDate = new Date(partidoData.match_date);
   const now = new Date();
   const DURACION_PARTIDO_MS = 2 * 60 * 60 * 1000; // 2 horas
   const isVotable = now.getTime() > matchDate.getTime() + DURACION_PARTIDO_MS;
 
-  // 3. Definición dinámica de pestañas
   const tabs = isVotable ? ["Info", "Calificar", "Foro"] : ["Info", "Foro"];
 
-  // 4. Renderizado condicional del contenido
   const renderTabContent = (activeTab: number) => {
     const currentTabName = tabs[activeTab];
 
@@ -49,10 +45,9 @@ export default function RatingPartido() {
 
       case "Foro":
         return (
-          // Pasamos matchId (desde partidoData) y userId (desde useRatingPartido)
-          <ForoPartido 
-            matchId={Number(partidoData.id)} 
-            userId={userId} 
+          <ForoPartido
+            matchId={Number(partidoData.id)}
+            userId={userId}
           />
         );
 
@@ -76,7 +71,7 @@ export default function RatingPartido() {
           <Text style={styles.errorText}>{error}</Text>
         </View>
       ) : (
-        <AnimatedTabMenu 
+        <AnimatedTabMenu
           tabs={tabs}
         >
           {(activeTab) => renderTabContent(activeTab)}
@@ -87,24 +82,24 @@ export default function RatingPartido() {
 }
 
 const styles = StyleSheet.create({
-  view: { 
-    flex: 1, 
-    backgroundColor: "#0b1220" 
+  view: {
+    flex: 1,
+    backgroundColor: "#0b1220"
   },
-  partidoHeader: { 
-    paddingHorizontal: 10, 
+  partidoHeader: {
+    paddingHorizontal: 10,
     marginBottom: 20
   },
-  center: { 
-    flex: 1, 
-    justifyContent: "center", 
+  center: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    padding: 20 
+    padding: 20
   },
-  errorText: { 
-    color: "#ef4444", 
-    fontSize: 16, 
-    textAlign: 'center' 
+  errorText: {
+    color: "#ef4444",
+    fontSize: 16,
+    textAlign: 'center'
   },
   placeholderText: {
     color: '#94a3b8',

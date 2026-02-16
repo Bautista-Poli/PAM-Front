@@ -1,4 +1,3 @@
-//bracket.tsx
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
@@ -6,8 +5,8 @@ import Svg, { Path } from 'react-native-svg';
 
 interface BracketTeam {
   name: string;
-  scoreLeg1?: number;  
-  scoreLeg2?: number;  
+  scoreLeg1?: number;
+  scoreLeg2?: number;
   isWinner?: boolean;
 }
 interface BracketMatch {
@@ -23,8 +22,8 @@ interface BracketVisualizerProps {
 
 
 const UNIT_HEIGHT = 100;
-const COLUMN_WIDTH = 150; 
-const CONNECTOR_WIDTH = 40; 
+const COLUMN_WIDTH = 150;
+const CONNECTOR_WIDTH = 40;
 
 const BracketVisualizer: React.FC<BracketVisualizerProps> = ({ matches, onMatchPress }) => {
   const r16 = matches.filter(m => m.round === 'round_of_16');
@@ -32,7 +31,6 @@ const BracketVisualizer: React.FC<BracketVisualizerProps> = ({ matches, onMatchP
   const sf = matches.filter(m => m.round === 'semifinals');
   const f = matches.filter(m => m.round === 'final');
 
-  // Componente de Línea Conectora
   const Connector = ({ type, height }: { type: 'left' | 'right', height: number }) => (
     <View style={{ width: CONNECTOR_WIDTH, height }}>
       <Svg height="100%" width="100%">
@@ -51,7 +49,6 @@ const BracketVisualizer: React.FC<BracketVisualizerProps> = ({ matches, onMatchP
     </View>
   );
 
-  // Reemplazar renderMatchCard completo
   const renderMatchCard = (match?: BracketMatch) => (
     <Pressable
       onPress={() => match && onMatchPress?.(match)}

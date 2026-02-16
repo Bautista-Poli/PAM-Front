@@ -22,14 +22,14 @@ export interface MatchRow {
   league:       string;
   home_team:    string;
   away_team:    string;
-  home_club_id: number | null;  
-  away_club_id: number | null;   
+  home_club_id: number | null;
+  away_club_id: number | null;
   score_home:   number | null;
   score_away:   number | null;
-  round:        string;          
-  group_name:   string | null;   
-  leg:          number | null;   
-  match_date:   string | null;   
+  round:        string;
+  group_name:   string | null;
+  leg:          number | null;
+  match_date:   string | null;
   updated_at:   string;
 }
 

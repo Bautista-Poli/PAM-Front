@@ -1,4 +1,3 @@
-// components/componentesDeApp/plantelConRatings.tsx
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { PlayerWithRating } from "@/apiConnections/types";
 import { useRouter } from "expo-router";
@@ -12,11 +11,11 @@ export default function PlantelConRatings({ jugadores, equipoNombre }: PlantelCo
   const router = useRouter();
   const navegarARating = (jugadorId: number, nombreCompleto: string) => {
     router.push({
-      pathname: "/ratingJugador", 
-      params: { 
-        id: jugadorId, 
+      pathname: "/ratingJugador",
+      params: {
+        id: jugadorId,
         nombre: nombreCompleto,
-        equipoNombre : equipoNombre 
+        equipoNombre : equipoNombre
       }
     });
   };
@@ -36,14 +35,13 @@ export default function PlantelConRatings({ jugadores, equipoNombre }: PlantelCo
       {jugadores.map((jugador, index) => (
         <View key={jugador.id}>
           <View style={styles.playerRow}>
-            <Pressable 
+            <Pressable
               onPress={() => navegarARating(jugador.id, jugador.full_name)}
-              // Combinamos el estilo base y el efecto de opacidad en una sola propiedad
               style={({ pressed }) => [
                 styles.playerInfo,
-                { 
+                {
                   opacity: pressed ? 0.6 : 1,
-                  backgroundColor: pressed ? "#1E3A5F50" : "transparent" // Un toque extra de feedback
+                  backgroundColor: pressed ? "#1E3A5F50" : "transparent"
                 }
               ]}
             >

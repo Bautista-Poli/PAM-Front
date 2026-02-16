@@ -1,5 +1,3 @@
-// components/componentesDeApp/EquipoInfoCard.tsx
-
 import { View, Text, StyleSheet } from 'react-native';
 import { EquipoInfo } from '@/apiConnections/types';
 

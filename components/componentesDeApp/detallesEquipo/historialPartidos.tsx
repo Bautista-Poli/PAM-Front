@@ -1,7 +1,6 @@
-// components/componentesDeApp/HistorialPartidos.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Animated } from 'react-native';
-import { MatchRow } from '@/apiConnections/types'; // Importa tu tipo real
+import { MatchRow } from '@/apiConnections/types';
 
 interface HistorialPartidosProps {
   equipoNombre: string;
@@ -23,7 +22,6 @@ const PartidoCard = ({
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
 
-  // Lógica para determinar rol y rival
   const esLocal = partido.home_team === equipoNombre;
   const rival = esLocal ? partido.away_team : partido.home_team;
 
@@ -113,8 +111,7 @@ export default function HistorialPartidos({ equipoNombre, partidos }: HistorialP
   
   const hoy = new Date();
 
-  // Separar partidos usando la fecha y el score (si es 0-0 y la fecha pasó, asumimos que se jugó o está por jugarse)
-  // Nota: En una app real, podrías chequear un campo 'status' si lo tienes en tu DB
+
   const proximosPartidos = partidos
     .filter(p => new Date(p.match_date) >= hoy)
     .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime());

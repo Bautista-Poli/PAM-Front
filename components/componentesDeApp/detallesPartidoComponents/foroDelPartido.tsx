@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
+import {
   View, Text, StyleSheet, FlatList, TextInput, Pressable, 
   KeyboardAvoidingView, Platform, Image, ActivityIndicator 
 } from 'react-native';
@@ -32,10 +32,10 @@ export default function ForoPartido({ matchId, userId }: ForoProps) {
     cargarComentarios(true);
 
     const interval = setInterval(() => {
-      cargarComentarios(false); 
+      cargarComentarios(false);
     }, 50000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [matchId]);
 
   const handleEnviar = async () => {
@@ -44,7 +44,7 @@ export default function ForoPartido({ matchId, userId }: ForoProps) {
     setIsSending(true);
     try {
       const textoEnviar = mensaje.trim();
-      setMensaje(""); 
+      setMensaje("");
       await postComment(matchId, userId, textoEnviar);
       await cargarComentarios(false);
       setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 200);
@@ -60,9 +60,7 @@ export default function ForoPartido({ matchId, userId }: ForoProps) {
   return (
     <KeyboardAvoidingView 
       style={styles.container}
-      // Dejamos a Android en "undefined" para que use el "resize" nativo del app.json
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // Ajusta este offset de iOS si tienes un Header de navegación arriba
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       <FlatList

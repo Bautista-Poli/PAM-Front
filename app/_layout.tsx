@@ -1,6 +1,5 @@
-// app/_layout.tsx
 import { Slot } from "expo-router";
-import { AuthProvider } from "../auth/authContext"; // <- ruta relativa desde /app
+import { AuthProvider } from "../auth/authContext";
 
 export default function RootLayout() {
   return (

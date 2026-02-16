@@ -10,8 +10,6 @@ import { toBracketMatches } from "@/components/tablaTorneo/bracketHelper";
 import { TabButton } from "@/components/tablaTorneo/tabButtom";
 import { GrupoTable } from "@/components/tablaTorneo/groupTable";
 
-//copa.tsx
-
 export default function TorneoCopa() {
   const router = useRouter();
   const { torneoNombre } = useLocalSearchParams<{ torneoNombre: string  }>();
@@ -37,19 +35,16 @@ export default function TorneoCopa() {
     cargar();
   }, [torneoNombre]);
 
-  // Champions 24/25 usa formato liga (una sola tabla sin grupos)
   const isLeagueFormat = useMemo(
     () => tournamentData?.groups.length === 1 && tournamentData.groups[0].name === "Fase de Liga",
     [tournamentData]
   );
 
-  // Convertir una sola vez cuando cambian los datos, no en cada render
   const bracketMatches = useMemo(
     () => tournamentData ? toBracketMatches(tournamentData.knockout_matches) : [],
     [tournamentData]
   );
 
-  // ─── Estados ───────────────────────────────────────────────────────────────
 
   if (loading) return <LoaderBall message="Cargando información del torneo..." fullScreen />;
 
@@ -60,8 +55,6 @@ export default function TorneoCopa() {
       </View>
     );
   }
-
-  // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <View style={styles.container}>

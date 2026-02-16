@@ -16,23 +16,22 @@ interface MatchEvent {
 
 const getEventConfig = (type: string) => {
   switch (type) {
-    case 'yellow-card': 
+    case 'yellow-card':
       return { icon: "square" as const, color: "#fbbf24", label: "Amarilla" };
-    case 'red-card': 
+    case 'red-card':
       return { icon: "square" as const, color: "#ef4444", label: "Roja" };
-    case 'goal': 
-    case 'penalty-goal': 
+    case 'goal':
+    case 'penalty-goal':
       return { icon: "football" as const, color: "#10b981", label: "Gol" };
-    case 'own-goal': 
+    case 'own-goal':
       return { icon: "football" as const, color: "#ef4444", label: "Gol en contra" };
-    case 'substitution': 
+    case 'substitution':
       return { icon: "swap-horizontal" as const, color: "#94a3b8", label: "Cambio" };
-    default: 
+    default:
       return { icon: "ellipse" as const, color: "#64748b", label: "Evento" };
   }
 };
 
-// Componente de Fila de Estadística
 const StatRow = ({ label, homeValue, awayValue }: { label: string, homeValue: string | number, awayValue: string | number }) => (
   <View style={styles.statRowContainer}>
     <Text style={styles.statTeamValue}>{homeValue}</Text>
@@ -46,7 +45,6 @@ export default function InfoPartido() {
   const [events, setEvents] = useState<MatchEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Variables para extraer la info del partido
   const [homeTeam, setHomeTeam] = useState("Local");
   const [awayTeam, setAwayTeam] = useState("Visita");
   const [homeScore, setHomeScore] = useState(0);
@@ -59,9 +57,8 @@ export default function InfoPartido() {
           let matchId: string | number;
           try {
             const partidoObj = JSON.parse(partido as string);
-            matchId = partidoObj.id; 
+            matchId = partidoObj.id;
             
-            // Extraemos los datos reales del partido para la cabecera
             if (partidoObj.home_team) setHomeTeam(partidoObj.home_team);
             if (partidoObj.away_team) setAwayTeam(partidoObj.away_team);
             if (partidoObj.score_home !== undefined) setHomeScore(partidoObj.score_home);
@@ -89,8 +86,6 @@ export default function InfoPartido() {
     return <ActivityIndicator color="#3b82f6" style={{ marginTop: 20 }} />;
   }
 
-  // --- CÁLCULO DE ESTADÍSTICAS REALES ---
-  // Filtramos el arreglo events comparando el nombre del equipo con el nombre que vino del parámetro
   const homeYellows = events.filter(e => e.type === 'yellow-card' && e.team_name === homeTeam).length;
   const awayYellows = events.filter(e => e.type === 'yellow-card' && e.team_name === awayTeam).length;
 
@@ -107,12 +102,7 @@ export default function InfoPartido() {
       {/* --- SECCIÓN DE ESTADÍSTICAS COMPARATIVAS --- */}
       <View style={styles.statsCard}>
         <Text style={styles.cardTitle}>Estadísticas</Text>
-        
-        {/* Cabecera con los nombres reales de los equipos */}
-        <View style={styles.teamsHeader}>
-          <Text style={styles.teamHeaderName} numberOfLines={1}>{homeTeam}</Text>
-          <Text style={styles.teamHeaderName} numberOfLines={1}>{awayTeam}</Text>
-        </View>
+  
 
         {/* Filas con datos reales calculados en el momento */}
         <StatRow label="Tarjetas Amarillas" homeValue={homeYellows} awayValue={awayYellows} />
@@ -164,10 +154,9 @@ export default function InfoPartido() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   
-  statsCard: { backgroundColor: "#162236", borderRadius: 20, padding: 20, marginBottom: 16 },
+  statsCard: { backgroundColor: "#162236", borderRadius: 20, padding: 20, marginBottom: 12 },
   teamsHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
   
-  // Limité el ancho del texto a 40% para que si el equipo se llama "Estudiantes de Río Cuarto" no rompa el diseño
   teamHeaderName: { color: "#3b82f6", fontSize: 13, fontWeight: "bold", textTransform: "uppercase", width: '40%', textAlign: 'center' },
   
   statRowContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: "#1e293b" },
@@ -175,7 +164,7 @@ const styles = StyleSheet.create({
   statLabelCenter: { color: "#94a3b8", fontSize: 13, flex: 1, textAlign: "center" },
   
   card: { backgroundColor: "#162236", borderRadius: 20, padding: 20 },
-  cardTitle: { fontSize: 18, fontWeight: "bold", color: "#f1f5f9", marginBottom: 20 },
+  cardTitle: { fontSize: 18, fontWeight: "bold", color: "#f1f5f9", marginBottom: 15 },
   eventItem: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
   eventMinute: { width: 45, color: "#3b82f6", fontWeight: "bold", fontSize: 14 },
   iconCircle: { width: 30, alignItems: "center", justifyContent: "center" },

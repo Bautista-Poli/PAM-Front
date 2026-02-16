@@ -33,18 +33,17 @@ export default function EquipoDetalle() {
         setLoading(true);
         setError(null);
         
-        // Ejecutamos las 3 llamadas en paralelo
         const [info, players, matches] = await Promise.all([
           obtenerEquipoInfo(nombre as string),
           getPlayerRatingsByClub(nombre as string),
-          getMatchesByTeam(nombre as string) // Nueva llamada
+          getMatchesByTeam(nombre as string)
         ]);
 
         if (!isMounted) return;
 
         setEquipoInfo(info);
         setJugadores(players);
-        setPartidosReal(matches); // Guardamos los partidos reales
+        setPartidosReal(matches);
       } catch (e: any) {
         if (isMounted) setError(e?.message ?? 'Error al cargar los datos');
       } finally {

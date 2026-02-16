@@ -10,7 +10,6 @@ interface AnimatedTabMenuProps {
 export default function AnimatedTabMenu({ tabs, onTabChange, children }: AnimatedTabMenuProps) {
   const [activeTab, setActiveTab] = useState<number>(0);
   
-  // Animaciones
   const slideAnim = useRef(new Animated.Value(0)).current;
   const indicatorAnim = useRef(new Animated.Value(0)).current;
 
@@ -18,7 +17,6 @@ export default function AnimatedTabMenu({ tabs, onTabChange, children }: Animate
     setActiveTab(index);
     onTabChange?.(index);
     
-    // Animar el contenido
     Animated.spring(slideAnim, {
       toValue: -index,
       useNativeDriver: true,
@@ -26,7 +24,6 @@ export default function AnimatedTabMenu({ tabs, onTabChange, children }: Animate
       friction: 8,
     }).start();
     
-    // Animar el indicador
     Animated.spring(indicatorAnim, {
       toValue: index,
       useNativeDriver: true,
@@ -35,11 +32,10 @@ export default function AnimatedTabMenu({ tabs, onTabChange, children }: Animate
     }).start();
   };
 
-  const tabWidth = 100 / tabs.length; // Porcentaje por tab
+  const tabWidth = 100 / tabs.length;
 
   return (
     <View style={styles.container}>
-      {/* Menú de pestañas */}
       <View style={styles.tabContainer}>
         {tabs.map((tab, index) => (
           <TouchableOpacity

@@ -12,9 +12,9 @@ interface SuccessCheckAnimationProps {
 }
 
 export default function SuccessCheckAnimation({ onClose, isVisible, message }: SuccessCheckAnimationProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current; 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.5)).current;
-  const checkProgress = useRef(new Animated.Value(0)).current; 
+  const checkProgress = useRef(new Animated.Value(0)).current;
   
   useEffect(() => {
     if (isVisible) {
@@ -28,7 +28,7 @@ export default function SuccessCheckAnimation({ onClose, isVisible, message }: S
           duration: 300,
           useNativeDriver: true,
         }),
-        Animated.spring(scaleAnim, { 
+        Animated.spring(scaleAnim, {
           toValue: 1,
           bounciness: 10,
           speed: 8,
@@ -42,9 +42,9 @@ export default function SuccessCheckAnimation({ onClose, isVisible, message }: S
       ]).start();
     } else {
       Animated.timing(fadeAnim, {
-          toValue: 0, 
-          duration: 200, 
-          useNativeDriver: true 
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true
       }).start();
     }
   }, [isVisible, fadeAnim, scaleAnim, checkProgress]);
@@ -77,7 +77,7 @@ export default function SuccessCheckAnimation({ onClose, isVisible, message }: S
           
           <View style={styles.iconContainer}>
             <Animated.View style={checkAnimatedStyle}>
-                <Ionicons 
+                <Ionicons
                     name="checkmark-circle"
                     size={ICON_SIZE}
                     color={CHECK_COLOR}

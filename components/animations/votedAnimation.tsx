@@ -1,4 +1,3 @@
-//components/animations/votedAnimation.tsx
 import { useRef, useEffect } from 'react';
 import { View, Text, Modal, Pressable, StyleSheet, Animated, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,8 +26,8 @@ export default function AlreadyVotedModal({ onClose, isVisible }: AlreadyVotedMo
                 Animated.spring(slideAnim, {toValue: 0,  bounciness: 8, speed: 4, useNativeDriver: true,}),
                 
                 Animated.spring(iconScaleAnim, {
-                    toValue: 1, 
-                    delay: 200, 
+                    toValue: 1,
+                    delay: 200,
                     bounciness: 12,
                     useNativeDriver: true,
                 })

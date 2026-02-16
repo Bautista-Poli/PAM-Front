@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Asegúrate de importar useEffect
+import React, { useState, useEffect } from 'react';
 import { SectionList, Text, Alert, View } from 'react-native';
 import PlayerItem from '../playerCard';
 import { useRouter } from 'expo-router';
@@ -40,7 +40,6 @@ export default function PlayerVotingSectionList({ sections, partidoData, userId 
         fetchExisting();
     }, [partidoData.id, userId]);
 
-    // 3. Lógica de envío y actualización
     const handleEvaluar = async (forceUpdate = false) => {
         const payload = Object.entries(ratings)
             .filter(([_, r]) => r > 0)

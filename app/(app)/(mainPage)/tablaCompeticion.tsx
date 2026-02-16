@@ -1,4 +1,3 @@
-// app/competicion.tsx — pantalla unificada de entrada
 import { useLocalSearchParams, Redirect } from "expo-router";
 import Copa from "../../../components/tablaTorneo/copa";
 import Ligas from "../../../components/tablaTorneo/ligas";

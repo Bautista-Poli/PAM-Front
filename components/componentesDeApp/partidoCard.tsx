@@ -9,7 +9,6 @@ type PartidoProps = {
 
 const fallbackLogo = 'https://ligafutbolcity.com/img/logo/equipos/equipo_default.png';
 
-// Funciones auxiliares de tiempo se mantienen igual
 function getLocalDateFromApi(isoDate: string): Date {
   const localIsoDate = isoDate.endsWith('Z') ? isoDate.slice(0, -1) : isoDate;
   return new Date(localIsoDate);
@@ -33,9 +32,7 @@ function getMatchStatus(isoDate: string): string {
   return formatHourTime(isoDate);
 }
 
-/**
- * Renombrado a PartidoCard para mayor claridad
- */
+
 export default function PartidoCard({ data }: PartidoProps) {
   const router = useRouter();
   const matchDate = getLocalDateFromApi(data.match_date);
@@ -81,7 +78,6 @@ export default function PartidoCard({ data }: PartidoProps) {
           </Text>
         </View>
 
-        {/* Bloque Central - Marcador (Ya no es presionable) */}
         <View style={styles.scoreBlock}>
           {partidoNoComenzado ? (
             <Text style={styles.scoreText}>-</Text>
@@ -93,7 +89,6 @@ export default function PartidoCard({ data }: PartidoProps) {
           )}
         </View>
 
-        {/* Bloque Equipo Visitante - Mantiene el botón en el escudo */}
         <View style={styles.teamBlock}>
           <Pressable
             onPress={() => handleTeamPress(data.away_team ?? "Visitante")}
@@ -114,17 +109,11 @@ export default function PartidoCard({ data }: PartidoProps) {
         </View>
       </View>
 
-      {/* Overlay de Bloqueo */}
-      {!partidoFinalizado && (
-        <View style={styles.lockOverlay}>
-          <Text style={styles.lockText}>🔒 Evaluación disponible al finalizar</Text>
-        </View>
-      )}
+      
     </View>
   );
 }
 
-// Los estilos se mantienen iguales
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#0a84e21f',

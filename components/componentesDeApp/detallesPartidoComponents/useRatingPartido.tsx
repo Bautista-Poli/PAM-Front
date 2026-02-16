@@ -40,12 +40,12 @@ export function useRatingPartido(originalPartidoParam: unknown) {
     })();
   }, [partidoData]);
 
-  return { 
-    partidoData, 
-    userId: user.id, 
-    sections, 
-    loading, 
-    error 
+  return {
+    partidoData,
+    userId: user.id,
+    sections,
+    loading,
+    error
   };
 }
 

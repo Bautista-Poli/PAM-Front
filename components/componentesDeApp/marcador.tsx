@@ -1,4 +1,3 @@
-// components/Marcador.tsx
 import { View, Text, StyleSheet} from "react-native";
 
 export type MarcadorProps = {

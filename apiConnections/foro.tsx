@@ -1,4 +1,3 @@
-// apiConnections/types.ts o en el mismo archivo del foro
 export interface ForoComment {
   id: number;
   match_id: number;

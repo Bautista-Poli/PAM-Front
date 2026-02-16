@@ -25,7 +25,7 @@ export default function Index() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isBooting) return; 
+    if (isBooting) return;
     if (!user) router.replace("/(auth)/login");
   }, [isBooting, user]);
 
@@ -39,7 +39,7 @@ export default function Index() {
         if (day === 'mañana') fechaBase.setDate(fechaBase.getDate() + 1);
         
         const fechaString = fechaBase.toISOString().split('T')[0];
-        const todos = await getMatches(`?date=${fechaString}`); 
+        const todos = await getMatches(`?date=${fechaString}`);
         setPartidos(todos);
       } catch (e: any) {
         setError(e.message ?? "Error al cargar partidos");

@@ -34,15 +34,10 @@ export default function CreateAccountScreen() {
         selectedClub.id
       );
 
-      // Ahora verificamos si el resultado tiene un "id" para confirmar que se creó
       if (result && result.id) {
-        // Como 'result' YA ES el usuario entero, lo pasamos directamente
         await setFromCreate({ user: result });
-
-        // Ir al área protegida
         router.replace("/(app)/(mainPage)");
       } else {
-        // Si result tiene un error (dependiendo de cómo funcione tu handleResponse)
         Alert.alert("Error", result?.error || "No se pudo crear la cuenta");
       }
     } catch (err) {

@@ -19,7 +19,6 @@ export default function Login() {
     setLoading(true);
     try {
       await login({ email: mail, password: contrasena });
-      // podés confiar en el guard del layout o navegar directo:
       router.replace("/(app)/(mainPage)");
     } catch (e) {
       Alert.alert("Error", "Mail o contraseña incorrectos");

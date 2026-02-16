@@ -7,7 +7,6 @@ interface GrupoTableProps {
   isLeagueFormat: boolean;
 }
 
-// Determina el estilo del borde izquierdo según posición y formato
 function getBorderStyle(index: number, isLeagueFormat: boolean) {
   if (isLeagueFormat) {
     if (index < 8)  return styles.clasificado;

@@ -32,9 +32,7 @@ export default function Index(){
             <Text style={styles.bottom}></Text>
             
         </View>
-
     )
-
 }
 
 const styles = StyleSheet.create({

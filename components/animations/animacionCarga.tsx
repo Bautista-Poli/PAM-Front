@@ -1,17 +1,12 @@
-// components/LoaderBall.tsx
 import { View, Text, Animated, Easing, StyleSheet } from "react-native";
 import { useEffect, useRef } from "react";
-/*
-const BALL_URL =
-  "https://png.pngtree.com/png-clipart/20220530/original/pngtree-ball-blue-png-image_7767430.png";
 
-*/
 const BALL_SOURCE = require('../../assets/images/ball-blue.png')
 type Props = {
   message?: string;
-  size?: number;        
-  speedMs?: number;    
-  fullScreen?: boolean; 
+  size?: number;
+  speedMs?: number;
+  fullScreen?: boolean;
 };
 
 export default function LoaderBall({
