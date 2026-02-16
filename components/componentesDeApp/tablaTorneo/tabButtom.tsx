@@ -1,18 +1,13 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 
-interface TabButtonProps<T extends string> {
+interface TabButtonProps {
   label: string;
-  value: T;
+  value: "grupos" | "eliminatorias";
   selected: boolean;
-  onPress: (value: T) => void;
+  onPress: (value: "grupos" | "eliminatorias") => void;
 }
 
-export function TabButton<T extends string>({
-  label,
-  value,
-  selected,
-  onPress,
-}: TabButtonProps<T>) {
+export function TabButton({ label, value, selected, onPress }: TabButtonProps) {
   return (
     <Pressable
       onPress={() => onPress(value)}

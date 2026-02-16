@@ -2,9 +2,9 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import Estadisticas from "@/components/componentesDeApp/estadisticas";
 import { useEffect, useState } from "react";
-import { LeagueTableRow } from '../../apiConnections/types';
 import LoaderBall from "@/components/animations/animacionCarga";
 import { getLeagueTableByName } from "@/apiConnections/clubs";
+import { LeagueTableRow } from "@/apiConnections/types";
 
 export default function Ligas() {
   const router = useRouter();

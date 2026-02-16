@@ -22,11 +22,18 @@ export interface KnockoutMatch {
   away_score?: number;
   date: string;
   leg: 1 | 2;
-  round: "round_of_16" | "quarterfinals" | "semifinals" | "final";
+  round: "round of 16" | "quarterfinals" | "semifinals" | "final";
 }
 
 export interface TournamentData {
   tournament_name: string;
   groups: Group[];
   knockout_matches: KnockoutMatch[];
+}
+
+export interface BracketTeamResult {
+  name: string;
+  scoreLeg1?: number;
+  scoreLeg2?: number;
+  isWinner: boolean;
 }

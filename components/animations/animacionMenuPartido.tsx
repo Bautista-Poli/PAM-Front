@@ -50,7 +50,6 @@ export default function AnimatedTabMenu({ tabs, onTabChange, children }: Animate
           </TouchableOpacity>
         ))}
         
-        {/* Indicador animado */}
         <Animated.View
           style={[
             styles.indicator,

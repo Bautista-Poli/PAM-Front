@@ -1,6 +1,6 @@
+import Copa from "@/components/componentesDeApp/tablaTorneo/copa";
+import Ligas from "@/components/componentesDeApp/tablaTorneo/ligas";
 import { useLocalSearchParams, Redirect } from "expo-router";
-import Copa from "../../../components/tablaTorneo/copa";
-import Ligas from "../../../components/tablaTorneo/ligas";
 
 export default function Competicion() {
   const { type } = useLocalSearchParams<{ type: 'copa' | 'liga' }>();

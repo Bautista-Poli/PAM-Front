@@ -11,8 +11,8 @@ import { getMatches } from "@/apiConnections/matches";
 import PartidoCard from "@/components/componentesDeApp/partidoCard";
 
 type Dia = 'ayer' | 'hoy' | 'mañana';
-const ligasDisponibles = ['Liga Profesional Argentina', 'Premier League', 'La Liga', 'Copa Libertadores', 'Champions League'];
-const torneosDeCopa = ['Copa Libertadores', 'Champions League'];
+const ligasDisponibles = ['Liga Profesional Argentina', 'Premier League', 'La Liga', 'Champions League'];
+const torneosDeCopa = ['Champions League'];
 
 export default function Index() {
   const router = useRouter();
@@ -60,6 +60,10 @@ export default function Index() {
 
   if (isBooting || (!user && !error)) {
     return <LoaderBall message="Cargando aplicación..." fullScreen />;
+  }
+
+  if (loading) {
+    return <LoaderBall message="Cargando partidos..." fullScreen />;
   }
   
   if (error) {

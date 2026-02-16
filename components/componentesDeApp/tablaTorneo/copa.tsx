@@ -2,13 +2,13 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import LoaderBall from "@/components/animations/animacionCarga";
-import BracketVisualizer from "@/components/tablaTorneo/bracket";
 import { getTournamentMatches } from "@/apiConnections/matches";
 import { transformTournamentData } from "@/helpers/utils/tournamentTransform";
-import { TournamentData } from "@/components/tablaTorneo/types";
-import { toBracketMatches } from "@/components/tablaTorneo/bracketHelper";
-import { TabButton } from "@/components/tablaTorneo/tabButtom";
-import { GrupoTable } from "@/components/tablaTorneo/groupTable";
+import { TournamentData } from "./types";
+import { toBracketMatches } from "./bracketHelper";
+import { TabButton } from "./tabButtom";
+import { GrupoTable } from "./groupTable";
+import BracketVisualizer from "./bracket";
 
 export default function TorneoCopa() {
   const router = useRouter();
@@ -18,7 +18,6 @@ export default function TorneoCopa() {
   const [tournamentData, setTournamentData] = useState<TournamentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  console.log(torneoNombre)
 
   useEffect(() => {
     const cargar = async () => {
@@ -35,10 +34,7 @@ export default function TorneoCopa() {
     cargar();
   }, [torneoNombre]);
 
-  const isLeagueFormat = useMemo(
-    () => tournamentData?.groups.length === 1 && tournamentData.groups[0].name === "Fase de Liga",
-    [tournamentData]
-  );
+  const isLeagueFormat = tournamentData?.groups.length === 1 && tournamentData.groups[0].name === "Fase de Liga";
 
   const bracketMatches = useMemo(
     () => tournamentData ? toBracketMatches(tournamentData.knockout_matches) : [],
